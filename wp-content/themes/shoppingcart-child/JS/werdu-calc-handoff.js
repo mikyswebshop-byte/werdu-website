@@ -11,6 +11,12 @@
 
   function beratungBase() {
     try {
+      // Prefer the server-computed home_url('/beratung-anfragen/') so the
+      // redirect always matches the current WordPress environment (prod/test),
+      // even if it ever differs from the browser's window.location.origin.
+      if (w.werduCalcConfig && w.werduCalcConfig.beratungUrl) {
+        return w.werduCalcConfig.beratungUrl;
+      }
       return w.location.origin + BERATUNG_PATH;
     } catch (e) {
       return BERATUNG_PATH;

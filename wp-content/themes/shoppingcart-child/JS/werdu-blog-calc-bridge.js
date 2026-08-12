@@ -115,8 +115,9 @@
     }
 
     // Force known CTA ids (Elementor markup)
+    var beratungBase = (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) || '/beratung-anfragen/';
     var url = (api && api.buildBeratungUrl(data)) || (
-      '/beratung-anfragen/?kapazitaet=' + encodeURIComponent(kwh) +
+      beratungBase + '?kapazitaet=' + encodeURIComponent(kwh) +
       '&kwh=' + encodeURIComponent(kwh) +
       '&ersparnis=' + encodeURIComponent(savings) +
       '&savings=' + encodeURIComponent(savings) +
@@ -130,10 +131,10 @@
       }
     });
 
-    // Rewrite remaining kontakt Beratung CTAs in content
+    // Rewrite remaining kontakt Beratung/submit CTAs in content
     document.querySelectorAll('a[href*="/kontakt/"]').forEach(function (a) {
       var text = (a.textContent || '').toLowerCase();
-      if (/beratung|analyse|angebot anfordern/i.test(text)) {
+      if (/beratung|analyse|angebot|anfordern|absenden|senden|anfrage/i.test(text)) {
         a.href = url;
         a.classList.add('werdu-calc-cta');
       }
@@ -141,13 +142,15 @@
   }
 
   function ensureBaseHref() {
-    // Graceful fallback: point the CTA at /beratung-anfragen/ even before any
+    // Graceful fallback: point the CTA at /beratung-anfragen/ (current
+    // environment, via home_url() when available) even before any
     // calculation has run, so it never points at the legacy /kontakt/ URL.
     var el = document.getElementById('cta-link');
     if (!el) return;
+    var base = (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) || '/beratung-anfragen/';
     var href = el.getAttribute('href') || '';
     if (href.indexOf('beratung-anfragen') === -1) {
-      el.href = '/beratung-anfragen/';
+      el.href = base;
       el.classList.add('werdu-calc-cta');
     }
   }

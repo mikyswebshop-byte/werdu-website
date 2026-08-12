@@ -548,6 +548,10 @@ function werdu_enqueue_calc_handoff_assets() {
             filemtime( $handoff['path'] ),
             true
         );
+        wp_localize_script( 'werdu-calc-handoff', 'werduCalcConfig', array(
+            'beratungUrl' => home_url( '/beratung-anfragen/' ),
+            'homeUrl'     => home_url( '/' ),
+        ) );
     }
 
     if ( $is_home_calc ) {
@@ -623,9 +627,14 @@ function werdu_print_calc_bridge_footer_fallback() {
     }
     if ( empty( $urls ) ) return;
 
-    $json = wp_json_encode( $urls );
+    $json   = wp_json_encode( $urls );
+    $config = wp_json_encode( array(
+        'beratungUrl' => home_url( '/beratung-anfragen/' ),
+        'homeUrl'     => home_url( '/' ),
+    ) );
     echo "<script id=\"werdu-calc-bridge-fallback\">\n";
     echo "(function(){\n";
+    echo "  if (!window.werduCalcConfig) window.werduCalcConfig = {$config};\n";
     echo "  var urls = {$json};\n";
     echo "  function load(src, test){\n";
     echo "    if (!src) return;\n";
