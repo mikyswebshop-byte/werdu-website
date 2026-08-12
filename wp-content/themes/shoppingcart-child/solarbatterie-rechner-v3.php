@@ -378,7 +378,7 @@ get_header();
             <h3>Passende Produkte für Ihren Bedarf</h3>
             <div class="werdu-product-grid" id="w-products">
 
-                <a href="https://werdu.de/tewaycell-10-kwh-all-in-one-sodium-ion-solarspeicher-5-kw-hybrid-wechselrichter/" class="werdu-product-item" id="prod-10">
+                <a href="<?php echo esc_url( home_url( '/tewaycell-10-kwh-all-in-one-sodium-ion-solarspeicher-5-kw-hybrid-wechselrichter/' ) ); ?>" class="werdu-product-item" id="prod-10">
                     <div class="werdu-product-type">All-in-One System</div>
                     <div class="werdu-product-kwh">10 kWh</div>
                     <div class="werdu-product-price">2.799 €</div>
@@ -387,7 +387,7 @@ get_header();
                 </a>
 
                 <!-- BASEN GREEN 16 kWh - VERVANGT Tewaycell 15 kWh -->
-                <a href="https://werdu.de/16-kwh-heimspeicher-lifepo4-314ah/" class="werdu-product-item" id="prod-16green">
+                <a href="<?php echo esc_url( home_url( '/16-kwh-heimspeicher-lifepo4-314ah/' ) ); ?>" class="werdu-product-item" id="prod-16green">
                     <div class="werdu-product-type">Batterie Only</div>
                     <div class="werdu-product-kwh">16 kWh</div>
                     <div class="werdu-product-price">1.990 €</div>
@@ -395,7 +395,7 @@ get_header();
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="https://werdu.de/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/" class="werdu-product-item" id="prod-16">
+                <a href="<?php echo esc_url( home_url( '/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/' ) ); ?>" class="werdu-product-item" id="prod-16">
                     <div class="werdu-product-type">Batterie Only</div>
                     <div class="werdu-product-kwh">16 kWh</div>
                     <div class="werdu-product-price">2.345 €</div>
@@ -403,7 +403,7 @@ get_header();
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="https://werdu.de/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/" class="werdu-product-item" id="prod-15aio">
+                <a href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>" class="werdu-product-item" id="prod-15aio">
                     <div class="werdu-product-type">All-in-One System</div>
                     <div class="werdu-product-kwh">15 kWh</div>
                     <div class="werdu-product-price">2.899 €</div>
@@ -411,7 +411,7 @@ get_header();
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="https://werdu.de/tewaycell-30-32-kwh-lifepo4-batterie-512v-560-628ah-mobile-ess-300ah-bms/" class="werdu-product-item" id="prod-30">
+                <a href="<?php echo esc_url( home_url( '/tewaycell-30-32-kwh-lifepo4-batterie-512v-560-628ah-mobile-ess-300ah-bms/' ) ); ?>" class="werdu-product-item" id="prod-30">
                     <div class="werdu-product-type">Batterie Only</div>
                     <div class="werdu-product-kwh">30-32 kWh</div>
                     <div class="werdu-product-price">3.499 €</div>
@@ -419,7 +419,7 @@ get_header();
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="https://werdu.de/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/" class="werdu-product-item" id="prod-30aio">
+                <a href="<?php echo esc_url( home_url( '/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/' ) ); ?>" class="werdu-product-item" id="prod-30aio">
                     <div class="werdu-product-type">All-in-One 3-phasig</div>
                     <div class="werdu-product-kwh">30 kWh</div>
                     <div class="werdu-product-price">4.839 €</div>
@@ -469,13 +469,13 @@ get_header();
     <footer class="werdu-footer" itemscope itemtype="https://schema.org/WPFooter">
         <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
             <span itemprop="name">WERDU.de</span> &ndash; 
-            <span itemprop="url">https://werdu.de</span>
+            <span itemprop="url"><?php echo esc_url( home_url( '/' ) ); ?></span>
         </div>
         <p>&copy; 2026 WERDU.de | Solarbatterie-Rechner v3.2 | Alle Angaben ohne Gewähr. Die tatsächliche Ersparnis hängt von individuellen Faktoren ab.</p>
         <p style="font-size:0.75em; margin-top:8px;">
-            <a href="https://werdu.de/datenschutz" style="color:#94a3b8; text-decoration:underline;">Datenschutz</a> &bull; 
-            <a href="https://werdu.de/impressum" style="color:#94a3b8; text-decoration:underline;">Impressum</a> &bull; 
-            <a href="https://werdu.de/agb" style="color:#94a3b8; text-decoration:underline;">AGB</a>
+            <a href="<?php echo esc_url( home_url( '/datenschutz' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">Datenschutz</a> &bull; 
+            <a href="<?php echo esc_url( home_url( '/impressum' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">Impressum</a> &bull; 
+            <a href="<?php echo esc_url( home_url( '/agb' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">AGB</a>
         </p>
     </footer>
 

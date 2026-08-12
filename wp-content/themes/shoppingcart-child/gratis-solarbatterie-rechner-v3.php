@@ -1065,7 +1065,7 @@ if (!defined('ABSPATH')) {
       "name": "Solarbatterie Rechner 2026 | Speichergröße kostenlos berechnen",
       "description": "Kostenloser Solarbatterie Rechner. Berechnen Sie Speichergröße, Autarkiegrad und Amortisation in 2 Minuten. Basierend auf DWD-Solardaten und VDI 4655.",
       "inLanguage": "de-DE",
-      "url": "https://werdu.de/solarbatterie-rechner/"
+      "url": "<?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?>"
     },
     {
       "@type": "SoftwareApplication",
@@ -1430,7 +1430,7 @@ if (!defined('ABSPATH')) {
         <li>Plug & Play Installation</li>
         <li>Deutscher Support</li>
       </ul>
-      <a href="https://werdu.de/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/" class="wr5-prod-cta" id="wr5-prod-link">Jetzt konfigurieren</a>
+      <a href="<?php echo esc_url( home_url( '/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/' ) ); ?>" class="wr5-prod-cta" id="wr5-prod-link">Jetzt konfigurieren</a>
     </div>
   </div>
 
@@ -1467,7 +1467,7 @@ if (!defined('ABSPATH')) {
   <div class="wr5-cta wr5-animate">
     <h3>Bereit für Ihre Energieunabhängigkeit?</h3>
     <p>Mit dem empfohlenen System sparen Sie <strong id="wr5-cta-ersparnis">—</strong> pro Jahr</p>
-    <a href="https://werdu.de/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/" class="btn" id="wr5-cta-link">Jetzt Speicher konfigurieren</a>
+    <a href="<?php echo esc_url( home_url( '/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/' ) ); ?>" class="btn" id="wr5-cta-link">Jetzt Speicher konfigurieren</a>
   </div>
 
   <div class="wr5-disc wr5-animate">
@@ -1523,7 +1523,7 @@ if (!defined('ABSPATH')) {
   </div>
 
   <div class="wr5-embed-codebox">
-    <code>&lt;iframe src="https://werdu.de/solarbatterie-rechner/?embed=1"
+    <code>&lt;iframe src="<?php echo esc_url( home_url( '/solarbatterie-rechner/?embed=1' ) ); ?>"
         width="100%" height="1200" frameborder="0"
         style="border:none;overflow:hidden;"&gt;&lt;/iframe&gt;</code>
   </div>
@@ -1678,7 +1678,7 @@ if (!defined('ABSPATH')) {
       preis: 2345,
       uvp: 3199,
       img: 'https://werdu.de/wp-content/uploads/2026/03/Tewaycell_48V_300Ah_15Kwh_Mobile_Haus_Solarspeicher_System_2.webp',
-      url: 'https://werdu.de/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/',
+      url: '<?php echo esc_url( home_url( '/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/' ) ); ?>',
       ideal: 'Bestehende Anlagen'
     },
     mobile32: {
@@ -1686,7 +1686,7 @@ if (!defined('ABSPATH')) {
       preis: 3899,
       uvp: 4759,
       img: 'https://werdu.de/wp-content/uploads/2026/03/tewaycell-30kwh-32kwh-lifepo4-stromspeicher-batterie-51-2v-mobile-ess.webp',
-      url: 'https://werdu.de/30-32-kwh-lifepo4-heimspeicher-560-628ah/',
+      url: '<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>',
       ideal: 'Maximale Autarkie'
     }
   };
@@ -2529,7 +2529,7 @@ if (!defined('ABSPATH')) {
     html += '<div class="footer">';
     html += '<p><strong>Hinweis:</strong> Alle Berechnungen basieren auf DWD-Solardaten und VDI 4655. Die Ergebnisse dienen der Orientierung.</p>';
     html += '<p>&copy; 2026 Werdu.de | Solarbatterie-Rechner v3</p>';
-    html += '<p>https://werdu.de/solarbatterie-rechner/</p>';
+    html += '<p><?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?></p>';
     html += '</div>';
     html += '</body></html>';
 
