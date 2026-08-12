@@ -19,4 +19,9 @@ jobs:
         server: ${{ secrets.TEST_FTP_SERVER }}
         username: ${{ secrets.TEST_FTP_USERNAME }}
         password: ${{ secrets.TEST_FTP_PASSWORD }}
+        protocol: ftps
         server-dir: /
+        exclude: |
+          **/.git**
+          **/.github**
+          **/cgi-bin/**
