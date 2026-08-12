@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
  * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
- * Version: 3.2
+ * Version: 3.3
  * Author: Michael van der Veen
  * Network: false
  */
@@ -110,6 +110,12 @@ function werdu_home_seo_base_css() {
   --werdu-sky-bottom: #FFFFFF;
   --werdu-sky-bg: linear-gradient(180deg, #EDF5FF 0%, #FFFFFF 100%);
   --werdu-card-border: #E2E8F0;
+  /* Design System 3.3 — "High-Visual": gloeiende knoppen/kaarten. Statische
+     box-shadow + een eenmalige hover-transitie kosten niets tijdens scroll
+     (geen backdrop-filter, geen infinite animatie) en botsen dus niet met
+     de performance-fix uit 3.1. */
+  --werdu-orange-glow: rgba(255, 102, 0, 0.45);
+  --werdu-glow-shadow: 0 8px 25px var(--werdu-orange-glow), 0 0 15px rgba(255, 102, 0, 0.3);
 }
 
 .werdu-seo-container {
@@ -946,6 +952,190 @@ function werdu_home_seo_base_css() {
   }
   .werdu-hero-container h1 {
     font-size: 1.7rem !important;
+  }
+}
+
+/* ============================================
+   DESIGN SYSTEM 3.3 — High-Visual (gloeiende knoppen, kaarten, badges)
+   ============================================
+   Toegepast op de ECHTE, al bestaande CTA/kaart/tabel-classes (zodat het
+   direct zichtbaar is), plus dezelfde regels ook onder de expliciet
+   gevraagde class-namen (.werdu-btn-glow, .btn-primary-orange,
+   .werdu-hero-card, .werdu-usp-item, .werdu-bullet-list/.werdu-bullet-icon,
+   .werdu-styled-table, .werdu-card-grid, .werdu-visual-card,
+   .werdu-badge-orange) — voor het geval toekomstige content die direct
+   gebruikt. Er wordt niets herschreven dat al bestond; dit is een extra
+   visuele laag boven op 3.1/3.2. */
+.werdu-calc-cta,
+.werdu-seo-cta,
+.btn-3d,
+.werdu-cta-auto,
+.btn-werdu-primary,
+.werdu-btn-primary,
+.werdu-btn-glow,
+.btn-primary-orange {
+  background: linear-gradient(135deg, var(--werdu-orange) 0%, var(--werdu-orange-hover) 100%) !important;
+  border: 2px solid #FF8533 !important;
+  box-shadow: var(--werdu-glow-shadow) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease !important;
+}
+
+.werdu-calc-cta:hover,
+.werdu-seo-cta:hover,
+.btn-3d:hover,
+.werdu-cta-auto:hover,
+.btn-werdu-primary:hover,
+.werdu-btn-primary:hover,
+.werdu-btn-glow:hover,
+.btn-primary-orange:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 12px 35px var(--werdu-orange-glow), 0 0 25px rgba(255, 102, 0, 0.6) !important;
+  border-color: #FFFFFF !important;
+}
+
+/* Hero-kaart: dezelfde look als .werdu-hero-container, ook onder de
+   expliciet gevraagde .werdu-hero-card class. */
+.werdu-hero-container,
+.werdu-hero-card {
+  border-width: 2px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* USP-vinkjes: ronde oranje bullet-badge in plaats van platte tekst-check. */
+.werdu-usp-tag,
+.werdu-usp-item,
+.werdu-bullet-list li {
+  list-style: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.werdu-usp-check,
+.werdu-bullet-icon {
+  background: var(--werdu-orange) !important;
+  color: #FFFFFF !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3) !important;
+  flex-shrink: 0;
+}
+
+/* Tabellen: donkere kop, zebra-striping en zachte schaduw — zowel op de
+   bestaande .werdu-table/.werdu-matrix-table als op .werdu-styled-table. */
+.werdu-table-wrapper,
+.werdu-matrix-wrapper {
+  border-radius: 16px !important;
+  box-shadow: var(--werdu-shadow-lg, var(--werdu-shadow)) !important;
+}
+
+.werdu-table thead th,
+.werdu-matrix-table th,
+.werdu-styled-table th {
+  background: var(--werdu-text) !important;
+  color: #FFFFFF !important;
+  border-bottom: none !important;
+}
+
+.werdu-table tbody tr:nth-child(even) td,
+.werdu-matrix-table tr:nth-child(even) td,
+.werdu-styled-table tr:nth-child(even) td {
+  background-color: var(--werdu-bg-subtle);
+}
+
+.werdu-table tbody tr:hover td,
+.werdu-matrix-table tr:hover td,
+.werdu-styled-table tr:hover td {
+  background-color: #F1F5F9;
+}
+
+.werdu-styled-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--werdu-shadow-lg, var(--werdu-shadow));
+  border: 1px solid var(--werdu-card-border);
+  background: #FFFFFF;
+}
+
+.werdu-styled-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--werdu-card-border);
+  color: var(--werdu-muted);
+  font-size: 0.95rem;
+}
+
+/* Scenario-/productkaarten: sterkere schaduw + oranje glow bij hover. */
+.werdu-scenario-card,
+.werdu-product-card,
+.werdu-visual-card {
+  border-width: 2px !important;
+  box-shadow: var(--werdu-shadow-lg, var(--werdu-shadow)) !important;
+}
+
+.werdu-scenario-card:hover,
+.werdu-product-card:hover,
+.werdu-visual-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(255, 102, 0, 0.2) !important;
+}
+
+.werdu-card-container,
+.werdu-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin: 35px 0;
+}
+
+/* Badges: gradient-variant naast de bestaande vlakke .werdu-scenario-badge. */
+.werdu-badge-orange {
+  background: linear-gradient(135deg, var(--werdu-orange), #FF8533) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  font-size: 0.8rem !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.25) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .werdu-calc-cta,
+  .werdu-seo-cta,
+  .btn-3d,
+  .werdu-cta-auto,
+  .btn-werdu-primary,
+  .werdu-btn-primary,
+  .werdu-btn-glow,
+  .btn-primary-orange,
+  .werdu-scenario-card,
+  .werdu-product-card,
+  .werdu-visual-card {
+    transition: opacity 0.2s ease !important;
+  }
+  .werdu-calc-cta:hover,
+  .werdu-seo-cta:hover,
+  .btn-3d:hover,
+  .werdu-cta-auto:hover,
+  .btn-werdu-primary:hover,
+  .werdu-btn-primary:hover,
+  .werdu-btn-glow:hover,
+  .btn-primary-orange:hover,
+  .werdu-scenario-card:hover,
+  .werdu-product-card:hover,
+  .werdu-visual-card:hover {
+    transform: none !important;
   }
 }
 CSS;
