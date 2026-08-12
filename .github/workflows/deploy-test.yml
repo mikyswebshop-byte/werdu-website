@@ -13,7 +13,7 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
-    - name: Sync files to test server
+    - name: Sync wp-content to test server
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.TEST_FTP_SERVER }}
@@ -21,12 +21,8 @@ jobs:
         password: ${{ secrets.TEST_FTP_PASSWORD }}
         protocol: ftp
         port: 21
-        server-dir: /
+        local-dir: ./wp-content/
+        server-dir: /wp-content/
         exclude: |
-          **/.git**
-          **/.github**
-          **/cgi-bin/**
-          **/wp-content/uploads/**
-          **/wp-content/cache/**
-          **/*.sql
-          **/*.zip
+          **/cache/**
+          **/uploads/**
