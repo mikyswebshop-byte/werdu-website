@@ -1,0 +1,22 @@
+name: Deploy to Test Environment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  web-deploy:
+    name: Deploy to test.werdu.de
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v3
+    - name: SFTP Deploy
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        server: ${{ secrets.TEST_FTP_SERVER }}
+        username: ${{ secrets.TEST_FTP_USERNAME }}
+        password: ${{ secrets.TEST_FTP_PASSWORD }}
+        port: 22
+        local_path: './*'
+        remote_path: '/'
+        sftp_only: true

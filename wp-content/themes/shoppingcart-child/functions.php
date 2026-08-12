@@ -595,6 +595,83 @@ function werdu_enqueue_calc_handoff_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'werdu_enqueue_calc_handoff_assets', 30 );
 
+/* ============================================================
+   18d. Werdu Homepage V2 template — losstaand, review-baar
+   ============================================================ */
+/**
+ * Laadt de CSS/JS voor het "Werdu Homepage V2"-template uitsluitend wanneer
+ * dat exacte template actief is (template-werdu-v2.php, root van het child
+ * theme). Bewust hier in functions.php i.p.v. bovenin het templatebestand
+ * zelf: het templatebestand moet EXACT beginnen met de Template Name-header
+ * gevolgd door get_header(), zodat WordPress het altijd correct herkent en
+ * in de Sjabloon-dropdown toont, ongeacht hook-timing.
+ */
+function werdu_enqueue_homepage_v2_assets() {
+    if ( ! is_page_template( 'template-werdu-v2.php' ) ) {
+        return;
+    }
+
+    $css_path = get_stylesheet_directory() . '/css/werdu-startseite-v3.css';
+    if ( file_exists( $css_path ) ) {
+        wp_enqueue_style(
+            'werdu-startseite-v3',
+            get_stylesheet_directory_uri() . '/css/werdu-startseite-v3.css',
+            array(),
+            filemtime( $css_path )
+        );
+    }
+
+    $handoff_deps = array();
+    $handoff = werdu_theme_js_uri( 'werdu-calc-handoff.js' );
+    if ( $handoff ) {
+        wp_enqueue_script( 'werdu-calc-handoff', $handoff['uri'], array(), filemtime( $handoff['path'] ), true );
+        wp_localize_script( 'werdu-calc-handoff', 'werduCalcConfig', array(
+            'beratungUrl' => function_exists( 'werdu_home_seo_beratung_url' ) ? werdu_home_seo_beratung_url() : home_url( '/beratung-anfragen/' ),
+            'homeUrl'     => home_url( '/' ),
+        ) );
+        $handoff_deps[] = 'werdu-calc-handoff';
+    }
+
+    $js_path = get_stylesheet_directory() . '/JS/werdu-startseite-v3.js';
+    if ( file_exists( $js_path ) ) {
+        wp_enqueue_script(
+            'werdu-startseite-v3',
+            get_stylesheet_directory_uri() . '/JS/werdu-startseite-v3.js',
+            $handoff_deps,
+            filemtime( $js_path ),
+            true
+        );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'werdu_enqueue_homepage_v2_assets', 30 );
+
+/**
+ * Eenmalige page-template cache flush: WordPress cachet de lijst met
+ * beschikbare page templates (Seiten-Attribute -> Template dropdown) in de
+ * 'themes'-cache-group. Na het toevoegen/hernoemen van template-werdu-v2.php
+ * moet die cache geleegd worden zodat het nieuwe template direct in de
+ * dropdown verschijnt, zonder te wachten op een automatische expiry.
+ * Zichzelf-beperkend via een optie-vlag: draait maar één keer per
+ * daadwerkelijke wijziging van dit bestand (filemtime-versie), niet op
+ * elke pageload.
+ */
+function werdu_flush_page_template_cache_once() {
+    $version_flag = 'werdu_v2_tpl_cache_flushed';
+    $current_ver  = (string) @filemtime( __FILE__ );
+    if ( get_option( $version_flag ) === $current_ver ) {
+        return;
+    }
+
+    wp_clean_themes_cache( false );
+
+    if ( function_exists( 'wp_cache_flush_group' ) ) {
+        wp_cache_flush_group( 'themes' );
+    }
+
+    update_option( $version_flag, $current_ver, false );
+}
+add_action( 'admin_init', 'werdu_flush_page_template_cache_once' );
+
 /**
  * Late footer fallback: inject bridges only if helpers are missing (optimizer-safe).
  */

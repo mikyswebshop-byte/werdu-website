@@ -1,0 +1,674 @@
+/*
+ * WERDU HOMEPAGE V2 — Design System (Stage 1)
+ * ---------------------------------------------------------------------------
+ * Losstaand, additief stylesheet voor het nieuwe pagina-template
+ * `page-templates/page-werdu-v2.php` (Template Name: Werdu Homepage V2).
+ * Wordt UITSLUITEND geladen wanneer dat template actief is (zie de
+ * conditionele wp_enqueue_style-aanroep in dat bestand) — dit bestand heeft
+ * dus geen enkel effect op de huidige, live Elementor-homepage of enige
+ * andere pagina, totdat het nieuwe template bewust aan een pagina wordt
+ * gekoppeld.
+ *
+ * Alle klassen zijn met opzet generiek/herbruikbaar (.glass-card,
+ * .btn-shimmer, .variant-card, .accordion, ...) zodat ze ook in een
+ * eventuele volgende iteratie van de site opnieuw ingezet kunnen worden.
+ */
+
+/* =============================================================
+   1. DESIGN TOKENS — kleuren (oklch color-mix), sfeer, ruimtes
+   ============================================================= */
+:root {
+  --accent: #ff6600;
+  /* Perceptueel uniforme kleurmixing in oklch: een donkerdere variant voor
+     gebruik op lichte achtergronden, en een lichtere variant voor gebruik op
+     donkere achtergronden (bv. de header/footer of donkere kaarten). */
+  --on-light: color-mix(in oklch, var(--accent), black 12%);
+  --on-dark: color-mix(in oklch, var(--accent), white 18%);
+
+  --wv2-text: #0f172a;
+  --wv2-muted: #475569;
+  --wv2-border: #e2e8f0;
+  --wv2-bg: #ffffff;
+  --wv2-bg-subtle: #f8fafc;
+  --wv2-sky-top: #f0f7ff;
+  --wv2-sky-bottom: #ffffff;
+
+  --wv2-radius: 16px;
+  --wv2-radius-sm: 10px;
+  --wv2-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+  --wv2-shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.14);
+  --wv2-glow: 0 0 0 4px rgba(255, 102, 0, 0.2);
+
+  --wv2-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =============================================================
+   2. BASE LAYOUT — sfeer-achtergrond, container, secties
+   ============================================================= */
+.wv2-page {
+  background: linear-gradient(180deg, var(--wv2-sky-top) 0%, var(--wv2-sky-bottom) 640px);
+  color: var(--wv2-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.65;
+}
+
+.wv2-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.wv2-section {
+  padding: 64px 0;
+}
+
+.wv2-section-head {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 40px;
+}
+
+.wv2-section-head h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--wv2-text);
+  margin: 0 0 12px;
+}
+
+.wv2-section-head p {
+  color: var(--wv2-muted);
+  margin: 0;
+}
+
+.wv2-eyebrow {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+/* =============================================================
+   3. SKIP-LINK — toetsenbordtoegankelijkheid (nooit display:none)
+   ============================================================= */
+.skip {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  z-index: 10000;
+  background: var(--wv2-text);
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip:focus {
+  top: 0.5rem;
+}
+
+/* =============================================================
+   4. GLASSMORPHISM CARDS
+   ============================================================= */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+}
+
+.wv2-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* =============================================================
+   5. TACTILE / SHIMMER BUTTONS
+   ============================================================= */
+.wv2-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 32px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wv2-btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(255, 102, 0, 0.3);
+}
+
+.wv2-btn-primary:hover {
+  background: var(--on-light);
+  transform: translateY(-2px);
+}
+
+/* Tactile click: fysieke "indruk" via een vaste bottom-shadow die inklapt. */
+.wv2-btn-primary {
+  box-shadow: 0 4px 0 var(--on-light), 0 6px 20px rgba(255, 102, 0, 0.3);
+}
+
+.wv2-btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--on-light);
+}
+
+/* Periodiek, subtiel glans-effect over de knop — géén constante animatie op
+   alle knoppen tegelijk (performance), maar een losse class die je bewust
+   toevoegt aan de primaire CTA. */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.5) 50%, transparent 80%);
+  transform: translateX(-120%);
+  animation: shimmer 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%, 45% { transform: translateX(-120%); }
+  65%, 100% { transform: translateX(120%); }
+}
+
+/* =============================================================
+   6. FORM INPUT-GROUPS — uniforme oranje focus-glow
+   ============================================================= */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group input,
+.input-group select {
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--wv2-radius-sm);
+  padding: 12px 14px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+}
+
+.input-group:focus-within {
+  border-color: var(--accent);
+}
+
+.input-group:focus-within input,
+.input-group:focus-within select {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.2);
+}
+
+/* =============================================================
+   7. PROGRESSIVE IMAGE LOADING
+   ============================================================= */
+.img-blur-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--wv2-radius);
+  background: var(--wv2-bg-subtle);
+}
+
+.img-blur-wrapper .tiny-blur {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(20px);
+  transform: scale(1.08);
+}
+
+.img-blur-wrapper .full-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.img-blur-wrapper .full-img.loaded {
+  opacity: 1;
+}
+
+.img-overlay-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+}
+
+/* =============================================================
+   8. VARIANT / DIMENSIONIERUNG CARDS — volledig klikbare radio-kaarten
+   ============================================================= */
+.variant-card {
+  display: block;
+  cursor: pointer;
+  position: relative;
+}
+
+.variant-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.variant-card .glass-card {
+  padding: 28px;
+  transition: transform 0.3s var(--wv2-ease), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.variant-card .glass-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--wv2-shadow-lg);
+}
+
+.variant-card input:checked ~ .glass-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.2);
+}
+
+.variant-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  color: var(--wv2-text);
+}
+
+.variant-card p {
+  margin: 0 0 14px;
+  color: var(--wv2-muted);
+  font-size: 0.92rem;
+}
+
+.variant-card strong {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+/* =============================================================
+   9. VERGELIJKINGSTABEL — schoon, geen zwarte headers
+   ============================================================= */
+.wv2-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--wv2-border);
+  border-radius: 12px;
+  box-shadow: var(--wv2-shadow);
+}
+
+.wv2-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.wv2-table th {
+  background: #f1f5f9;
+  color: var(--wv2-text);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-align: left;
+  padding: 14px 18px;
+}
+
+.wv2-table td {
+  background: #ffffff;
+  padding: 14px 18px;
+  border-top: 1px solid var(--wv2-border);
+  color: var(--wv2-muted);
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease;
+}
+
+.wv2-table tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* =============================================================
+   10. FAQ ACCORDION — native <details>/<summary>, CSS Grid transition
+   ============================================================= */
+.accordion {
+  border: 1px solid var(--wv2-border);
+  border-radius: 12px;
+  background: #fff;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 22px;
+  font-weight: 700;
+  color: var(--wv2-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion summary::after {
+  content: "+";
+  font-size: 1.3rem;
+  color: var(--accent);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.accordion[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+}
+
+.accordion[open] .accordion-content {
+  grid-template-rows: 1fr;
+}
+
+.accordion-content > div {
+  overflow: hidden;
+}
+
+.accordion-content p {
+  margin: 0;
+  padding: 0 22px 20px;
+  color: var(--wv2-muted);
+  line-height: 1.6;
+}
+
+/* =============================================================
+   11. TWEE-HANDLE CAPACITEITS-SLIDER — één --p variabele stuurt alles
+   ============================================================= */
+.wv2-slider {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--wv2-border);
+  margin: 40px 0 28px;
+}
+
+.wv2-slider-fill {
+  position: absolute;
+  inset: 0;
+  width: var(--p, 45%);
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.15s ease;
+}
+
+.wv2-slider input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+.wv2-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+  cursor: pointer;
+  margin-top: -9px;
+}
+
+.wv2-slider input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+  cursor: pointer;
+}
+
+.wv2-slider-preview {
+  position: absolute;
+  left: var(--p, 45%);
+  bottom: 100%;
+  transform: translate(-50%, -10px);
+  background: var(--wv2-text);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* =============================================================
+   12. BLOG GRID — kaarten met hover-scale op de featured image
+   ============================================================= */
+.wv2-blog-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wv2-blog-card .img-blur-wrapper {
+  aspect-ratio: 16 / 10;
+  margin: -1px -1px 0;
+  border-radius: 16px 16px 0 0;
+}
+
+.wv2-blog-card .img-blur-wrapper img {
+  transition: transform 0.4s var(--wv2-ease);
+}
+
+.wv2-blog-card:hover .img-blur-wrapper .full-img {
+  transform: scale(1.06);
+}
+
+.wv2-blog-card-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.wv2-blog-badge {
+  align-self: flex-start;
+  background: #fff7ed;
+  color: var(--on-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.wv2-blog-date {
+  color: var(--wv2-muted);
+  font-size: 0.8rem;
+}
+
+.wv2-blog-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.wv2-blog-card h3 a {
+  color: var(--wv2-text);
+  text-decoration: none;
+}
+
+.wv2-blog-card p {
+  color: var(--wv2-muted);
+  font-size: 0.92rem;
+  margin: 0;
+  flex: 1;
+}
+
+.wv2-blog-readmore {
+  color: var(--on-light);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* =============================================================
+   13. ADD-TO-CART FLY + BUMP ANIMATIE
+   ============================================================= */
+.wv2-fly-clone {
+  position: fixed;
+  z-index: 9999;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: wv2-fly-to-cart 0.6s cubic-bezier(0.5, -0.3, 0.6, 1) forwards;
+}
+
+@keyframes wv2-fly-to-cart {
+  to {
+    transform: translate(var(--dx), var(--dy)) scale(0.2);
+    opacity: 0.4;
+  }
+}
+
+.cart-value.bump,
+.wv2-cart-badge.bump {
+  animation: wv2-cart-pop 0.35s ease;
+}
+
+@keyframes wv2-cart-pop {
+  50% { transform: scale(1.5); }
+}
+
+/* =============================================================
+   14. HOVER-LIFT (generiek, herbruikbaar op kaarten)
+   ============================================================= */
+.wv2-hover-lift {
+  transition: transform 0.3s var(--wv2-ease), box-shadow 0.3s var(--wv2-ease);
+}
+
+.wv2-hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--wv2-shadow-lg);
+}
+
+/* =============================================================
+   15. A11Y — prefers-reduced-motion & hover:none (VERPLICHT)
+   ============================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .wv2-btn-primary,
+  .variant-card .glass-card,
+  .wv2-blog-card .img-blur-wrapper img,
+  .wv2-hover-lift,
+  .accordion summary::after {
+    transition: opacity 0.2s ease !important;
+    transform: none !important;
+  }
+
+  .wv2-btn-primary:hover,
+  .wv2-btn-primary:active,
+  .variant-card .glass-card:hover,
+  .wv2-blog-card:hover .img-blur-wrapper .full-img,
+  .wv2-hover-lift:hover {
+    transform: none !important;
+  }
+
+  .btn-shimmer::after {
+    animation: none !important;
+    display: none !important;
+  }
+
+  .wv2-fly-clone {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .cart-value.bump,
+  .wv2-cart-badge.bump {
+    animation: none !important;
+  }
+
+  .accordion-content {
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+/* Hover-afhankelijke UI moet op touch-apparaten altijd zichtbaar zijn. */
+@media (hover: none) {
+  .wv2-blog-card .img-blur-wrapper .full-img {
+    transform: none !important;
+  }
+}
+
+/* =============================================================
+   16. RESPONSIVE
+   ============================================================= */
+@media (max-width: 900px) {
+  .wv2-section {
+    padding: 44px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .wv2-container {
+    padding: 0 18px;
+  }
+
+  .wv2-section-head h2 {
+    font-size: 1.5rem;
+  }
+}

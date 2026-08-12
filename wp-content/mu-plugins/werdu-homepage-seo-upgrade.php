@@ -1508,6 +1508,83 @@ HTML;
 }
 
 /**
+ * Enige waarheidsbron voor de FAQ-vragen/antwoorden: dezelfde array voedt
+ * zowel de zichtbare accordion-HTML als de JSON-LD FAQPage-schema. Dit
+ * voorkomt contentdrift tussen wat bezoekers zien en wat crawlers/AI-search
+ * (Google AIO, Perplexity, ChatGPT Search) als structured data binnenkrijgen.
+ */
+function werdu_home_seo_faq_data() {
+    return array(
+        array(
+            'q' => 'Kann ich einen Speicher nachträglich einbauen?',
+            'a' => 'Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.',
+        ),
+        array(
+            'q' => 'Wie lange hält eine moderne Solarbatterie?',
+            'a' => 'Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80 %.',
+        ),
+        array(
+            'q' => 'Funktioniert der Speicher auch bei einem Stromausfall?',
+            'a' => 'Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.',
+        ),
+        array(
+            'q' => 'Lohnt sich ein Speicher auch im Winter?',
+            'a' => 'Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.',
+        ),
+    );
+}
+
+/**
+ * Rendert de zichtbare FAQ-accordion (.werdu-faq-item) vanuit
+ * werdu_home_seo_faq_data(). esc_html() op elk veld — de brontekst bevat
+ * bewust geen HTML, dus dit is puur een veiligheidsnet.
+ */
+function werdu_home_seo_faq_html() {
+    $html = '';
+    foreach ( werdu_home_seo_faq_data() as $i => $item ) {
+        $open_class = ( 0 === $i ) ? ' is-open' : '';
+        $html .= '<div class="werdu-faq-item' . $open_class . '">'
+            . '<div class="werdu-faq-header"><span>' . esc_html( $item['q'] ) . '</span><span class="werdu-faq-icon">+</span></div>'
+            . '<div class="werdu-faq-answer-wrapper"><div class="werdu-faq-answer-inner"><p>' . esc_html( $item['a'] ) . '</p></div></div>'
+            . '</div>';
+    }
+    return $html;
+}
+
+/**
+ * Rendert het FAQPage JSON-LD-schema vanuit werdu_home_seo_faq_data() via
+ * wp_json_encode() (i.p.v. een handgeschreven heredoc-string). Dit voorkomt
+ * de klasse van bugs waarbij een aanhalingsteken/umlaut in toekomstige copy
+ * de <script type="application/ld+json">-tag corrumpeert en een
+ * "SyntaxError: Unexpected token" in de browserconsole veroorzaakt — de
+ * PHP JSON-encoder escapet dat altijd correct, een hand-geschreven string
+ * niet per definitie.
+ */
+function werdu_home_seo_faq_json_ld() {
+    $questions = array();
+    foreach ( werdu_home_seo_faq_data() as $item ) {
+        $questions[] = array(
+            '@type'          => 'Question',
+            'name'           => $item['q'],
+            'acceptedAnswer' => array(
+                '@type' => 'Answer',
+                'text'  => $item['a'],
+            ),
+        );
+    }
+
+    $schema = array(
+        '@context'   => 'https://schema.org',
+        '@type'      => 'FAQPage',
+        'mainEntity' => $questions,
+    );
+
+    return '<script type="application/ld+json">'
+        . wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
+        . '</script>';
+}
+
+/**
  * Groot SEO/AIO-contentblok (ToC, artikel, vergelijkingstabel, FAQ, JSON-LD).
  * Wordt direct onder de calculator-sectie geplaatst. Alle CTA's verwijzen naar
  * home_url('/beratung-anfragen/') resp. home_url('/solarbatterie-rechner/') —
@@ -1708,52 +1785,7 @@ function werdu_home_seo_body_html() {
 
         <h2 id="faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</h2>
         <div class="werdu-faq-box">
-        <div class="werdu-faq-container">
-            <div class="werdu-faq-item is-open">
-                <div class="werdu-faq-header">
-                    <span>Kann ich einen Speicher nachträglich einbauen?</span>
-                    <span class="werdu-faq-icon">+</span>
-                </div>
-                <div class="werdu-faq-answer-wrapper">
-                    <div class="werdu-faq-answer-inner">
-                        <p>Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="werdu-faq-item">
-                <div class="werdu-faq-header">
-                    <span>Wie lange hält eine moderne Solarbatterie?</span>
-                    <span class="werdu-faq-icon">+</span>
-                </div>
-                <div class="werdu-faq-answer-wrapper">
-                    <div class="werdu-faq-answer-inner">
-                        <p>Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80&nbsp;%.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="werdu-faq-item">
-                <div class="werdu-faq-header">
-                    <span>Funktioniert der Speicher auch bei einem Stromausfall?</span>
-                    <span class="werdu-faq-icon">+</span>
-                </div>
-                <div class="werdu-faq-answer-wrapper">
-                    <div class="werdu-faq-answer-inner">
-                        <p>Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="werdu-faq-item">
-                <div class="werdu-faq-header">
-                    <span>Lohnt sich ein Speicher auch im Winter?</span>
-                    <span class="werdu-faq-icon">+</span>
-                </div>
-                <div class="werdu-faq-answer-wrapper">
-                    <div class="werdu-faq-answer-inner">
-                        <p>Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="werdu-faq-container">___FAQ_ACCORDION___</div>
         </div>
 
         <div class="werdu-highlight-card" style="margin-top:56px;">
@@ -1766,51 +1798,12 @@ function werdu_home_seo_body_html() {
 </div>
 
 <!-- JSON-LD FAQ Schema for Google AIO Search Features -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Kann ich einen Speicher nachträglich einbauen?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme oder ein hybrider DC-Wechselrichter zum Einsatz."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Wie lange hält eine moderne Solarbatterie?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Funktioniert der Speicher auch bei einem Stromausfall?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Verfügt das System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie das Zuhause bei einem Netzausfall automatisch weiter."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Lohnt sich ein Speicher auch im Winter?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Ja. Auch im Winter fängt der Speicher kurzzeitige Sonnenphasen ab und reduziert so den Zukauf von Netzstrom."
-      }
-    }
-  ]
-}
-</script>
+___FAQ_JSONLD___
 HTML;
 
     return str_replace(
-        array( '___BERATUNG_URL___', '___RECHNER_URL___' ),
-        array( esc_url( $beratung ), esc_url( $rechner ) ),
+        array( '___BERATUNG_URL___', '___RECHNER_URL___', '___FAQ_ACCORDION___', '___FAQ_JSONLD___' ),
+        array( esc_url( $beratung ), esc_url( $rechner ), werdu_home_seo_faq_html(), werdu_home_seo_faq_json_ld() ),
         $template
     );
 }
