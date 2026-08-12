@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
  * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
- * Version: 3.1
+ * Version: 3.2
  * Author: Michael van der Veen
  * Network: false
  */
@@ -676,6 +676,278 @@ function werdu_home_seo_base_css() {
     transform: none !important;
   }
 }
+
+/* ============================================
+   DESIGN SYSTEM 3.2 — Deutsche Landingpage-Struktur
+   ============================================
+   Layout-laag voor de Duitse markt: 2-koloms hero met badge/USP's,
+   3 Szenario-Karten en een Vergleichsmatrix. Puur additief bovenop 3.1
+   (geen bestaande class hernoemd/verwijderd); zelfde performance-principes:
+   geen backdrop-filter, geen infinite animaties, effen kleuren. */
+.werdu-hero-container {
+  background: var(--werdu-sky-bg);
+  border: 1px solid #DBEAFE;
+  border-radius: 20px;
+  padding: 45px 35px;
+  margin: 20px 0 35px 0;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: center;
+  text-align: left;
+}
+
+.werdu-badge-de {
+  background: #DBEAFE;
+  color: #1E40AF;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.werdu-hero-container h1 {
+  color: var(--werdu-text) !important;
+  font-size: 2.4rem !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  margin-bottom: 15px !important;
+  text-align: left;
+}
+
+.werdu-hero-p {
+  font-size: 1.1rem;
+  color: var(--werdu-muted);
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.werdu-usps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.werdu-usp-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--werdu-text);
+  font-size: 0.95rem;
+}
+
+.werdu-usp-check {
+  color: var(--werdu-orange);
+  font-size: 1.2rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.btn-werdu-primary {
+  background-color: var(--werdu-orange) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  padding: 16px 36px !important;
+  border-radius: 10px !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  font-size: 1.1rem !important;
+  box-shadow: 0 6px 20px rgba(255, 102, 0, 0.3) !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, background-color 0.15s ease !important;
+}
+
+.btn-werdu-primary:hover {
+  background-color: var(--werdu-orange-hover) !important;
+  transform: translateY(-2px);
+}
+
+.werdu-hero-fact-card {
+  background: #FFFFFF;
+  border: 1px solid var(--werdu-card-border);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+}
+
+.werdu-hero-fact-card h3 {
+  font-size: 1.05rem;
+  color: var(--werdu-text);
+  margin: 0 0 16px;
+}
+
+.werdu-hero-fact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--werdu-card-border);
+}
+
+.werdu-hero-fact-row:last-child {
+  border-bottom: none;
+}
+
+.werdu-hero-fact-row span:first-child {
+  color: var(--werdu-muted);
+  font-size: 0.9rem;
+}
+
+.werdu-hero-fact-row strong {
+  color: var(--werdu-orange);
+  font-size: 1.15rem;
+}
+
+.werdu-section-head {
+  text-align: center;
+  margin: 40px 0 25px 0;
+}
+
+.werdu-section-head h2 {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: var(--werdu-text) !important;
+  margin-top: 0 !important;
+}
+
+.werdu-section-head p {
+  color: var(--werdu-muted);
+  max-width: 640px;
+  margin: 8px auto 0;
+}
+
+.werdu-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 45px;
+}
+
+.werdu-scenario-card {
+  background: #FFFFFF;
+  border: 1px solid var(--werdu-card-border);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.werdu-scenario-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--werdu-orange);
+}
+
+.werdu-scenario-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: var(--werdu-orange);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.werdu-scenario-card h3 {
+  color: var(--werdu-text) !important;
+  font-size: 1.4rem !important;
+  margin-bottom: 10px !important;
+  margin-top: 0 !important;
+}
+
+.werdu-scenario-card p {
+  color: var(--werdu-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.werdu-scenario-card ul {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.werdu-scenario-card ul li {
+  font-size: 0.9rem;
+  color: var(--werdu-muted);
+  padding-left: 22px;
+  position: relative;
+}
+
+.werdu-scenario-card ul li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--werdu-orange);
+  font-weight: 900;
+}
+
+.werdu-matrix-wrapper {
+  background: #FFFFFF;
+  border: 1px solid var(--werdu-card-border);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 45px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+  overflow-x: auto;
+}
+
+.werdu-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.werdu-matrix-table th {
+  background: var(--werdu-bg-subtle);
+  color: var(--werdu-text);
+  padding: 14px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--werdu-card-border);
+}
+
+.werdu-matrix-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--werdu-card-border);
+  color: var(--werdu-muted);
+  font-size: 0.95rem;
+}
+
+.werdu-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.werdu-faq-box {
+  background: #FFFFFF;
+  border: 1px solid var(--werdu-card-border);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 782px) {
+  .werdu-hero-container {
+    grid-template-columns: 1fr;
+    padding: 30px 22px;
+  }
+  .werdu-hero-container h1 {
+    font-size: 1.7rem !important;
+  }
+}
 CSS;
 }
 
@@ -1014,14 +1286,35 @@ add_action( 'wp_footer', 'werdu_home_seo_print_interactions_js', 21 );
  * volledig ongewijzigd; dit is een extra, op zichzelf staand blok.
  */
 function werdu_home_seo_hero_html() {
-    return <<<'HTML'
+    $rechner = werdu_home_seo_rechner_url();
+
+    $template = <<<'HTML'
 <div class="werdu-seo-container" style="padding-bottom:0;">
-    <div class="werdu-hero-intro">
-        <h1>PV-Speicher für Ihr Zuhause: Autarkie-Rechner &amp; Testsieger 2026</h1>
-        <p>Sie möchten Ihre Stromkosten spürbar senken und sich unabhängiger von steigenden Netzpreisen machen? Ein moderner PV-Speicher speichert Ihren selbst erzeugten Solarstrom und stellt ihn genau dann bereit, wenn Sie ihn wirklich brauchen – auch abends und nachts. Nutzen Sie unseren kostenlosen Autarkie-Rechner, um die passende Kapazität für Ihr Zuhause zu ermitteln, und sichern Sie sich anschließend Ihr individuelles Angebot.</p>
+    <div class="werdu-hero-container">
+        <div>
+            <span class="werdu-badge-de">Für den deutschen Markt · 0&nbsp;% MwSt.</span>
+            <h1>PV-Speicher für Ihr Zuhause: Autarkie-Rechner &amp; Testsieger 2026</h1>
+            <p class="werdu-hero-p">Sie möchten Ihre Stromkosten spürbar senken und sich unabhängiger von steigenden Netzpreisen machen? Ein moderner PV-Speicher speichert Ihren selbst erzeugten Solarstrom und stellt ihn genau dann bereit, wenn Sie ihn wirklich brauchen – auch abends, nachts und bei einem Stromausfall.</p>
+            <div class="werdu-usps-grid">
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> 0&nbsp;% MwSt. auf PV-Speicher</div>
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> LiFePO4-Technologie</div>
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> Optionale Notstromfunktion</div>
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> Bis zu 85&nbsp;% Autarkiegrad</div>
+            </div>
+            <a href="___RECHNER_URL___" class="btn-werdu-primary">Jetzt Autarkie-Rechner starten</a>
+        </div>
+        <div class="werdu-hero-fact-card">
+            <h3>Ihr PV-Speicher auf einen Blick</h3>
+            <div class="werdu-hero-fact-row"><span>Steuervorteil</span><strong>0&nbsp;% MwSt.</strong></div>
+            <div class="werdu-hero-fact-row"><span>Zellchemie</span><strong>LiFePO4</strong></div>
+            <div class="werdu-hero-fact-row"><span>Max. Autarkiegrad</span><strong>bis 85&nbsp;%</strong></div>
+            <div class="werdu-hero-fact-row"><span>Notstrom-Option</span><strong>Verfügbar</strong></div>
+        </div>
     </div>
 </div>
 HTML;
+
+    return str_replace( '___RECHNER_URL___', esc_url( $rechner ), $template );
 }
 
 /**
@@ -1050,6 +1343,47 @@ function werdu_home_seo_body_html() {
             <li><a href="#kosten-wirtschaftlichkeit">5. Kosten, Förderung &amp; Amortisation im Überblick</a></li>
             <li><a href="#faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</a></li>
         </ul>
+    </div>
+
+    <!-- Schnellauswahl: 3 Szenario-Karten (Welcher Speicher passt zu mir?) -->
+    <div class="werdu-section-head" id="schnellauswahl">
+        <h2>Welcher PV-Speicher passt zu Ihnen?</h2>
+        <p>Drei typische Haushaltsprofile – finden Sie in Sekunden Ihre passende Kategorie und bestätigen Sie die genaue Größe anschließend mit dem kostenlosen Autarkie-Rechner.</p>
+    </div>
+    <div class="werdu-card-container">
+        <div class="werdu-scenario-card">
+            <span class="werdu-scenario-badge">Beliebteste Wahl</span>
+            <h3>Standard-Haushalt</h3>
+            <p>2–4 Personen, ca. 3.000–4.500&nbsp;kWh Jahresverbrauch, klassische PV-Anlage ohne E-Auto.</p>
+            <ul>
+                <li>Empfohlene Größe: 5–8&nbsp;kWh</li>
+                <li>Autarkiegrad: ca. 70–78&nbsp;%</li>
+                <li>0&nbsp;% MwSt. inklusive</li>
+            </ul>
+            <a href="___RECHNER_URL___" class="btn-werdu-primary">Größe berechnen</a>
+        </div>
+        <div class="werdu-scenario-card">
+            <span class="werdu-scenario-badge">Für Vielverbraucher</span>
+            <h3>Haushalt mit E-Auto &amp; Wärmepumpe</h3>
+            <p>Höherer Verbrauch durch Elektromobilität und/oder Wärmepumpe, ca. 6.000–9.000&nbsp;kWh im Jahr.</p>
+            <ul>
+                <li>Empfohlene Größe: 12–16&nbsp;kWh</li>
+                <li>Autarkiegrad: ca. 80–88&nbsp;%</li>
+                <li>LiFePO4-Technologie</li>
+            </ul>
+            <a href="___RECHNER_URL___" class="btn-werdu-primary">Größe berechnen</a>
+        </div>
+        <div class="werdu-scenario-card">
+            <span class="werdu-scenario-badge">Volle Unabhängigkeit</span>
+            <h3>Maximale Autarkie &amp; Notstrom</h3>
+            <p>Sie möchten größtmögliche Unabhängigkeit und bei einem Stromausfall abgesichert sein.</p>
+            <ul>
+                <li>Empfohlene Größe: 16–32&nbsp;kWh</li>
+                <li>Optionale Notstromfunktion</li>
+                <li>All-in-One Off-Grid-fähig</li>
+            </ul>
+            <a href="___BERATUNG_URL___" class="btn-werdu-primary">Beratung anfragen</a>
+        </div>
     </div>
 
     <!-- Main Article Body -->
@@ -1092,8 +1426,8 @@ function werdu_home_seo_body_html() {
             Als bewährte Praxisregel für Einfamilienhäuser gilt: Pro 1.000&nbsp;kWh jährlichem Stromverbrauch sollte die Nutzkapazität etwa 1 bis 1,5&nbsp;kWh betragen – abgestimmt auf die Spitzenleistung (kWp) Ihrer Photovoltaikanlage.
         </p>
 
-        <div class="werdu-table-wrapper">
-            <table class="werdu-table">
+        <div class="werdu-table-wrapper werdu-matrix-wrapper">
+            <table class="werdu-table werdu-matrix-table">
                 <thead>
                     <tr>
                         <th>Jährlicher Verbrauch</th>
@@ -1183,6 +1517,7 @@ function werdu_home_seo_body_html() {
         </div>
 
         <h2 id="faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</h2>
+        <div class="werdu-faq-box">
         <div class="werdu-faq-container">
             <div class="werdu-faq-item is-open">
                 <div class="werdu-faq-header">
@@ -1228,6 +1563,7 @@ function werdu_home_seo_body_html() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="werdu-highlight-card" style="margin-top:56px;">
@@ -1304,7 +1640,7 @@ function werdu_home_seo_inject( $content ) {
     }
 
     // Idempotentie: nooit tweemaal injecteren binnen dezelfde request.
-    if ( false !== strpos( $content, 'werdu-hero-intro' ) ) {
+    if ( false !== strpos( $content, 'werdu-hero-container' ) ) {
         return $content;
     }
 
