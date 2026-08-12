@@ -1,10 +1,8 @@
 name: Deploy to Test Environment
-
 on:
   push:
     branches:
       - main
-
 jobs:
   web-deploy:
     name: Deploy to test.werdu.de
@@ -12,17 +10,13 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v3
-
-    - name: Sync wp-content to test server
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+    - name: SFTP Deploy
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
         server: ${{ secrets.TEST_FTP_SERVER }}
         username: ${{ secrets.TEST_FTP_USERNAME }}
         password: ${{ secrets.TEST_FTP_PASSWORD }}
-        protocol: ftp
-        port: 21
-        local-dir: ./wp-content/
-        server-dir: /wp-content/
-        exclude: |
-          **/cache/**
-          **/uploads/**
+        port: 22
+        local_path: './*'
+        remote_path: '/'
+        sftp_only: true
