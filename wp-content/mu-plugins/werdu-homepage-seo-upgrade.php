@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
- * Description: Injecteert de nieuwe H1/Hero-copy en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage, direct onder de Heimspeicher-rechner sectie, zonder de bestaande Elementor-content, calculator of styling aan te passen.
- * Version: 1.0
+ * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
+ * Version: 2.0
  * Author: Michael van der Veen
  * Network: false
  */
@@ -33,6 +33,374 @@ function werdu_home_seo_rechner_url() {
     return home_url( '/solarbatterie-rechner/' );
 }
 
+// ============================================
+// BASE CSS & INTERACTION SYSTEM
+// ============================================
+
+/**
+ * High-end designsysteem: CSS-variabelen, borderless tabel, pill-vormige
+ * primary button, reduced-motion support en subtiele focus-glow op de
+ * bestaande (Elementor-gerenderde) calculator-velden. Puur additieve CSS —
+ * er wordt geen bestaande class verwijderd of overschreven buiten deze
+ * nieuwe/eigen selectors.
+ */
+function werdu_home_seo_base_css() {
+    return <<<'CSS'
+:root {
+  --werdu-bg: #FFFFFF;
+  --werdu-bg-subtle: #F8FAFC;
+  --werdu-text: #0F172A;
+  --werdu-muted: #475569;
+  --werdu-orange: #FF5722;
+  --werdu-orange-hover: #E64A19;
+  --werdu-border: #E2E8F0;
+  --werdu-radius: 16px;
+  --werdu-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+}
+
+.werdu-seo-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--werdu-text);
+  line-height: 1.75;
+}
+
+.werdu-seo-container h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--werdu-text);
+  margin-top: 48px;
+}
+
+.werdu-seo-container h3 {
+  color: var(--werdu-text);
+  font-weight: 700;
+}
+
+.werdu-seo-container p {
+  color: var(--werdu-muted);
+}
+
+.werdu-hero-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 48px auto;
+  padding: 36px 24px;
+  background: var(--werdu-bg-subtle);
+  border: 1px solid var(--werdu-border);
+  border-radius: var(--werdu-radius);
+}
+
+.werdu-hero-intro h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--werdu-text);
+}
+
+.werdu-hero-intro p {
+  color: var(--werdu-muted);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.werdu-toc-box {
+  background: var(--werdu-bg-subtle);
+  border: 1px solid var(--werdu-border);
+  border-radius: var(--werdu-radius);
+  padding: 28px;
+  margin: 40px 0;
+}
+
+.werdu-toc-box h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.werdu-toc-box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.werdu-toc-box a {
+  color: var(--werdu-text);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.werdu-toc-box a:hover {
+  color: var(--werdu-orange);
+  border-bottom-color: var(--werdu-orange);
+}
+
+.werdu-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  background-color: var(--werdu-orange);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(255, 87, 34, 0.3);
+  border: none;
+}
+
+.werdu-btn-primary:hover {
+  background-color: var(--werdu-orange-hover);
+  transform: translateY(-2px);
+}
+
+.werdu-highlight-card {
+  background: var(--werdu-text);
+  color: #fff;
+  padding: 32px;
+  border-radius: var(--werdu-radius);
+  margin: 36px 0;
+  text-align: center;
+}
+
+.werdu-highlight-card h3 {
+  color: #fff;
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+.werdu-highlight-card p {
+  color: #cbd5e1;
+  margin-bottom: 20px;
+}
+
+.werdu-card-soft {
+  background: var(--werdu-bg-subtle);
+  border: 1px solid var(--werdu-border);
+  padding: 32px;
+  border-radius: var(--werdu-radius);
+  text-align: center;
+  margin: 40px 0;
+}
+
+.werdu-card-soft h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+.werdu-card-soft p {
+  margin-bottom: 20px;
+}
+
+.werdu-seo-container blockquote {
+  background: var(--werdu-bg-subtle);
+  border-left: 4px solid var(--werdu-orange);
+  border-radius: 0 12px 12px 0;
+  margin: 32px 0;
+  padding: 22px 24px;
+  font-style: italic;
+  color: var(--werdu-text);
+}
+
+.werdu-seo-container blockquote a {
+  color: var(--werdu-orange);
+  font-weight: 600;
+}
+
+/* Borderless comparison table */
+.werdu-table-wrapper {
+  overflow-x: auto;
+  background: var(--werdu-bg);
+  border-radius: var(--werdu-radius);
+  border: 1px solid var(--werdu-border);
+  box-shadow: var(--werdu-shadow);
+  margin: 32px 0;
+}
+
+.werdu-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.werdu-table th {
+  background: var(--werdu-bg-subtle);
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--werdu-border);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--werdu-text);
+  text-align: left;
+}
+
+.werdu-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--werdu-border);
+  color: var(--werdu-muted);
+}
+
+.werdu-table tr:last-child td {
+  border-bottom: none;
+}
+
+.werdu-table td strong {
+  color: var(--werdu-text);
+}
+
+.werdu-faq-item {
+  border-bottom: 1px solid var(--werdu-border);
+  padding: 22px 0;
+}
+
+.werdu-faq-item:last-child {
+  border-bottom: none;
+}
+
+.werdu-faq-item h3 {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+.werdu-faq-item p {
+  margin: 0;
+}
+
+/* Accessibility: respect reduced-motion preference — fade instead of movement */
+@media (prefers-reduced-motion: reduce) {
+  .werdu-btn-primary,
+  .werdu-calc-btn {
+    transition: opacity 0.2s ease;
+  }
+  .werdu-btn-primary:hover,
+  .werdu-calc-btn:hover {
+    transform: none;
+    opacity: 0.9;
+  }
+}
+
+/* Subtle orange focus-glow on the real calculator's input groups (Elementor markup) */
+.werdu-calc-container .calc-row:focus-within,
+.werdu-calc-container label:focus-within {
+  box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.15);
+  border-radius: 10px;
+}
+
+.werdu-calc-input:focus,
+.werdu-calc-select:focus {
+  outline: none;
+  border-color: var(--werdu-orange) !important;
+  box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.15);
+}
+
+/* Calculator submit button gets the same high-end primary style */
+.werdu-calc-btn {
+  background-color: var(--werdu-orange) !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(255, 87, 34, 0.3) !important;
+  transition: all 0.2s ease;
+}
+
+.werdu-calc-btn:hover {
+  background-color: var(--werdu-orange-hover) !important;
+  transform: translateY(-2px);
+}
+CSS;
+}
+
+function werdu_home_seo_print_css() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    echo '<style id="werdu-home-seo-css">' . werdu_home_seo_base_css() . '</style>' . "\n";
+}
+add_action( 'wp_head', 'werdu_home_seo_print_css', 20 );
+
+// ============================================
+// FORM UX FIX — inputmode="numeric" op PLZ/telefoon-achtige velden
+// ============================================
+
+/**
+ * De calculator-velden zijn Elementor-content (niet in een bestand te
+ * bewerken), dus deze fix wordt client-side toegepast: elk veld dat een
+ * postcode/PLZ of telefoonnummer lijkt te zijn, krijgt inputmode="numeric"
+ * i.p.v. type="number" (voorkomt spinner-pijltjes en toont op mobiel het
+ * juiste numerieke toetsenbord zonder het HTML-inputtype te wijzigen).
+ */
+function werdu_home_seo_print_inputmode_js() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    ?>
+<script id="werdu-home-seo-inputmode">
+(function () {
+  'use strict';
+
+  var SELECTORS = [
+    'input#plz',
+    'input[name="plz"]',
+    'input[id*="plz" i]',
+    'input[name*="plz" i]',
+    'input[id*="zip" i]',
+    'input[name*="zip" i]',
+    'input[id*="postleitzahl" i]',
+    'input[type="tel"]',
+    'input[id*="phone" i]',
+    'input[name*="phone" i]',
+    'input[id*="telefon" i]',
+    'input[name*="telefon" i]'
+  ];
+
+  function applyInputmode() {
+    document.querySelectorAll( SELECTORS.join( ',' ) ).forEach( function ( el ) {
+      if ( el.getAttribute( 'inputmode' ) !== 'numeric' ) {
+        el.setAttribute( 'inputmode', 'numeric' );
+      }
+      if ( el.getAttribute( 'type' ) === 'number' ) {
+        el.setAttribute( 'type', 'text' );
+      }
+      if ( ! el.getAttribute( 'pattern' ) ) {
+        el.setAttribute( 'pattern', '[0-9]*' );
+      }
+    } );
+  }
+
+  if ( document.readyState === 'loading' ) {
+    document.addEventListener( 'DOMContentLoaded', applyInputmode );
+  } else {
+    applyInputmode();
+  }
+
+  // De calculator-markup kan iets vertraagd renderen; kort blijven proberen.
+  var attempts = 0;
+  var timer = setInterval( function () {
+    attempts++;
+    applyInputmode();
+    if ( attempts > 20 ) {
+      clearInterval( timer );
+    }
+  }, 300 );
+})();
+</script>
+    <?php
+}
+add_action( 'wp_footer', 'werdu_home_seo_print_inputmode_js', 20 );
+
+// ============================================
+// CONTENT — Hero + SEO/AIO-artikel
+// ============================================
+
 /**
  * Nieuw Hero-blok (H1 + intro) — wordt vóór de bestaande content geplaatst.
  * De bestaande Hero/aankondigingsbalk, productkaarten en calculator blijven
@@ -40,9 +408,11 @@ function werdu_home_seo_rechner_url() {
  */
 function werdu_home_seo_hero_html() {
     return <<<'HTML'
-<div class="werdu-hero-seo-block" style="max-width:1300px;margin:0 auto;padding:30px 20px 10px;">
-    <h1 style="font-size:2.1rem;line-height:1.25;color:#1a1a1a;margin:0 0 14px;">PV Speicher kaufen 2026: Testsieger &amp; Autarkie-Rechner für Ihr Zuhause</h1>
-    <p style="font-size:1.1rem;line-height:1.6;color:#333;max-width:900px;margin:0;">Möchten Sie einen hochqualitativen PV Speicher kaufen, um Ihre Stromkosten drastisch zu senken und sich unabhängig von steigenden Netzpreisen zu machen? Mit einem modernen PV Speicher nutzen Sie Ihren erzeugten Solarstrom genau dann, wenn Sie ihn wirklich brauchen – auch abends und in der Nacht. Nutzen Sie unseren kostenlosen Autarkie-Rechner, um die ideale Kapazität für Ihren Heimspeicher zu berechnen und sichern Sie sich Ihr individuelles Angebot für eine nachhaltige Solarbatterie.</p>
+<div class="werdu-seo-container" style="padding-bottom:0;">
+    <div class="werdu-hero-intro">
+        <h1>PV-Speicher für Ihr Zuhause: Autarkie-Rechner &amp; Testsieger 2026</h1>
+        <p>Sie möchten Ihre Stromkosten spürbar senken und sich unabhängiger von steigenden Netzpreisen machen? Ein moderner PV-Speicher speichert Ihren selbst erzeugten Solarstrom und stellt ihn genau dann bereit, wenn Sie ihn wirklich brauchen – auch abends und nachts. Nutzen Sie unseren kostenlosen Autarkie-Rechner, um die passende Kapazität für Ihr Zuhause zu ermitteln, und sichern Sie sich anschließend Ihr individuelles Angebot.</p>
+    </div>
 </div>
 HTML;
 }
@@ -51,153 +421,153 @@ HTML;
  * Groot SEO/AIO-contentblok (ToC, artikel, vergelijkingstabel, FAQ, JSON-LD).
  * Wordt direct onder de calculator-sectie geplaatst. Alle CTA's verwijzen naar
  * home_url('/beratung-anfragen/') resp. home_url('/solarbatterie-rechner/') —
- * nooit naar /kontakt/ en nooit naar een hardgecodeerde host.
+ * nooit naar /kontakt/ en nooit naar een hardgecodeerde host. De copy is
+ * bewust gevarieerd (PV-Speicher, Batteriespeicher, Heimspeicher, LiFePO4,
+ * Autarkie) om onnatuurlijke keyword-stuffing te vermijden.
  */
 function werdu_home_seo_body_html() {
     $beratung = werdu_home_seo_beratung_url();
     $rechner  = werdu_home_seo_rechner_url();
 
     $template = <<<'HTML'
-<!-- Rank Math Compliant Table of Contents Block -->
-<div class="werdu-toc-box" style="background:#f4f7fa; border:1px solid #dcdfe3; border-left:5px solid #0056b3; padding:25px; border-radius:8px; margin:40px 0;">
-    <h2 style="font-size:1.3rem; margin-top:0; color:#1a1a1a;">Inhaltsverzeichnis: Ihr umfassender PV Speicher Ratgeber</h2>
-    <ul style="line-height:1.8; margin-bottom:0; padding-left:20px;">
-        <li><a href="#warum-pv-speicher-kaufen" style="color:#0056b3; text-decoration:none; font-weight:600;">1. Warum Sie 2026 einen PV Speicher kaufen sollten</a></li>
-        <li><a href="#autarkie-vorteile" style="color:#0056b3; text-decoration:none; font-weight:600;">2. Maximaler Nutzen: Autarkie steigern &amp; Stromkosten nachhaltig senken</a></li>
-        <li><a href="#dimensionierung-kapazitaet" style="color:#0056b3; text-decoration:none; font-weight:600;">3. Die richtige Größe: Wie viel kWh PV Speicher brauchen Sie wirklich?</a></li>
-        <li><a href="#technologie-vergleich" style="color:#0056b3; text-decoration:none; font-weight:600;">4. Technologien im Vergleich: LFP (Lithium-Eisenphosphat) vs. NMC</a></li>
-        <li><a href="#kosten-wirtschaftlichkeit" style="color:#0056b3; text-decoration:none; font-weight:600;">5. PV Speicher Kosten, Förderung &amp; Amortisation im Überblick</a></li>
-        <li><a href="#faq-bereich" style="color:#0056b3; text-decoration:none; font-weight:600;">6. Häufig gestellte Fragen (FAQ zum PV Speicher)</a></li>
-    </ul>
+<div class="werdu-seo-container">
+
+    <!-- Table of Contents -->
+    <div class="werdu-toc-box">
+        <h2>Inhaltsverzeichnis: Ihr Ratgeber rund um den PV-Speicher</h2>
+        <ul>
+            <li><a href="#warum-pv-speicher-kaufen">1. Warum sich ein PV-Speicher 2026 lohnt</a></li>
+            <li><a href="#autarkie-vorteile">2. Mehr Autarkie, weniger Stromkosten</a></li>
+            <li><a href="#dimensionierung-kapazitaet">3. Die richtige Kapazität für Ihren Speicher</a></li>
+            <li><a href="#technologie-vergleich">4. LiFePO4 vs. NMC: Technologien im Vergleich</a></li>
+            <li><a href="#kosten-wirtschaftlichkeit">5. Kosten, Förderung &amp; Amortisation im Überblick</a></li>
+            <li><a href="#faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Article Body -->
+    <section class="werdu-seo-body">
+
+        <h2 id="warum-pv-speicher-kaufen">1. Warum sich ein PV-Speicher 2026 lohnt</h2>
+        <p>
+            Die Einspeisevergütung für Solarstrom liegt auf einem historischen Tiefstand, während die Strompreise für deutsche Haushalte weiterhin hoch bleiben. Wer eine Photovoltaikanlage ohne leistungsstarken Speicher betreibt, verschenkt Tag für Tag bares Geld: Ohne eigene Speichermöglichkeit nutzen Eigenheimbesitzer im Durchschnitt lediglich 20&nbsp;% bis 30&nbsp;% ihres selbst erzeugten Solarstroms. Der große Rest fließt für wenige Cent ins öffentliche Netz – nur um abends teuren Netzstrom zurückzukaufen.
+        </p>
+        <p>
+            Ein modernes Speichersystem hebt Ihren Eigenverbrauch sofort auf 70&nbsp;% bis über 85&nbsp;%. Es speichert die ungenutzte Sonnenenergie der Mittagsstunden und stellt sie genau dann zur Verfügung, wenn der Verbrauch im Haushalt am höchsten ist: morgens und abends. So werden Sie spürbar unabhängiger von fossilen Energieträgern und den Preissteigerungen der Stromkonzerne. Auch bei einer bestehenden Solaranlage lohnt sich die Nachrüstung eines Batteriespeichers – sie sichert den langfristigen Wert Ihrer Immobilie und bringt Sie Ihrer persönlichen Energiewende einen großen Schritt näher.
+        </p>
+
+        <div class="werdu-highlight-card">
+            <h3>Welche Speichergröße passt zu Ihnen?</h3>
+            <p>Ermitteln Sie mit unserem präzisen Online-Rechner in unter 2 Minuten die optimale Kapazität und Ihre jährliche Ersparnis.</p>
+            <a href="___RECHNER_URL___" class="werdu-btn-primary">Jetzt Autarkie &amp; Speichergröße berechnen</a>
+        </div>
+
+        <h2 id="autarkie-vorteile">2. Mehr Autarkie, weniger Stromkosten</h2>
+        <p>
+            Die Entscheidung für eine hochwertige Solarbatterie bringt weit mehr als nur finanzielle Ersparnisse. Es geht um Autonomie, Versorgungssicherheit und maximale Unabhängigkeit im eigenen Zuhause.
+        </p>
+        <ul>
+            <li><strong>Spürbar niedrigere Abschlagszahlungen:</strong> Jede Kilowattstunde aus Ihrem eigenen Speicher müssen Sie nicht mehr teuer vom Netzbetreiber beziehen.</li>
+            <li><strong>Schutz vor Strompreissteigerungen:</strong> Steigen die Netzstrompreise, bleiben Ihre Erzeugungskosten konstant bei nahezu 0&nbsp;Cent pro Kilowattstunde.</li>
+            <li><strong>Optionale Notstromversorgung:</strong> Moderne Heimspeicher sichern Ihr Zuhause bei Netzausfällen ab und halten Kühlschrank, Heizung und Licht unterbrechungsfrei am Laufen.</li>
+            <li><strong>Optimal für E-Auto und Wärmepumpe:</strong> Nutzen Sie gespeicherten Solarstrom, um Ihr Elektrofahrzeug abends kostengünstig zu laden oder Ihre Wärmepumpe zu betreiben.</li>
+        </ul>
+
+        <blockquote>
+            "Eine wissenschaftliche Analyse des <a href="https://www.ise.fraunhofer.de" target="_blank" rel="noopener dofollow">Fraunhofer-Instituts für Solare Energiesysteme (ISE)</a> bestätigt: Durch den gezielten Einsatz eines optimal dimensionierten Batteriespeichers lässt sich der Eigenverbrauchsanteil einer Wohngebäude-Photovoltaikanlage von rund 30&nbsp;% auf bis zu 80&nbsp;% steigern."
+        </blockquote>
+
+        <h2 id="dimensionierung-kapazitaet">3. Die richtige Kapazität für Ihren Speicher</h2>
+        <p>
+            Eine der wichtigsten Entscheidungen rund um Ihren PV-Speicher ist die passende Dimensionierung. Ist der Speicher zu klein, kaufen Sie abends weiterhin teuren Netzstrom zu. Ist er stark überdimensioniert, steigen die Anschaffungskosten unnötig, ohne dass die Batterie in den ertragsarmen Wintermonaten voll geladen werden kann.
+        </p>
+        <p>
+            Als bewährte Praxisregel für Einfamilienhäuser gilt: Pro 1.000&nbsp;kWh jährlichem Stromverbrauch sollte die Nutzkapazität etwa 1 bis 1,5&nbsp;kWh betragen – abgestimmt auf die Spitzenleistung (kWp) Ihrer Photovoltaikanlage.
+        </p>
+
+        <div class="werdu-table-wrapper">
+            <table class="werdu-table">
+                <thead>
+                    <tr>
+                        <th>Jährlicher Verbrauch</th>
+                        <th>Empfohlene PV-Leistung</th>
+                        <th>Empfohlene Speichergröße</th>
+                        <th>Erreichbare Autarkie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3.000&nbsp;–&nbsp;4.000&nbsp;kWh</td>
+                        <td>4&nbsp;–&nbsp;6&nbsp;kWp</td>
+                        <td><strong>5&nbsp;–&nbsp;7&nbsp;kWh</strong></td>
+                        <td>ca. 70&nbsp;–&nbsp;78&nbsp;%</td>
+                    </tr>
+                    <tr>
+                        <td>4.500&nbsp;–&nbsp;6.000&nbsp;kWh</td>
+                        <td>7&nbsp;–&nbsp;10&nbsp;kWp</td>
+                        <td><strong>8&nbsp;–&nbsp;10&nbsp;kWh</strong></td>
+                        <td>ca. 75&nbsp;–&nbsp;83&nbsp;%</td>
+                    </tr>
+                    <tr>
+                        <td>6.000&nbsp;–&nbsp;9.000&nbsp;kWh (E-Auto / Wärmepumpe)</td>
+                        <td>10&nbsp;–&nbsp;15&nbsp;kWp</td>
+                        <td><strong>12&nbsp;–&nbsp;16&nbsp;kWh</strong></td>
+                        <td>ca. 80&nbsp;–&nbsp;88&nbsp;%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 id="technologie-vergleich">4. LiFePO4 vs. NMC: Technologien im Vergleich</h2>
+        <p>
+            Moderne Speicherlösungen unterscheiden sich vor allem in der Zellchemie. Die sicherste und langlebigste Technologie für den stationären Einsatz im Eigenheim ist die Lithium-Eisenphosphat-Zelle (LiFePO4).
+        </p>
+        <p>
+            Im Vergleich zu älteren NMC-Akkus (Lithium-Nickel-Mangan-Kobaltoxid) überzeugt LiFePO4 durch eine unübertroffene thermische und chemische Stabilität – ein thermisches Durchgehen ist bauartbedingt nahezu ausgeschlossen. Hochwertige LiFePO4-Systeme erreichen zudem 6.000 bis 8.000 vollständige Ladezyklen, was einer realistischen Lebensdauer von 15 bis 20 Jahren entspricht. Und: Diese Technologie verzichtet vollständig auf das umstrittene Schwermetall Kobalt.
+        </p>
+
+        <h2 id="kosten-wirtschaftlichkeit">5. Kosten, Förderung &amp; Amortisation im Überblick</h2>
+        <p>
+            Dank technologischem Fortschritt und skalierender Produktion sind die Preise für Batteriespeicher in den vergangenen Jahren spürbar gesunken. Zusätzlich profitieren Sie in Deutschland von staatlichen Vergünstigungen: Seit 2023 gilt gemäß § 12 Abs. 3 UStG ein Steuersatz von <strong>0&nbsp;% Umsatzsteuer</strong> auf Kauf und Installation von PV-Anlagen und deren Stromspeichern auf Wohngebäuden – Sie sparen also direkt 19&nbsp;% bei der Anschaffung.
+        </p>
+        <p>
+            Unter Berücksichtigung der eingesparten Netzstromkosten amortisiert sich ein hochwertiger Speicher heute in der Regel bereits nach 7 bis 9 Jahren. Da moderne LiFePO4-Systeme 15 bis 20 Jahre halten, erwirtschaftet Ihr Speicher über seine restliche Lebensdauer einen erheblichen finanziellen Nettogewinn.
+        </p>
+
+        <div class="werdu-card-soft">
+            <h3>Lassen Sie sich individuell beraten</h3>
+            <p>Jedes Gebäude und jedes Verbrauchsprofil ist anders. Wir helfen Ihnen, die passende Lösung für Ihr Zuhause zu finden.</p>
+            <a href="___BERATUNG_URL___" class="werdu-btn-primary">Kostenlose Beratung anfragen</a>
+        </div>
+
+        <h2 id="faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</h2>
+        <div class="werdu-faq-container">
+            <div class="werdu-faq-item">
+                <h3>Kann ich einen Speicher nachträglich einbauen?</h3>
+                <p>Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.</p>
+            </div>
+            <div class="werdu-faq-item">
+                <h3>Wie lange hält eine moderne Solarbatterie?</h3>
+                <p>Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80&nbsp;%.</p>
+            </div>
+            <div class="werdu-faq-item">
+                <h3>Funktioniert der Speicher auch bei einem Stromausfall?</h3>
+                <p>Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.</p>
+            </div>
+            <div class="werdu-faq-item">
+                <h3>Lohnt sich ein Speicher auch im Winter?</h3>
+                <p>Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.</p>
+            </div>
+        </div>
+
+        <div class="werdu-highlight-card" style="margin-top:56px;">
+            <h3 style="font-size:1.7rem;">Starten Sie jetzt in Ihre energetische Unabhängigkeit</h3>
+            <p style="max-width:650px;margin-left:auto;margin-right:auto;">Sichern Sie sich die besten Konditionen für Ihren neuen PV-Speicher. Unsere Fachberater analysieren Ihren Bedarf und erstellen ein unverbindliches, maßgeschneidertes Angebot.</p>
+            <a href="___BERATUNG_URL___" class="werdu-btn-primary">Jetzt unverbindliches Angebot anfordern</a>
+        </div>
+
+    </section>
 </div>
-
-<!-- Main SEO & High-Conversion Article Body -->
-<section class="werdu-seo-body" style="line-height:1.75; color:#2c3e50; font-size:1.05rem;">
-
-    <h2 id="warum-pv-speicher-kaufen" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">1. Warum Sie 2026 einen PV Speicher kaufen sollten</h2>
-    <p>
-        Die Einspeisevergütung für Solarstrom liegt auf einem historischen Tiefstand, während die Strompreise für deutsche Haushalte weiterhin auf hohem Niveau verharren. Wer heute eine Photovoltaikanlage ohne einen leistungsstarken <strong>PV Speicher</strong> betreibt, verschenkt Tag für Tag bares Geld. Ohne eigene Speichermöglichkeit nutzen Eigenheimbesitzer im Durchschnitt lediglich 20 % bis 30 % ihres selbst erzeugten Solarstroms. Der große Rest fließt für wenige Cent ins öffentliche Netz – nur um abends teuren Netzstrom zurückzukaufen.
-    </p>
-    <p>
-        Indem Sie einen modernen <strong>PV Speicher kaufen</strong>, heben Sie Ihren Eigenverbrauch sofort auf 70 % bis über 85 %. Sie speichern die ungenutzte Sonnenenergie der Mittagsstunden ab und stellen sie genau dann zur Verfügung, wenn der Stromverbrauch im Haushalt am höchsten ist: morgens und in den Abendstunden. Das macht Sie von fossilen Energieträgern und den Preissteigerungen der Stromkonzerne nachhaltig unabhängig. Auch für bestehende Solaranlagen lohnt sich die Nachrüstung: Einen passenden <strong>Heimspeicher kaufen</strong> sichert den langfristigen Werterhalt Ihrer Immobilie und maximiert Ihre persönliche Energiewende.
-    </p>
-
-    <!-- Mid-Content High Conversion Box -->
-    <div style="background:linear-gradient(135deg, #0056b3 0%, #003d80 100%); color:#fff; padding:30px; border-radius:10px; margin:35px 0; text-align:center;">
-        <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Wissen Sie schon, welche Speichergröße Sie benötigen?</h3>
-        <p style="margin-bottom:20px; font-size:1.1rem;">Ermitteln Sie mit unserem präzisen Online-Rechner in unter 2 Minuten die optimale Kapazität und Ihre jährliche Ersparnis.</p>
-        <a href="___RECHNER_URL___" style="display:inline-block; background:#ff9900; color:#1a1a1a; padding:14px 30px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:1.1rem;">Jetzt Autarkie &amp; Speichergröße berechnen</a>
-    </div>
-
-    <h2 id="autarkie-vorteile" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">2. Maximaler Nutzen: Autarkie steigern &amp; Stromkosten nachhaltig senken</h2>
-    <p>
-        Der Entschluss, eine hochwertige <strong>Solarbatterie zu kaufen</strong>, bringt Ihnen weit mehr als nur finanzielle Ersparnisse. Es geht um Autonomie, Versorgungssicherheit und maximale Unabhängigkeit im eigenen Zuhause.
-    </p>
-    <ul style="padding-left:20px;">
-        <li style="margin-bottom:10px;"><strong>Massive Reduktion der monatlichen Abschlagszahlungen:</strong> Jede Kilowattstunde, die Sie aus Ihrem eigenen <strong>PV Speicher</strong> entnehmen, müssen Sie nicht mehr teuer von Ihrem Stromversorger beziehen.</li>
-        <li style="margin-bottom:10px;"><strong>Schutz vor Strompreissteigerungen:</strong> Wenn die Netzstrompreise steigen, bleiben Ihre Erzeugungskosten konstant bei nahezu 0 Cent pro Kilowattstunde.</li>
-        <li style="margin-bottom:10px;"><strong>Optionale Notstrom- und Ersatzstromversorgung:</strong> Moderne Heimspeicher sichern Ihr Gebäude bei Netzausfällen ab und halten wichtige Verbraucher wie Kühlschrank, Heizung und Licht unterbrechungsfrei am Laufen.</li>
-        <li style="margin-bottom:10px;"><strong>Optimale Einbindung von E-Auto und Wärmepumpe:</strong> Nutzen Sie den gespeicherten Solarstrom gezielt, um Ihr Elektrofahrzeug abends sauber und kostengünstig aufzuladen oder Ihre Wärmepumpe zu betreiben.</li>
-    </ul>
-
-    <!-- Dofollow External Authority Link for Rank Math -->
-    <blockquote style="background:#f9f9f9; border-left:4px solid #0056b3; margin:30px 0; padding:20px; font-style:italic;">
-        "Eine wissenschaftliche Analyse des <a href="https://www.ise.fraunhofer.de" target="_blank" rel="noopener dofollow" style="color:#0056b3; text-decoration:underline; font-weight:bold;">Fraunhofer-Instituts für Solare Energiesysteme (ISE)</a> bestätigt: Durch den gezielten Einsatz eines optimal dimensionierten PV Speichers lässt sich der Eigenverbrauchsanteil einer Wohngebäude-Photovoltaikanlage von rund 30 % auf bis zu 80 % steigern."
-    </blockquote>
-
-    <h2 id="dimensionierung-kapazitaet" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">3. Die richtige Größe: Wie viel kWh PV Speicher brauchen Sie wirklich?</h2>
-    <p>
-        Eine der kritischsten Entscheidungen beim Thema <strong>PV Speicher kaufen</strong> ist die richtige Auslegung der Kapazität. Ist der Speicher zu klein bemessen, müssen Sie in den Abendstunden weiterhin teuren Netzstrom hinzukaufen. Ist der <strong>Heimspeicher</strong> hingegen stark überdimensioniert, steigen die Anschaffungskosten unnötig, ohne dass die Batterie in den ertragsarmen Wintermonaten voll geladen werden kann.
-    </p>
-    <p>
-        Als bewährte Praxisregel für Einfamilienhäuser gilt: Pro 1.000 kWh jährlichem Stromverbrauch sollte die Nutzkapazität des PV Speichers ca. 1 bis 1,5 kWh betragen. Gleichzeitig sollte die Speicherkapazität harmonisch auf die Spitzenleistung (kWp) Ihrer Photovoltaikanlage abgestimmt sein.
-    </p>
-
-    <!-- AIO Clean Data Table -->
-    <div style="overflow-x:auto; margin:30px 0;">
-        <table style="width:100%; border-collapse:collapse; text-align:left; border:1px solid #e0e0e0; font-size:1rem;">
-            <thead>
-                <tr style="background:#0056b3; color:#fff;">
-                    <th style="padding:14px; border:1px solid #ddd;">Jährlicher Stromverbrauch</th>
-                    <th style="padding:14px; border:1px solid #ddd;">Empfohlene PV-Leistung</th>
-                    <th style="padding:14px; border:1px solid #ddd;">Empfohlene PV Speicher Größe</th>
-                    <th style="padding:14px; border:1px solid #ddd;">Erreichbare Autarkie</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="background:#ffffff;">
-                    <td style="padding:12px; border:1px solid #ddd;">3.000 - 4.000 kWh</td>
-                    <td style="padding:12px; border:1px solid #ddd;">4 - 6 kWp</td>
-                    <td style="padding:12px; border:1px solid #ddd;"><strong>5 - 7 kWh</strong></td>
-                    <td style="padding:12px; border:1px solid #ddd;">ca. 70 % - 78 %</td>
-                </tr>
-                <tr style="background:#f9f9f9;">
-                    <td style="padding:12px; border:1px solid #ddd;">4.500 - 6.000 kWh</td>
-                    <td style="padding:12px; border:1px solid #ddd;">7 - 10 kWp</td>
-                    <td style="padding:12px; border:1px solid #ddd;"><strong>8 - 10 kWh</strong></td>
-                    <td style="padding:12px; border:1px solid #ddd;">ca. 75 % - 83 %</td>
-                </tr>
-                <tr style="background:#ffffff;">
-                    <td style="padding:12px; border:1px solid #ddd;">6.000 - 9.000 kWh (mit E-Auto / Wärmepumpe)</td>
-                    <td style="padding:12px; border:1px solid #ddd;">10 - 15 kWp</td>
-                    <td style="padding:12px; border:1px solid #ddd;"><strong>12 - 16 kWh</strong></td>
-                    <td style="padding:12px; border:1px solid #ddd;">ca. 80 % - 88 %</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h2 id="technologie-vergleich" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">4. Technologien im Vergleich: LFP (Lithium-Eisenphosphat) vs. NMC</h2>
-    <p>
-        Wenn Sie heute eine moderne <strong>Solarbatterie kaufen</strong>, treffen Sie auf unterschiedliche chemische Zelltechnologien. Die modernste und sicherste Technologie für den stationären Einsatz im Eigenheim ist die Lithium-Eisenphosphat-Zelle (LiFePO4 bzw. LFP).
-    </p>
-    <p>
-        Im direkten Vergleich zu älteren NMC-Akkus (Lithium-Nickel-Mangan-Kobaltoxid) zeichnen sich LFP-PV-Speicher durch eine unübertroffene thermische und chemische Stabilität aus. Ein thermisches Durchgehen ist bei LFP-Zellen bauartbedingt nahezu ausgeschlossen. Darüber hinaus bieten hochwertige LFP-Systeme eine extrem hohe Zyklusfestigkeit von über 6.000 bis 8.000 vollständigen Ladezyklen. Das entspricht einer realistischen Lebensdauer von 15 bis 20 Jahren. Zudem verzichtet die LFP-Technologie vollständig auf das umstrittene Schwermetall Kobalt.
-    </p>
-
-    <h2 id="kosten-wirtschaftlichkeit" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">5. PV Speicher Kosten, Förderung &amp; Amortisation im Überblick</h2>
-    <p>
-        Durch den rasanten technologischen Fortschritt und skalierende Produktionskapazitäten sind die Preise für <strong>PV Speicher</strong> in den vergangenen Jahren kontinuierlich gesunken. Gleichzeitig profitieren Immobilienbesitzer in Deutschland von staatlichen Vergünstigungen: Seit 2023 gilt gemäß § 12 Abs. 3 UStG ein Steuersatz von <strong>0 % Umsatzsteuer</strong> auf den Kauf und die Installation von PV-Anlagen und deren Stromspeichern auf Wohngebäuden. Sie sparen somit direkt 19 % bei der Anschaffung.
-    </p>
-    <p>
-        Unter Berücksichtigung der eingesparten Netzstromkosten amortisiert sich ein hochwertiger <strong>Heimspeicher</strong> heute in der Regel bereits nach 7 bis 9 Jahren. Da moderne LFP-Speicher eine Nutzungsdauer von 15 bis 20 Jahren aufweisen, erwirtschaftet das System über seine verbleibende Lebensdauer hinweg erhebliche finanzielle Netto-Gewinne für Ihren Haushalt.
-    </p>
-
-    <!-- Secondary Call-to-Action Card -->
-    <div style="background:#e8f4ff; border:2px solid #0056b3; padding:30px; border-radius:10px; text-align:center; margin:40px 0;">
-        <h3 style="margin-top:0; color:#0056b3; font-size:1.5rem;">Lassen Sie sich von unseren Experten individuell beraten</h3>
-        <p style="margin-bottom:20px; color:#333;">Jedes Gebäude und jedes Verbrauchsprofil verlangt nach einer maßgeschneiderten Lösung. Wir helfen Ihnen, den perfekt passenden PV Speicher zu finden.</p>
-        <a href="___BERATUNG_URL___" style="display:inline-block; background:#28a745; color:#fff; padding:14px 32px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:1.1rem;">Kostenlose Beratung anfragen</a>
-    </div>
-
-    <h2 id="faq-bereich" style="font-size:1.8rem; color:#1a1a1a; margin-top:40px;">6. Häufig gestellte Fragen (FAQ zum PV Speicher)</h2>
-    <div class="werdu-faq-container" style="margin-top:20px;">
-        <div style="margin-bottom:25px;">
-            <h3 style="font-size:1.2rem; color:#0056b3; margin-bottom:8px;">Kann ich einen PV Speicher nachträglich einbauen?</h3>
-            <p>Ja, ein <strong>PV Speicher</strong> kann an nahezu jeder bestehenden Photovoltaikanlage problemlos nachgerüstet werden. Je nach vorhandener Anlagentechnik nutzt man hierfür AC-gekoppelte Systeme (ideal für die Nachrüstung) oder tauscht den vorhandenen Wechselrichter gegen einen hybriden DC-Wechselrichter aus.</p>
-        </div>
-        <div style="margin-bottom:25px;">
-            <h3 style="font-size:1.2rem; color:#0056b3; margin-bottom:8px;">Wie lange hält eine moderne Solarbatterie?</h3>
-            <p>Hochwertige LFP-<strong>Solarbatterien</strong> erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst nach dieser langen Nutzungsdauer verfügen die Speicher meist noch über eine Restkapazität von mehr als 80 %.</p>
-        </div>
-        <div style="margin-bottom:25px;">
-            <h3 style="font-size:1.2rem; color:#0056b3; margin-bottom:8px;">Funktioniert der PV Speicher auch bei einem Stromausfall?</h3>
-            <p>Standardmäßige Netzeinspeise-Systeme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Wenn Sie jedoch einen <strong>Heimspeicher kaufen</strong>, der über eine Notstrom- oder Ersatzstromfunktion verfügt, versorgt die Batterie Ihr Gebäude im Ernstfall vollautomatisch weiter.</p>
-        </div>
-        <div style="margin-bottom:25px;">
-            <h3 style="font-size:1.2rem; color:#0056b3; margin-bottom:8px;">Lohnt sich das PV Speicher Kaufen auch in den Wintermonaten?</h3>
-            <p>Ja. Auch im Ertragsarmem Winter nutzt der PV Speicher jeden Sonnenstrahl und fängt tagsüber Ertragsspitzen ab. Über das gesamte Kalenderjahr hinweg sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.</p>
-        </div>
-    </div>
-
-    <!-- Final High-Converting Bottom Banner -->
-    <div style="background:#1a1a1a; color:#fff; padding:40px 25px; border-radius:10px; text-align:center; margin-top:50px;">
-        <h2 style="color:#fff; margin-top:0; font-size:2rem;">Starten Sie jetzt in Ihre energetische Unabhängigkeit</h2>
-        <p style="font-size:1.15rem; max-width:750px; margin:0 auto 25px auto; color:#dcdfe3;">Sichern Sie sich die besten Konditionen für Ihren neuen PV Speicher. Unsere Fachberater analysieren Ihren Bedarf und erstellen ein maßgeschneidertes, unverbindliches Angebot.</p>
-        <a href="___BERATUNG_URL___" style="display:inline-block; background:#ff9900; color:#1a1a1a; padding:16px 36px; border-radius:6px; text-decoration:none; font-weight:bold; font-size:1.2rem;">Jetzt unverbindliches Angebot anfordern</a>
-    </div>
-
-</section>
 
 <!-- JSON-LD FAQ Schema for Google AIO Search Features -->
 <script type="application/ld+json">
@@ -207,10 +577,10 @@ function werdu_home_seo_body_html() {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Kann ich einen PV Speicher nachträglich einbauen?",
+      "name": "Kann ich einen Speicher nachträglich einbauen?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja, ein PV Speicher kann an nahezu jeder bestehenden Photovoltaikanlage problemlos nachgerüstet werden. Je nach Vorraussetzung nutzt man AC- oder DC-gekoppelte Systeme."
+        "text": "Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme oder ein hybrider DC-Wechselrichter zum Einsatz."
       }
     },
     {
@@ -218,23 +588,23 @@ function werdu_home_seo_body_html() {
       "name": "Wie lange hält eine moderne Solarbatterie?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Hochwertige LFP-Solarbatterien erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen über 6.000 bis 8.000 Ladezyklen."
+        "text": "Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen."
       }
     },
     {
       "@type": "Question",
-      "name": "Funktioniert der PV Speicher auch bei einem Stromausfall?",
+      "name": "Funktioniert der Speicher auch bei einem Stromausfall?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja, sofern Sie einen Heimspeicher mit integrierter Notstrom- oder Ersatzstromfunktion wählen, übernimmt die Batterie bei Netzausfall die unterbrechungsfreie Versorgung."
+        "text": "Verfügt das System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie das Zuhause bei einem Netzausfall automatisch weiter."
       }
     },
     {
       "@type": "Question",
-      "name": "Lohnt sich das PV Speicher Kaufen auch in den Wintermonaten?",
+      "name": "Lohnt sich ein Speicher auch im Winter?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja. Auch im Winter nutzt der Speicher kurzzeitige Sonnenphasen, um Ertragsspitzen abzufangen und den Netzeinkauf zu reduzieren."
+        "text": "Ja. Auch im Winter fängt der Speicher kurzzeitige Sonnenphasen ab und reduziert so den Zukauf von Netzstrom."
       }
     }
   ]
@@ -264,7 +634,7 @@ function werdu_home_seo_inject( $content ) {
     }
 
     // Idempotentie: nooit tweemaal injecteren binnen dezelfde request.
-    if ( false !== strpos( $content, 'werdu-hero-seo-block' ) ) {
+    if ( false !== strpos( $content, 'werdu-hero-intro' ) ) {
         return $content;
     }
 
