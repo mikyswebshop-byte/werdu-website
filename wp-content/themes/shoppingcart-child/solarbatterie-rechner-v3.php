@@ -17,7 +17,7 @@ get_header();
     <noscript>
         <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:20px; margin-bottom:20px; text-align:center;">
             <p style="margin:0; color:#92400e; font-weight:600;">&#9888; JavaScript ist erforderlich für den Solarbatterie-Rechner.</p>
-            <p style="margin:8px 0 0; color:#92400e; font-size:0.9em;">Bitte aktivieren Sie JavaScript in Ihrem Browser oder besuchen Sie unseren <a href="https://werdu.de/shop" style="color:#ea580c; text-decoration:underline; font-weight:600;">Shop</a> für direkte Produktempfehlungen.</p>
+            <p style="margin:8px 0 0; color:#92400e; font-size:0.9em;">Bitte aktivieren Sie JavaScript in Ihrem Browser oder besuchen Sie unseren <a href="<?php echo esc_url( home_url( '/shop/' ) ); ?>" style="color:#ea580c; text-decoration:underline; font-weight:600;">Shop</a> für direkte Produktempfehlungen.</p>
         </div>
     </noscript>
 

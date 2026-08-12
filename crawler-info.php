@@ -450,7 +450,7 @@ if (!$is_good) {
                 </div>
                 <div class="info-item">
                     <div class="label">Shop</div>
-                    <div class="value"><a href="https://werdu.de/shop/" target="_blank">https://werdu.de/shop/</a></div>
+                    <div class="value"><a href="/shop/" target="_blank">https://werdu.de/shop/</a></div>
                 </div>
                 <div class="info-item">
                     <div class="label">Über uns</div>
