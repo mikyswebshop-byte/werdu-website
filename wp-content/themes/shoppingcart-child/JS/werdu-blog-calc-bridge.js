@@ -8,9 +8,61 @@
   var MONTH_FACTORS = [0.03, 0.05, 0.09, 0.13, 0.15, 0.15, 0.15, 0.13, 0.10, 0.07, 0.04, 0.02];
   var MONTH_NAMES = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
   var bridged = false;
+  var lastKnownUrl = null;
+  var observerStarted = false;
 
   function handoff() {
     return window.werduCalcHandoff || null;
+  }
+
+  function isTargetPage() {
+    return window.location.pathname.indexOf('gratis-heimspeicher-rechner-online') !== -1;
+  }
+
+  function currentBeratungUrl() {
+    return lastKnownUrl ||
+      (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) ||
+      '/beratung-anfragen/';
+  }
+
+  function isKontaktUrl(value) {
+    if (!value) return false;
+    return /\/kontakt(\/|$|\?|#)|werdu\.de\/kontakt/i.test(value);
+  }
+
+  /**
+   * Intercept EVERY link and form action on this page pointing to /kontakt/
+   * or werdu.de/kontakt — regardless of button text or CSS class — and
+   * redirect it to the current Beratung URL (with calc params once known).
+   */
+  function rewriteKontaktTargets() {
+    if (!isTargetPage()) return;
+    var url = currentBeratungUrl();
+
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      if (isKontaktUrl(href)) {
+        a.setAttribute('href', url);
+        a.href = url;
+        a.classList.add('werdu-calc-cta');
+      }
+    });
+
+    document.querySelectorAll('form[action]').forEach(function (f) {
+      var action = f.getAttribute('action') || '';
+      if (isKontaktUrl(action)) {
+        f.setAttribute('action', url);
+      }
+    });
+  }
+
+  function startKontaktObserver() {
+    if (observerStarted || !isTargetPage() || typeof MutationObserver === 'undefined') return;
+    observerStarted = true;
+    var mo = new MutationObserver(function () {
+      rewriteKontaktTargets();
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'action'] });
   }
 
   function buildMonthly(peak, usage, autarky) {
@@ -123,6 +175,7 @@
       '&savings=' + encodeURIComponent(savings) +
       '&plz=' + encodeURIComponent(plz)
     );
+    lastKnownUrl = url;
     ['cta-link', 'wr5-beratung-link'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) {
@@ -131,14 +184,9 @@
       }
     });
 
-    // Rewrite remaining kontakt Beratung/submit CTAs in content
-    document.querySelectorAll('a[href*="/kontakt/"]').forEach(function (a) {
-      var text = (a.textContent || '').toLowerCase();
-      if (/beratung|analyse|angebot|anfordern|absenden|senden|anfrage/i.test(text)) {
-        a.href = url;
-        a.classList.add('werdu-calc-cta');
-      }
-    });
+    // Intercept EVERY remaining /kontakt/ link or form action on this page,
+    // regardless of button text or CSS class.
+    rewriteKontaktTargets();
   }
 
   function ensureBaseHref() {
@@ -146,13 +194,18 @@
     // environment, via home_url() when available) even before any
     // calculation has run, so it never points at the legacy /kontakt/ URL.
     var el = document.getElementById('cta-link');
-    if (!el) return;
-    var base = (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) || '/beratung-anfragen/';
-    var href = el.getAttribute('href') || '';
-    if (href.indexOf('beratung-anfragen') === -1) {
-      el.href = base;
-      el.classList.add('werdu-calc-cta');
+    if (el) {
+      var base = (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) || '/beratung-anfragen/';
+      var href = el.getAttribute('href') || '';
+      if (href.indexOf('beratung-anfragen') === -1) {
+        el.href = base;
+        el.classList.add('werdu-calc-cta');
+      }
     }
+    // Catch every other /kontakt/ link or form action on this page too,
+    // even before a calculation has run.
+    rewriteKontaktTargets();
+    startKontaktObserver();
   }
 
   function wrapCalculateWerdu() {
