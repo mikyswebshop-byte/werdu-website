@@ -1044,3 +1044,96 @@ function werdu_home_seo_inject( $content ) {
     return $content;
 }
 add_filter( 'the_content', 'werdu_home_seo_inject', 15 );
+
+// ============================================
+// GLOBAL SANITIZER — Elementor HTML-widget output (ALLE pagina's)
+// ============================================
+
+/**
+ * Sitebrede sanitizer (niet beperkt tot de homepage):
+ *
+ * A. Verwijdert hardgecodeerde inline style="...background/color/font-family..."
+ *    uit Elementor HTML-widget-output. Dit voorkomt dark-on-dark contrast-
+ *    problemen en inline styling die ons designsysteem doorbreekt. Alleen
+ *    style-attributen die een van deze drie eigenschappen bevatten worden
+ *    verwijderd — overige inline styles (bv. spacing/layout) blijven intact.
+ *
+ * B. Normaliseert een vaste set keyword-gestufte koppen (letterlijk
+ *    "Heimspeicher kaufen ..." herhaald in titels) naar natuurlijkere
+ *    varianten, sitebreed.
+ *
+ * LET OP: dit is een regex-gebaseerde best-effort sanitizer op de
+ * uiteindelijke HTML-tekst (net als de eerdere /kontakt/-fix in
+ * fix-calculator-links.php) — geen volwaardige HTML-parser. Style-
+ * attributen worden verwijderd op basis van "quote...quote" matching
+ * (niet backreference-based), wat in de praktijk voor Elementor-content
+ * betrouwbaar is omdat style-attributen vrijwel altijd met dubbele quotes
+ * worden geschreven.
+ */
+function werdu_sanitize_elementor_html_widget_output( $content ) {
+    if ( is_admin() || is_feed() || ! is_string( $content ) || '' === $content ) {
+        return $content;
+    }
+
+    // A. Hardgecodeerde inline background/color/font-family styles verwijderen.
+    $content = preg_replace(
+        '/style=["\'][^"\']*(?:background|color|font-family)[^"\']*["\']/i',
+        '',
+        $content
+    );
+
+    // B. Keyword-gestufte koppen normaliseren (\x{2013} = en dash "–").
+    $title_replacements = array(
+        '/Heimspeicher kaufen\s*[:\x{2013}\-]\s*Unsere Bestseller/iu'         => 'Unsere Bestseller Batteriespeicher',
+        '/Heimspeicher kaufen\s*[:\x{2013}\-]\s*Vergleich der Top-Systeme/iu' => 'Vergleich der Top-Speichersysteme',
+        '/Häufig gestellte Fragen zum Heimspeicher Kauf/iu'                   => 'Häufig gestellte Fragen (FAQ)',
+        '/Vor dem Heimspeicher Kauf:\s*Das sollten Sie wissen/iu'             => 'Wichtige Informationen vor dem Kauf',
+        '/Keine Neuigkeiten zum Heimspeicher Kauf verpassen/iu'               => 'Bleiben Sie auf dem Laufenden',
+        '/Heimspeicher kaufen für maximale Energieunabhängigkeit/iu'          => 'Maximale Energieunabhängigkeit',
+        '/PV Speicher kaufen 2026:\s*Testsieger/iu'                          => 'PV-Speicher & Autarkie-Rechner',
+    );
+
+    foreach ( $title_replacements as $pattern => $replacement ) {
+        $result = preg_replace( $pattern, $replacement, $content );
+        if ( null !== $result ) {
+            $content = $result;
+        }
+    }
+
+    return $content;
+}
+add_filter( 'the_content', 'werdu_sanitize_elementor_html_widget_output', 999 );
+
+/**
+ * Extra vangnet op Elementor's eigen data-hook: het "html"-veld van elke
+ * HTML-widget wordt al vóór het renderen door dezelfde sanitizer gehaald.
+ * Dit vult de the_content-filter aan voor contexten waarin die filter niet
+ * (volledig) wordt doorlopen, zoals Template Library-content of globale
+ * widgets (zie Elementor changelog: "builder_content_data" is bedoeld voor
+ * precies dit soort hergebruikte content).
+ */
+function werdu_sanitize_elementor_builder_data( $data ) {
+    if ( is_admin() || ! is_array( $data ) ) {
+        return $data;
+    }
+
+    foreach ( $data as &$element ) {
+        if ( ! is_array( $element ) ) {
+            continue;
+        }
+
+        if ( isset( $element['widgetType'], $element['settings']['html'] )
+            && 'html' === $element['widgetType']
+            && is_string( $element['settings']['html'] ) ) {
+            $element['settings']['html'] = werdu_sanitize_elementor_html_widget_output( $element['settings']['html'] );
+        }
+
+        if ( ! empty( $element['elements'] ) && is_array( $element['elements'] ) ) {
+            $element['elements'] = werdu_sanitize_elementor_builder_data( $element['elements'] );
+        }
+    }
+    unset( $element );
+
+    return $data;
+}
+add_filter( 'elementor/frontend/builder_content_data', 'werdu_sanitize_elementor_builder_data' );
