@@ -12,6 +12,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Deterministische asset-/cache-versie op basis van de laatste wijzigingsdatum
+ * van dit bestand (filemtime), NIET time(). Een live time()-stempel zou bij
+ * elke pageload een "nieuwe versie" opleveren en zo alle caching permanent
+ * uitschakelen; filemtime() verandert alleen wanneer dit bestand daadwerkelijk
+ * wordt aangepast — precies wat je wilt voor cache-busting.
+ */
+if ( ! defined( 'WERDU_ASSET_VER' ) ) {
+    define( 'WERDU_ASSET_VER', (string) @filemtime( __FILE__ ) );
+}
+
+/**
+ * Extra vangnet bovenop de content_version()-cachebuster in
+ * werdu-simple-cache.php: zodra WERDU_ASSET_VER wijzigt (dus zodra dit
+ * bestand opnieuw wordt gedeployed), sturen we éénmalig een
+ * "X-LiteSpeed-Purge: *"-header mee. Dat is een native LiteSpeed Web
+ * Server-feature die werkt ongeacht of het LSCache-plugin actief is; op elke
+ * andere hostingstack wordt de header simpelweg genegeerd (geen risico).
+ */
+add_action( 'init', 'werdu_home_seo_maybe_purge_edge_cache', 1 );
+function werdu_home_seo_maybe_purge_edge_cache() {
+    $last_ver = get_option( 'werdu_home_seo_asset_ver' );
+    if ( $last_ver === WERDU_ASSET_VER ) {
+        return;
+    }
+    update_option( 'werdu_home_seo_asset_ver', WERDU_ASSET_VER, false );
+
+    if ( ! headers_sent() ) {
+        header( 'X-LiteSpeed-Purge: *' );
+    }
+    if ( function_exists( 'do_action' ) ) {
+        do_action( 'litespeed_purge_all' );
+    }
+}
+
+/**
  * LET OP: op de live homepage bestaat geen element met class "werdu-calc-wrap".
  * De Heimspeicher-rechner staat in <section class="werdu-calc-section" id="solarbatterie-rechner">,
  * direct gevolgd door <section class="werdu-seo-section">. Deze twee markers worden
