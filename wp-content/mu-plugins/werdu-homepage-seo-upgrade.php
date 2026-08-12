@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
  * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
- * Version: 2.0
+ * Version: 3.1
  * Author: Michael van der Veen
  * Network: false
  */
@@ -32,18 +32,31 @@ if ( ! defined( 'WERDU_ASSET_VER' ) ) {
  */
 add_action( 'init', 'werdu_home_seo_maybe_purge_edge_cache', 1 );
 function werdu_home_seo_maybe_purge_edge_cache() {
+    // Handmatige purge-trigger: ?purge_werdu_cache aan een URL toevoegen
+    // forceert direct een cache-purge, los van de automatische check hieronder.
+    if ( isset( $_GET['purge_werdu_cache'] ) ) {
+        werdu_home_seo_purge_edge_cache();
+        return;
+    }
+
+    // Automatische purge: zodra WERDU_ASSET_VER wijzigt (dus zodra dit
+    // bestand opnieuw wordt gedeployed), één keer purgen.
     $last_ver = get_option( 'werdu_home_seo_asset_ver' );
     if ( $last_ver === WERDU_ASSET_VER ) {
         return;
     }
     update_option( 'werdu_home_seo_asset_ver', WERDU_ASSET_VER, false );
+    werdu_home_seo_purge_edge_cache();
+}
 
+function werdu_home_seo_purge_edge_cache() {
     if ( ! headers_sent() ) {
         header( 'X-LiteSpeed-Purge: *' );
     }
-    if ( function_exists( 'do_action' ) ) {
-        do_action( 'litespeed_purge_all' );
+    if ( function_exists( 'litespeed_purge_all' ) ) {
+        litespeed_purge_all();
     }
+    do_action( 'litespeed_purge_all' );
 }
 
 /**
@@ -87,16 +100,16 @@ function werdu_home_seo_base_css() {
   --werdu-text: #0F172A;
   --werdu-muted: #475569;
   --werdu-orange: #FF6600;
-  --werdu-orange-hover: #E65C00;
+  --werdu-orange-hover: #E05500;
   --werdu-border: #E2E8F0;
   --werdu-radius: 16px;
   --werdu-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-  /* Lichte, natuurlijke sfeer (Design System 3.0 — geen donkere thema's) */
+  /* Lichte, natuurlijke sfeer (Design System 3.1 — performance-first, geen
+     blur-filters meer; alleen lichte, goedkope gradients/borders/shadows). */
   --werdu-sky-top: #EAF5FF;
   --werdu-sky-bottom: #FFFFFF;
-  --werdu-glass-bg: rgba(255, 255, 255, 0.68);
-  --werdu-glass-border: rgba(255, 255, 255, 0.6);
-  --werdu-glass-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.12);
+  --werdu-sky-bg: linear-gradient(180deg, #EDF5FF 0%, #FFFFFF 100%);
+  --werdu-card-border: #E2E8F0;
 }
 
 .werdu-seo-container {
@@ -132,14 +145,12 @@ function werdu_home_seo_base_css() {
   text-align: center;
   max-width: 800px;
   margin: 0 auto 48px auto;
-  padding: 36px 24px;
-  /* Glassmorphism: licht transparant vlak op de hemelsblauwe atmosfeer */
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.82) 0%, rgba(234, 245, 255, 0.55) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--werdu-glass-border);
+  padding: 40px 24px;
+  /* Zacht hemelsblauw-naar-wit verloop, GEEN backdrop-filter/blur (performance) */
+  background: var(--werdu-sky-bg);
+  border: 1px solid #E0EEFF;
   border-radius: var(--werdu-radius);
-  box-shadow: var(--werdu-glass-shadow);
+  box-shadow: 0 10px 25px -5px rgba(0, 102, 204, 0.05);
 }
 
 .werdu-hero-intro h1 {
@@ -211,14 +222,18 @@ function werdu_home_seo_base_css() {
 }
 
 .werdu-highlight-card {
-  background: linear-gradient(160deg, rgba(255, 247, 237, 0.9) 0%, rgba(255, 255, 255, 0.85) 100%);
-  border: 1px solid rgba(255, 102, 0, 0.25);
+  background: #FFFFFF;
+  border: 2px solid var(--werdu-orange);
   color: var(--werdu-text);
   padding: 32px;
   border-radius: var(--werdu-radius);
   margin: 36px 0;
   text-align: center;
-  box-shadow: var(--werdu-glass-shadow);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.werdu-highlight-card * {
+  color: var(--werdu-text);
 }
 
 .werdu-highlight-card h3 {
@@ -507,67 +522,68 @@ function werdu_home_seo_base_css() {
 }
 
 /* ============================================
-   DESIGN SYSTEM 3.0 — Fris, licht & premium (geen donkere thema's)
+   DESIGN SYSTEM 3.1 — Performance-first & hoog contrast (bugfix-release)
    ============================================
-   Extra tokens naast de bestaande --werdu-* variabelen (niets wordt
-   hernoemd of verwijderd). De selectors hieronder zijn geverifieerd tegen
-   de daadwerkelijke, live gerenderde homepage-DOM (test.werdu.de) — géén
-   giswerk en géén ":contains()"-constructies (die zijn ongeldige CSS en
-   maken de hele regel onbruikbaar). Tekst-gebaseerde targeting (bv. een
-   CTA-link zonder eigen class herkennen op zijn tekst) gebeurt via de
-   auto-tag-JS in werdu_home_seo_print_interactions_js(), die daar een
-   class aan toevoegt waarop hieronder wordt gestyled. Primaire accentkleur
-   is oranje (#FF6600); hemelsblauw wordt uitsluitend decoratief gebruikt
-   voor de lichte achtergrond-atmosfeer. */
+   Ten opzichte van 3.0: alle backdrop-filter/blur() en de infinite
+   shimmer-animatie zijn verwijderd (zwaar voor lagere-eind devices en
+   overbodig voor leesbaarheid/snelheid). De vertrouwensbanner is
+   hersteld naar een expliciete hoog-contrast fix: alle tekst/logo's
+   binnen .werdu-compat-marquee worden geforceerd donker, ongeacht wat
+   Elementor daar zelf ooit als (voor de donkere 2.0-versie bedoelde)
+   witte tekstkleur heeft ingesteld — dit voorkomt de "wit-op-wit"
+   contrastbug. Extra tokens naast de bestaande --werdu-* variabelen. */
 :root {
   --werdu-primary: #0F172A;
   --werdu-accent: #0284C7;
-  --werdu-accent-glow: rgba(2, 132, 199, 0.15);
   --werdu-brand-orange: #FF6600;
-  --werdu-brand-orange-dark: #E65C00;
+  --werdu-brand-orange-dark: #E05500;
   --werdu-shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-  --werdu-shadow-glow: 0 0 35px rgba(255, 102, 0, 0.18);
 }
 
 /* Wechselrichter-vertrouwensbanner (echte class: .werdu-compat-marquee) —
-   lichte glass-strip i.p.v. het vorige donkere thema, met glazen
-   pill-badges per merk die oranje oplichten bij hover. */
+   effen lichte achtergrond (geen blur), met geforceerd donker, vetgedrukt
+   tekstcontrast op ALLE kind-elementen (logo's/labels/spans). */
 .werdu-compat-marquee {
-  background: linear-gradient(135deg, rgba(234, 245, 255, 0.85) 0%, rgba(255, 255, 255, 0.92) 100%) !important;
-  border: 1px solid var(--werdu-glass-border) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border-radius: 20px !important;
-  box-shadow: var(--werdu-glass-shadow) !important;
+  background: #F1F5F9 !important;
+  border: 1px solid var(--werdu-card-border) !important;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+}
+
+.werdu-compat-marquee *,
+.werdu-compat-brand,
+.werdu-compat-brand * {
+  color: #334155 !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #334155 !important;
 }
 
 .werdu-compat-brand {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  color: var(--werdu-text);
-  font-weight: 600;
+  background: #FFFFFF;
+  border: 1px solid var(--werdu-card-border);
   border-radius: 30px;
   padding: 6px 16px;
-  backdrop-filter: blur(8px);
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   display: inline-block;
 }
 
-.werdu-compat-brand:hover {
+.werdu-compat-brand:hover,
+.werdu-compat-brand:hover * {
   background: var(--werdu-brand-orange);
   border-color: var(--werdu-brand-orange);
-  color: #FFFFFF;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.35);
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 .werdu-compat-sep {
-  color: rgba(15, 23, 42, 0.25);
+  color: #94A3B8 !important;
 }
 
 /* Autarkie-Rechner velden (echte classes: .werdu-calc-container met
-   .werdu-calc-input / .werdu-calc-select) — lichte achtergrond, wordt
-   bij focus overschreven door de oranje glow verderop in dit bestand. */
+   .werdu-calc-input / .werdu-calc-select). */
 .werdu-calc-container input[type="text"],
 .werdu-calc-container input[type="number"],
 .werdu-calc-container input[type="email"],
@@ -575,124 +591,66 @@ function werdu_home_seo_base_css() {
   background: #F8FAFC;
   border: 1.5px solid #CBD5E1;
   border-radius: 10px;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Rekenmodule-container krijgt een glazen kaart + hover-lift, net als de
-   product- en FAQ-kaarten (consistente 3D glassmorphism-taal). */
-.werdu-calc-container {
-  background: var(--werdu-glass-bg) !important;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--werdu-glass-border) !important;
-  border-radius: var(--werdu-radius) !important;
-  box-shadow: var(--werdu-glass-shadow) !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Rekenmodule-container, productkaarten en FAQ-items: effen wit, lichte
+   rand en zachte schaduw — geen backdrop-filter/blur meer (performance). */
+.werdu-calc-container,
+.werdu-product-card,
+.werdu-faq-item {
+  background: #FFFFFF !important;
+  border: 1px solid var(--werdu-card-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .werdu-calc-container:hover,
-.werdu-calc-container:focus-within {
-  transform: translateY(-4px);
-  box-shadow: 0 28px 48px -14px rgba(15, 23, 42, 0.16), var(--werdu-shadow-glow) !important;
-}
-
-/* Bestseller-productkaarten (echte class: .werdu-product-card) — witte
-   glass-kaart met zachte hover-lift, schaduw en oranje glow op de rand. */
-.werdu-product-card {
-  background: var(--werdu-glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--werdu-glass-border);
-  border-radius: 16px;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+.werdu-calc-container:focus-within,
+.werdu-product-card:hover,
+.werdu-faq-item:hover {
+  border-color: var(--werdu-brand-orange) !important;
+  box-shadow: 0 6px 20px rgba(255, 102, 0, 0.12) !important;
 }
 
 .werdu-product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--werdu-shadow-lg), 0 0 0 3px rgba(255, 102, 0, 0.12) !important;
-  border-color: var(--werdu-brand-orange);
+  transform: translateY(-4px);
 }
 
-/* High-conversion CTA-gradient in de primaire accentkleur (#FF6600) — op
-   de bevestigde CTA-classes én op elke link die de auto-tag-JS als CTA
-   herkent (.werdu-cta-auto). Inclusief periodiek shimmer/glans-effect. */
+/* High-conversion CTA's in effen oranje (#FF6600) — op de bevestigde
+   CTA-classes én op elke link die de auto-tag-JS als CTA herkent
+   (.werdu-cta-auto). Bewust GEEN gradient/shimmer meer: één vlakke kleur
+   + een korte, goedkope hover-lift is sneller en even opvallend. */
 .werdu-calc-cta,
 .werdu-seo-cta,
 .btn-3d,
 .werdu-cta-auto {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--werdu-brand-orange) 0%, var(--werdu-brand-orange-dark) 100%) !important;
+  background-color: var(--werdu-brand-orange) !important;
+  background-image: none !important;
   color: #FFFFFF !important;
   font-weight: 700 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 10px 20px -5px rgba(255, 102, 0, 0.4) !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease !important;
-}
-
-.werdu-calc-cta::after,
-.werdu-seo-cta::after,
-.btn-3d::after,
-.werdu-cta-auto::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.55) 50%, transparent 80%);
-  transform: translateX(-120%);
-  animation: werdu-cta-shimmer 3.4s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes werdu-cta-shimmer {
-  0%, 45% { transform: translateX(-120%); }
-  65%, 100% { transform: translateX(120%); }
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.25) !important;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 .werdu-calc-cta:hover,
 .werdu-seo-cta:hover,
 .btn-3d:hover,
 .werdu-cta-auto:hover {
+  background-color: var(--werdu-brand-orange-dark) !important;
   transform: translateY(-2px);
-  box-shadow: 0 15px 25px -5px rgba(255, 102, 0, 0.5) !important;
-  filter: brightness(1.05);
+  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.32) !important;
 }
 
 /* Bestaande (native) FAQ-blok "Wie lange hält…" deelt de .werdu-faq-item
-   class met ons eigen accordion-blok verderop op de pagina. Dit voegt
-   glassmorphism + hover-lift toe aan beide varianten, ongeacht of het de
-   platte h3/p-variant of de eigen accordion-structuur betreft. */
-.werdu-faq-item {
-  background: var(--werdu-glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-}
-
-.werdu-faq-item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--werdu-glass-shadow);
-  border-color: rgba(255, 102, 0, 0.35);
-}
-
+   class met ons eigen accordion-blok verderop op de pagina. */
 .werdu-faq-item > .werdu-faq-question,
 .werdu-faq-item > .werdu-faq-answer {
   padding-left: 4px;
   padding-right: 4px;
-}
-
-/* Reel: Scroll & Reveal — kaarten/secties vliegen vloeiend in bij scroll.
-   .werdu-reveal wordt alleen door JS toegevoegd (progressive enhancement:
-   zonder JS blijft alles gewoon zichtbaar), .is-visible triggert de
-   IntersectionObserver in werdu_home_seo_print_interactions_js(). */
-.werdu-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.werdu-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -703,8 +661,7 @@ function werdu_home_seo_base_css() {
   .werdu-calc-cta,
   .werdu-seo-cta,
   .btn-3d,
-  .werdu-cta-auto,
-  .werdu-reveal {
+  .werdu-cta-auto {
     transition: opacity 0.2s ease !important;
     transform: none !important;
   }
@@ -717,17 +674,6 @@ function werdu_home_seo_base_css() {
   .btn-3d:hover,
   .werdu-cta-auto:hover {
     transform: none !important;
-  }
-  .werdu-calc-cta::after,
-  .werdu-seo-cta::after,
-  .btn-3d::after,
-  .werdu-cta-auto::after {
-    animation: none !important;
-    display: none !important;
-  }
-  .werdu-reveal {
-    opacity: 1;
-    transform: none;
   }
 }
 CSS;
@@ -1023,42 +969,10 @@ function werdu_home_seo_print_interactions_js() {
     } );
   }
 
-  // ---- Design System 3.0: Scroll & Reveal (fade-in-slide-up) ----
-  // Progressive enhancement: .werdu-reveal wordt hier pas toegevoegd, dus
-  // zonder JS (of bij falende IntersectionObserver-support) blijft alles
-  // gewoon standaard zichtbaar. Bij prefers-reduced-motion slaan we het
-  // hele effect over (CSS toont de elementen dan sowieso direct).
-  function bindScrollReveal() {
-    if ( prefersReducedMotion || ! ( 'IntersectionObserver' in window ) ) {
-      return;
-    }
-
-    var targets = document.querySelectorAll(
-      '.werdu-product-card, .werdu-faq-item, .werdu-highlight-card, .werdu-card-soft, .werdu-toc-box, .werdu-table-wrapper, .werdu-variant-card'
-    );
-    if ( ! targets.length ) {
-      return;
-    }
-
-    var observer = new IntersectionObserver( function ( entries, obs ) {
-      entries.forEach( function ( entry ) {
-        if ( entry.isIntersecting ) {
-          entry.target.classList.add( 'is-visible' );
-          obs.unobserve( entry.target );
-        }
-      } );
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' } );
-
-    targets.forEach( function ( el, i ) {
-      if ( el.dataset.werduRevealBound === '1' ) {
-        return;
-      }
-      el.dataset.werduRevealBound = '1';
-      el.classList.add( 'werdu-reveal' );
-      el.style.transitionDelay = Math.min( i % 4, 3 ) * 0.08 + 's';
-      observer.observe( el );
-    } );
-  }
+  // Scroll & Reveal (opacity/translateY-onthulling bij scroll) is bewust
+  // verwijderd in Design System 3.1: content moet direct zichtbaar/leesbaar
+  // zijn (performance + geen "flash of invisible content" voor SEO/AIO),
+  // in plaats van pas na een IntersectionObserver-trigger te verschijnen.
 
   function init() {
     bindFaqAccordion();
@@ -1066,7 +980,6 @@ function werdu_home_seo_print_interactions_js() {
     bindCalcButton();
     bindCtaAutoTag();
     bindCalcInputMicroInteractions();
-    bindScrollReveal();
   }
 
   if ( document.readyState === 'loading' ) {
