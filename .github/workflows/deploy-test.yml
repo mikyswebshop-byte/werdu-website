@@ -19,9 +19,14 @@ jobs:
         server: ${{ secrets.TEST_FTP_SERVER }}
         username: ${{ secrets.TEST_FTP_USERNAME }}
         password: ${{ secrets.TEST_FTP_PASSWORD }}
-        protocol: ftps
+        protocol: ftp
+        port: 21
         server-dir: /
         exclude: |
           **/.git**
           **/.github**
           **/cgi-bin/**
+          **/wp-content/uploads/**
+          **/wp-content/cache/**
+          **/*.sql
+          **/*.zip
