@@ -54,6 +54,81 @@
         f.setAttribute('action', url);
       }
     });
+
+    guardCtaLinkElement();
+  }
+
+  var guardedCtaEl = null;
+
+  /**
+   * calculateWerdu() (defined inline in the Elementor page content of
+   * /gratis-heimspeicher-rechner-online/, not in a theme/plugin file) sets
+   * #cta-link's href to "/kontakt/..." or "https://werdu.de/kontakt/..."
+   * after every calculation. Since that function itself cannot be edited
+   * here, #cta-link is hardened directly so ANY href change containing
+   * "kontakt" — via .href assignment, .setAttribute('href', ...), or any
+   * other means — is forced to the current Beratung URL instead.
+   */
+  function guardCtaLinkElement() {
+    if (!isTargetPage()) return;
+    var el = document.getElementById('cta-link');
+    if (!el || el === guardedCtaEl) return;
+    guardedCtaEl = el;
+
+    function sanitize(value) {
+      return isKontaktUrl(value) ? currentBeratungUrl() : value;
+    }
+
+    // Layer 1: intercept setAttribute('href', ...) synchronously.
+    try {
+      var originalSetAttribute = el.setAttribute.bind(el);
+      el.setAttribute = function (name, value) {
+        if (String(name).toLowerCase() === 'href') {
+          value = sanitize(value);
+        }
+        return originalSetAttribute(name, value);
+      };
+    } catch (e) { /* noop */ }
+
+    // Layer 2: intercept the .href property setter synchronously
+    // (e.g. el.href = 'https://werdu.de/kontakt/...').
+    try {
+      var proto = window.HTMLAnchorElement && window.HTMLAnchorElement.prototype;
+      var hrefDescriptor = proto && Object.getOwnPropertyDescriptor(proto, 'href');
+      if (hrefDescriptor && hrefDescriptor.configurable && hrefDescriptor.get && hrefDescriptor.set) {
+        Object.defineProperty(el, 'href', {
+          configurable: true,
+          enumerable: true,
+          get: function () {
+            return hrefDescriptor.get.call(el);
+          },
+          set: function (value) {
+            hrefDescriptor.set.call(el, sanitize(value));
+          }
+        });
+      }
+    } catch (e) { /* noop */ }
+
+    // Layer 3: attribute MutationObserver as a final safety net in case
+    // something bypasses both interceptors above.
+    if (typeof MutationObserver !== 'undefined') {
+      var mo = new MutationObserver(function () {
+        var current = el.getAttribute('href') || '';
+        if (isKontaktUrl(current)) {
+          var url = currentBeratungUrl();
+          el.setAttribute('href', url);
+          el.classList.add('werdu-calc-cta');
+        }
+      });
+      mo.observe(el, { attributes: true, attributeFilter: ['href'] });
+    }
+
+    // Enforce immediately in case it's already pointing at /kontakt/.
+    var initialHref = el.getAttribute('href') || '';
+    if (isKontaktUrl(initialHref)) {
+      el.setAttribute('href', currentBeratungUrl());
+      el.classList.add('werdu-calc-cta');
+    }
   }
 
   function startKontaktObserver() {
