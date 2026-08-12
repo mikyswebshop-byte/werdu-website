@@ -257,34 +257,170 @@ function werdu_home_seo_base_css() {
   color: var(--werdu-text);
 }
 
-.werdu-faq-item {
-  border-bottom: 1px solid var(--werdu-border);
-  padding: 22px 0;
+/* Reel 20: Accessible, Large Click-Target Cards */
+.werdu-variant-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 28px 0;
 }
 
-.werdu-faq-item:last-child {
-  border-bottom: none;
-}
-
-.werdu-faq-item h3 {
-  font-size: 1.1rem;
-  margin: 0 0 8px;
-}
-
-.werdu-faq-item p {
+.werdu-variant-label {
+  display: block;
+  cursor: pointer;
   margin: 0;
+}
+
+.werdu-variant-label input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.werdu-variant-card {
+  position: relative;
+  border: 2px solid var(--werdu-border);
+  border-radius: var(--werdu-radius);
+  padding: 24px;
+  background: #FFFFFF;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.werdu-variant-card:hover {
+  border-color: #CBD5E1;
+}
+
+.werdu-variant-label input[type="radio"]:checked + .werdu-variant-card {
+  border-color: var(--werdu-orange);
+  background-color: #FFF7ED;
+  box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.15);
+}
+
+.werdu-variant-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+.werdu-variant-card p {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+}
+
+.werdu-variant-card strong {
+  color: var(--werdu-orange);
+  font-size: 1.05rem;
+}
+
+/* Reel 3: CSS Grid Accordion Transition */
+.werdu-faq-item {
+  border: 1px solid var(--werdu-border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+.werdu-faq-header {
+  padding: 20px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--werdu-text);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  gap: 16px;
+}
+
+.werdu-faq-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  color: var(--werdu-orange);
+  flex-shrink: 0;
+}
+
+.werdu-faq-item.is-open .werdu-faq-icon {
+  transform: rotate(45deg); /* Turns + into x */
+}
+
+.werdu-faq-answer-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.werdu-faq-item.is-open .werdu-faq-answer-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.werdu-faq-answer-inner {
+  overflow: hidden;
+  padding: 0 20px 20px 20px;
+  color: var(--werdu-muted);
+  line-height: 1.6;
+}
+
+.werdu-faq-answer-inner p {
+  margin: 0;
+}
+
+/* Reel 21: Button Loading & Success States */
+.werdu-btn-primary,
+.werdu-calc-btn {
+  gap: 10px;
+}
+
+.werdu-btn-primary.is-loading,
+.werdu-calc-btn.is-loading {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.werdu-btn-primary.is-success,
+.werdu-calc-btn.is-success {
+  background-color: #10B981 !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important;
+}
+
+.werdu-btn-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: werdu-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.werdu-btn-check {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes werdu-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Accessibility: respect reduced-motion preference — fade instead of movement */
 @media (prefers-reduced-motion: reduce) {
   .werdu-btn-primary,
-  .werdu-calc-btn {
+  .werdu-calc-btn,
+  .werdu-variant-card,
+  .werdu-faq-icon,
+  .werdu-faq-answer-wrapper {
     transition: opacity 0.2s ease;
   }
   .werdu-btn-primary:hover,
   .werdu-calc-btn:hover {
     transform: none;
     opacity: 0.9;
+  }
+  .werdu-btn-spinner {
+    animation-duration: 1.4s;
   }
 }
 
@@ -396,6 +532,187 @@ function werdu_home_seo_print_inputmode_js() {
     <?php
 }
 add_action( 'wp_footer', 'werdu_home_seo_print_inputmode_js', 20 );
+
+// ============================================
+// INTERACTIVE UX — FAQ-accordion + 3-staps knop-feedback
+// ============================================
+
+/**
+ * Reel 3 (FAQ-accordion) en Reel 21 (Default -> Loading -> Success knop-
+ * feedback) worden hier client-side bedraad. De CSS-transitions (grid-
+ * template-rows, spinner-animatie) staan al in werdu_home_seo_base_css();
+ * dit script schakelt alleen de juiste classes ("is-open", "is-loading",
+ * "is-success") op de juiste momenten.
+ */
+function werdu_home_seo_print_interactions_js() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    ?>
+<script id="werdu-home-seo-interactions">
+(function () {
+  'use strict';
+
+  var prefersReducedMotion = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+
+  var CHECK_SVG = '<svg class="werdu-btn-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SPINNER_HTML = '<span class="werdu-btn-spinner" aria-hidden="true"></span>';
+
+  // ---- Reel 3: FAQ-accordion (CSS Grid transition, geen JS hoogteberekening) ----
+  function bindFaqAccordion() {
+    document.querySelectorAll( '.werdu-faq-item' ).forEach( function ( item ) {
+      var header = item.querySelector( '.werdu-faq-header' );
+      if ( ! header || header.dataset.werduBound === '1' ) {
+        return;
+      }
+      header.dataset.werduBound = '1';
+      header.setAttribute( 'role', 'button' );
+      header.setAttribute( 'tabindex', '0' );
+      header.setAttribute( 'aria-expanded', item.classList.contains( 'is-open' ) ? 'true' : 'false' );
+
+      function toggle() {
+        var open = item.classList.toggle( 'is-open' );
+        header.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+      }
+
+      header.addEventListener( 'click', toggle );
+      header.addEventListener( 'keydown', function ( e ) {
+        if ( e.key === 'Enter' || e.key === ' ' ) {
+          e.preventDefault();
+          toggle();
+        }
+      } );
+    } );
+  }
+
+  // ---- Reel 21: 3-staps knop-feedback (Default -> Loading -> Success) ----
+
+  // CTA-links (.werdu-btn-primary): korte, niet-blokkerende loading/success
+  // animatie vóór de navigatie, puur voor visuele feedback op de klik.
+  function bindCtaButtons() {
+    document.querySelectorAll( 'a.werdu-btn-primary' ).forEach( function ( btn ) {
+      if ( btn.dataset.werduFeedbackBound === '1' ) {
+        return;
+      }
+      btn.dataset.werduFeedbackBound = '1';
+
+      var href = btn.getAttribute( 'href' );
+      if ( ! href || btn.target === '_blank' ) {
+        return;
+      }
+
+      btn.addEventListener( 'click', function ( e ) {
+        if ( btn.classList.contains( 'is-loading' ) || btn.classList.contains( 'is-success' ) ) {
+          return;
+        }
+        e.preventDefault();
+
+        if ( prefersReducedMotion ) {
+          window.location.href = href;
+          return;
+        }
+
+        var originalHTML = btn.innerHTML;
+        btn.classList.add( 'is-loading' );
+        btn.innerHTML = SPINNER_HTML + '<span>Einen Moment...</span>';
+
+        setTimeout( function () {
+          btn.classList.remove( 'is-loading' );
+          btn.classList.add( 'is-success' );
+          btn.innerHTML = CHECK_SVG + '<span>Weiter...</span>';
+
+          setTimeout( function () {
+            window.location.href = href;
+          }, 450 );
+        }, 500 );
+      } );
+    } );
+  }
+
+  // Calculator-submitknop (.werdu-calc-btn): loading zodra geklikt, success
+  // zodra het resultaat-element daadwerkelijk verandert (geen vaste timer).
+  function bindCalcButton() {
+    var btn = document.querySelector( '.werdu-calc-btn' );
+    if ( ! btn || btn.dataset.werduFeedbackBound === '1' ) {
+      return;
+    }
+    var resultEl = document.getElementById( 'calc-result' ) || document.querySelector( '.werdu-calc-result' );
+    if ( ! resultEl ) {
+      return;
+    }
+    btn.dataset.werduFeedbackBound = '1';
+
+    var originalHTML = btn.innerHTML;
+    var revertTimer = null;
+    var safetyTimer = null;
+
+    function showSuccess() {
+      clearTimeout( safetyTimer );
+      btn.classList.remove( 'is-loading' );
+      btn.classList.add( 'is-success' );
+      btn.innerHTML = CHECK_SVG + '<span>Berechnet!</span>';
+      revertTimer = setTimeout( function () {
+        btn.classList.remove( 'is-success' );
+        btn.innerHTML = originalHTML;
+      }, 1500 );
+    }
+
+    var observer = new MutationObserver( function () {
+      if ( btn.classList.contains( 'is-loading' ) ) {
+        showSuccess();
+      }
+    } );
+    observer.observe( resultEl, { childList: true, subtree: true, characterData: true } );
+
+    btn.addEventListener( 'click', function () {
+      clearTimeout( revertTimer );
+      btn.classList.remove( 'is-success' );
+
+      if ( prefersReducedMotion ) {
+        return;
+      }
+
+      btn.classList.add( 'is-loading' );
+      btn.innerHTML = SPINNER_HTML + '<span>Berechne...</span>';
+
+      // Vangnet: als er onverhoopt geen resultaat-mutatie volgt, niet
+      // eindeloos in de loading-state blijven hangen.
+      safetyTimer = setTimeout( function () {
+        if ( btn.classList.contains( 'is-loading' ) ) {
+          btn.classList.remove( 'is-loading' );
+          btn.innerHTML = originalHTML;
+        }
+      }, 6000 );
+    } );
+  }
+
+  function init() {
+    bindFaqAccordion();
+    bindCtaButtons();
+    bindCalcButton();
+  }
+
+  if ( document.readyState === 'loading' ) {
+    document.addEventListener( 'DOMContentLoaded', init );
+  } else {
+    init();
+  }
+
+  // De calculator- en FAQ-markup kunnen iets vertraagd renderen (Elementor);
+  // kort blijven proberen zodat nieuw gerenderde elementen ook gebonden worden.
+  var attempts = 0;
+  var timer = setInterval( function () {
+    attempts++;
+    init();
+    if ( attempts > 20 ) {
+      clearInterval( timer );
+    }
+  }, 300 );
+})();
+</script>
+    <?php
+}
+add_action( 'wp_footer', 'werdu_home_seo_print_interactions_js', 21 );
 
 // ============================================
 // CONTENT — Hero + SEO/AIO-artikel
@@ -518,6 +835,41 @@ function werdu_home_seo_body_html() {
             </table>
         </div>
 
+        <p>
+            Zur Orientierung: So schneiden unsere drei meistgewählten Speichergrößen im direkten Vergleich ab. Wählen Sie eine Karte aus, um die Kennzahlen hervorzuheben, und bestätigen Sie die für Sie passende Größe anschließend mit dem Autarkie-Rechner.
+        </p>
+
+        <div class="werdu-variant-group" role="radiogroup" aria-label="Speichergröße vergleichen">
+            <label class="werdu-variant-label">
+                <input type="radio" name="werdu-variant-picker" value="16-basen-green" checked>
+                <div class="werdu-variant-card">
+                    <h3>16 kWh Basen Green</h3>
+                    <p>LiFePO4 • 51,2V, 314Ah • 200A Dauerstrom • 10.000 Zyklen</p>
+                    <strong>ab 1.990,- €</strong>
+                </div>
+            </label>
+            <label class="werdu-variant-label">
+                <input type="radio" name="werdu-variant-picker" value="16-tewaycell">
+                <div class="werdu-variant-card">
+                    <h3>16 kWh TewayCell</h3>
+                    <p>LiFePO4 • 48-51,2V, 300Ah • 8.000 Zyklen • Grade-A Zellen</p>
+                    <strong>ab 2.345,- €</strong>
+                </div>
+            </label>
+            <label class="werdu-variant-label">
+                <input type="radio" name="werdu-variant-picker" value="30-32-tewaycell">
+                <div class="werdu-variant-card">
+                    <h3>30-32 kWh TewayCell</h3>
+                    <p>LiFePO4 • Maximale Autarkie • Modulare Erweiterung</p>
+                    <strong>ab 3.899,- €</strong>
+                </div>
+            </label>
+        </div>
+
+        <div style="text-align:center;">
+            <a href="___RECHNER_URL___" class="werdu-btn-primary">Passende Größe mit dem Rechner bestätigen</a>
+        </div>
+
         <h2 id="technologie-vergleich">4. LiFePO4 vs. NMC: Technologien im Vergleich</h2>
         <p>
             Moderne Speicherlösungen unterscheiden sich vor allem in der Zellchemie. Die sicherste und langlebigste Technologie für den stationären Einsatz im Eigenheim ist die Lithium-Eisenphosphat-Zelle (LiFePO4).
@@ -542,21 +894,49 @@ function werdu_home_seo_body_html() {
 
         <h2 id="faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</h2>
         <div class="werdu-faq-container">
-            <div class="werdu-faq-item">
-                <h3>Kann ich einen Speicher nachträglich einbauen?</h3>
-                <p>Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.</p>
+            <div class="werdu-faq-item is-open">
+                <div class="werdu-faq-header">
+                    <span>Kann ich einen Speicher nachträglich einbauen?</span>
+                    <span class="werdu-faq-icon">+</span>
+                </div>
+                <div class="werdu-faq-answer-wrapper">
+                    <div class="werdu-faq-answer-inner">
+                        <p>Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.</p>
+                    </div>
+                </div>
             </div>
             <div class="werdu-faq-item">
-                <h3>Wie lange hält eine moderne Solarbatterie?</h3>
-                <p>Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80&nbsp;%.</p>
+                <div class="werdu-faq-header">
+                    <span>Wie lange hält eine moderne Solarbatterie?</span>
+                    <span class="werdu-faq-icon">+</span>
+                </div>
+                <div class="werdu-faq-answer-wrapper">
+                    <div class="werdu-faq-answer-inner">
+                        <p>Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80&nbsp;%.</p>
+                    </div>
+                </div>
             </div>
             <div class="werdu-faq-item">
-                <h3>Funktioniert der Speicher auch bei einem Stromausfall?</h3>
-                <p>Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.</p>
+                <div class="werdu-faq-header">
+                    <span>Funktioniert der Speicher auch bei einem Stromausfall?</span>
+                    <span class="werdu-faq-icon">+</span>
+                </div>
+                <div class="werdu-faq-answer-wrapper">
+                    <div class="werdu-faq-answer-inner">
+                        <p>Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.</p>
+                    </div>
+                </div>
             </div>
             <div class="werdu-faq-item">
-                <h3>Lohnt sich ein Speicher auch im Winter?</h3>
-                <p>Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.</p>
+                <div class="werdu-faq-header">
+                    <span>Lohnt sich ein Speicher auch im Winter?</span>
+                    <span class="werdu-faq-icon">+</span>
+                </div>
+                <div class="werdu-faq-answer-wrapper">
+                    <div class="werdu-faq-answer-inner">
+                        <p>Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
