@@ -65,6 +65,77 @@
     mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'action'] });
   }
 
+  function findActionableAncestor(el) {
+    var node = el;
+    var depth = 0;
+    while (node && node.nodeType === 1 && depth < 6) {
+      var tag = node.tagName;
+      if (tag === 'A' || tag === 'BUTTON' ||
+          (node.getAttribute && (node.getAttribute('onclick') || node.getAttribute('role') === 'button'))) {
+        return node;
+      }
+      node = node.parentElement;
+      depth++;
+    }
+    return el;
+  }
+
+  /**
+   * Matches the "Analyse & Angebot anfordern" CTA (and shorter "Analyse"
+   * variants, e.g. on mobile) of the PV-Autarkie-Rechner, regardless of tag,
+   * CSS class, or how its click handler was attached (inline onclick,
+   * addEventListener, jQuery, etc.).
+   */
+  function isAnalyseCtaElement(el) {
+    if (!el || !el.textContent) return false;
+    var text = el.textContent.replace(/\s+/g, ' ').trim();
+    if (!text || text.length > 60) return false;
+    return /analyse\s*&?\s*angebot\s*anfordern/i.test(text) || /^analyse$/i.test(text);
+  }
+
+  var analyseGuardInstalled = false;
+
+  /**
+   * Capture-phase click listener installed on document: fires BEFORE any
+   * inline onclick or addEventListener handler on the clicked button, so we
+   * can block a hardcoded window.location.href/window.open('/kontakt/')
+   * redirect and send the user to the current Beratung URL instead — no
+   * matter how the original handler was implemented (it lives in Elementor
+   * page content in the database, not in a theme file we can edit directly).
+   */
+  function installAnalyseClickGuard() {
+    if (analyseGuardInstalled || !isTargetPage()) return;
+    analyseGuardInstalled = true;
+    document.addEventListener('click', function (evt) {
+      var actionable = findActionableAncestor(evt.target);
+      if (!isAnalyseCtaElement(actionable)) return;
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
+      evt.stopPropagation();
+      window.location.href = currentBeratungUrl();
+    }, true);
+  }
+
+  var windowOpenGuardInstalled = false;
+
+  /**
+   * Monkey-patch window.open so any JS-based window.open('/kontakt/', ...)
+   * or window.open('https://werdu.de/kontakt/...') on this page is
+   * redirected to the Beratung URL instead.
+   */
+  function installWindowOpenGuard() {
+    if (windowOpenGuardInstalled || !isTargetPage() || typeof window.open !== 'function') return;
+    windowOpenGuardInstalled = true;
+    var originalOpen = window.open;
+    window.open = function (url) {
+      var args = Array.prototype.slice.call(arguments);
+      if (isKontaktUrl(url)) {
+        args[0] = currentBeratungUrl();
+      }
+      return originalOpen.apply(window, args);
+    };
+  }
+
   function buildMonthly(peak, usage, autarky) {
     var annualYield = (parseFloat(peak) || 8) * 950;
     var monthlyCons = (parseFloat(usage) || 4500) / 12;
@@ -206,7 +277,15 @@
     // even before a calculation has run.
     rewriteKontaktTargets();
     startKontaktObserver();
+    installAnalyseClickGuard();
+    installWindowOpenGuard();
   }
+
+  // Install the click/window.open guards immediately (does not need to wait
+  // for DOMContentLoaded — a capture listener on document is safe to attach
+  // as soon as this script runs, and window.open can be patched right away).
+  installAnalyseClickGuard();
+  installWindowOpenGuard();
 
   function wrapCalculateWerdu() {
     if (typeof window.calculateWerdu !== 'function') return false;
