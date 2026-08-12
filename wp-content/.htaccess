@@ -1,0 +1,56 @@
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # CSP — licht genoeg voor Elementor + WooCommerce + SilentShield
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.silentshield.io https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.silentshield.io https://www.google-analytics.com; frame-src 'self'; base-uri 'self'; form-action 'self';"
+    
+    # COOP — veilig voor WooCommerce popups
+    Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+    
+    # Verberg PHP versie
+    Header always unset X-Powered-By
+    
+    # Server header verbergen (werkt niet op alle shared hosting, maar proberen)
+    Header always unset Server
+    Header always set Server "werdu"
+</IfModule>
+
+# PHP versie verbergen
+<IfModule mod_php.c>
+    php_flag expose_php Off
+</IfModule>
+
+# Directory listing uitschakelen
+Options -Indexes
+
+# Gevoelige bestanden blokkeren
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])|~)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# === EINDE SECURITY HEADERS ===
+
+# BEGIN WordPress
+# De instructies (regels) tussen "BEGIN WordPress" en "END WordPress" zijn
+# dynamisch gegenereerd en zouden alleen aangepast mogen worden via WordPress filters.
+# Elke wijziging aan de instructies tussen deze markeringen wordt overschreven.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress

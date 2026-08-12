@@ -1,0 +1,2102 @@
+<?php
+
+namespace f12_cf7_captcha {
+
+	use f12_cf7_captcha\core\BaseController;
+	use f12_cf7_captcha\core\Compatibility;
+	use f12_cf7_captcha\core\Log_WordPress;
+	use f12_cf7_captcha\core\protection\captcha\Captcha_Validator;
+	use f12_cf7_captcha\core\protection\ip\IPBan;
+	use f12_cf7_captcha\core\protection\ip\IPLog;
+	use f12_cf7_captcha\core\protection\Protection;
+	use f12_cf7_captcha\core\settings\Override_Panel_Renderer;
+	use f12_cf7_captcha\core\settings\Settings_Resolver;
+	use f12_cf7_captcha\core\timer\Timer_Controller;
+	use f12_cf7_captcha\ui\UI_Manager;
+	use f12_cf7_captcha\ui\UI_Page_Form;
+	use forge12\contactform7\CF7Captcha\CaptchaCleaner;
+	use forge12\contactform7\CF7Captcha\Messages;
+
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
+
+	/**
+	 * Class UI_Extended
+	 */
+	class UI_Extended extends UI_Page_Form {
+		public function __construct( UI_Manager $UI_Manager ) {
+			// Call the parent class constructor.
+			// The parameters are:
+			// 1. $UI_Manager: The UI Manager instance.
+			// 2. 'f12-cf7-captcha': The unique domain name for this UI page.
+			// 3. 'Dashboard': The displayed name of the page in the UI menu.
+			// 4. 0: The priority or order in the menu (0 means at the top).
+			parent::__construct( $UI_Manager, 'f12-cf7-captcha-extended', 'Extended', 1 );
+
+			$this->get_logger()->info( 'Constructor started.', [
+				'class'  => __CLASS__,
+				'method' => __METHOD__,
+			] );
+
+			// Add a filter hook that is triggered before saving the UI settings.
+			// The hook tag is dynamically created from the UI Manager domain name and the own domain name.
+			add_filter(
+				$UI_Manager->get_domain() . '_ui_f12-cf7-captcha-extended_before_on_save',
+				array( $this, 'maybe_clean' ), // Call the maybe_clean() method of this class.
+				10, // Filter priority (10 is standard).
+				1  // Number of passed arguments (here 1).
+			);
+			$this->get_logger()->debug( 'Filter "ui_f12-cf7-captcha-extended_before_on_save" added.', [
+				'hook' => $UI_Manager->get_domain() . '_ui_f12-cf7-captcha_before-extended_on_save'
+			] );
+
+			$this->get_logger()->info( 'Constructor completed.' );
+		}
+
+		/**
+		 * @param $settings
+		 *
+		 * @return array<string, mixed> The settings, with this screen's defaults merged in.
+		 */
+		public function get_settings( $settings ): array {
+			$this->get_logger()->info( 'Adding global default settings.', [
+				'class'  => __CLASS__,
+				'method' => __METHOD__,
+			] );
+
+			// Define an array with all default protection settings.
+			$default_global_settings = [
+				// Timer protection
+				'protection_time_enable'                   => 1,
+				'protection_time_field_name'               => 'f12_timer',
+				'protection_time_ms'                       => 500,
+
+				// Multiple submission protection
+				'protection_multiple_submission_enable'    => 1,
+
+				// IP-based rate limiting
+				'protection_ip_enable'                     => 0,
+				'protection_ip_max_retries'                => 3,
+				'protection_ip_max_retries_period'         => 300,
+				'protection_ip_period_between_submits'     => 60,
+				'protection_ip_block_time'                 => 3600,
+
+				// Other rules and whitelists
+				'protection_log_enable'                    => 0,
+				'protection_rules_url_enable'              => 0,
+				'protection_rules_url_limit'               => 0,
+				'protection_rules_blacklist_enable'        => 0,
+				'protection_rules_blacklist_value'         => '',
+				'protection_rules_blacklist_greedy'        => 0,
+				'protection_rules_bbcode_enable'           => 0,
+				'protection_rules_error_message_url'       => __( 'The Limit %d has been reached. Remove the %s to continue.', 'captcha-for-contact-form-7' ),
+				'protection_rules_error_message_bbcode'    => __( 'BBCode is not allowed.', 'captcha-for-contact-form-7' ),
+				'protection_rules_error_message_blacklist' => __( 'The word %s is blacklisted.', 'captcha-for-contact-form-7' ),
+
+				// Browser and JavaScript detection
+				'protection_browser_enable'                => 1,
+				'protection_javascript_enable'             => 1,
+
+				// Gibberish content detection. Ships enabled but in `monitor`, so it measures
+				// from day one without any risk of rejecting a real enquiry. Flipping the mode
+				// to `block` is the site owner's decision, ideally after looking at what the
+				// monitor rows say about their own traffic.
+				'protection_gibberish_enable'              => 1,
+				'protection_gibberish_mode'                => 'monitor',
+				'protection_gibberish_min_fields'          => 3,
+				'protection_gibberish_sample_rate'         => 20,
+
+				// Whitelists
+				'protection_whitelist_emails'              => '',
+				'protection_whitelist_ips'                 => '',
+				'protection_whitelist_role_admin'          => 1,
+				'protection_whitelist_role_logged_in'      => 1,
+				'protection_blacklist_ips'                 => '',
+
+				// Asset loading
+				'protection_global_asset_loading'          => 1,
+				'protection_asset_loading_urls'            => '',
+
+				// Anonymous detection metrics. Its own switch rather than a corner of detailed
+				// tracking: that one turns on an IP-linked log the site owner reads, this one
+				// records anonymous measurements used to calibrate detection. Different
+				// purposes should not share one consent.
+				'protection_anonymous_metrics'             => 1,
+
+				// Detailed tracking (block log)
+				'protection_detailed_tracking'             => 0,
+				'protection_detailed_tracking_retention'   => 30,
+				'protection_audit_log_retention'           => 90,
+				'protection_log_plaintext'                 => 0,
+
+				// Raw SilentShield API responses in the audit log. Off by default:
+				// this writes one row per verified submission, and a busy site
+				// would fill the audit log with rows nobody reads. Failed calls
+				// are audited with their body either way.
+				'protection_api_log_responses'             => 0,
+
+				// Mail logging
+				'protection_mail_log_enable'              => 0,
+				'protection_mail_log_sent'                => 1,
+				'protection_mail_log_blocked'             => 1,
+				'protection_mail_log_retention'           => 30,
+
+				// Shadow Mode (API comparison)
+				'protection_api_shadow_mode'               => 0,
+
+				// Telemetry
+				'telemetry'                                => 1,
+
+				// AI-agent observation (plan/54 Inc1) — default on; actual sending
+				// is additionally gated by the server-side ingest flag.
+				'agent_observe'                            => 1,
+
+				// AI-agent enforcement (plan/64 Inc3) — default OFF. Blocks
+				// disallowed bots per the signed policy; an explicit opt-in.
+				'agent_enforce'                            => 0,
+			];
+
+			// Add the default settings under the 'global' key to the passed array.
+			if ( !isset($settings['global']) || ! is_array( $settings['global'] ) ) {
+				$settings['global'] = [];
+			}
+			$settings['global'] = array_merge( $settings['global'], $default_global_settings );
+
+			$this->get_logger()->info( 'Global default settings have been added to the settings array.' );
+
+			return $settings;
+		}
+
+		/**
+		 * Clean the database
+		 *
+		 * @param array $settings
+		 *
+		 * @return array
+		 * @throws \Exception
+		 */
+		public function maybe_clean( array $settings ): array {
+			$this->get_logger()->info( 'Starting check if a cleanup action was requested.', [
+				'class'  => __CLASS__,
+				'method' => __METHOD__,
+			] );
+
+			// Define the possible cleanup actions and their associated messages and methods.
+			$clean_actions = [
+				'captcha-ip-log-clean-all'   => [
+					'module'         => 'protection',
+					'sub_module'     => 'ip-validator',
+					'cleaner_method' => 'get_log_cleaner',
+					'db_method'      => 'reset_table',
+					'message'        => __( 'IP Logs removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-ip-ban-clean-all'   => [
+					'module'         => 'protection',
+					'sub_module'     => 'ip-validator',
+					'cleaner_method' => 'get_ban_cleaner',
+					'db_method'      => 'reset_table',
+					'message'        => __( 'IP Bans removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-clean-all'          => [
+					'module'         => 'protection',
+					'sub_module'     => 'captcha-validator',
+					'cleaner_method' => 'get_captcha_cleaner',
+					'db_method'      => 'reset_table',
+					'message'        => __( 'Captchas removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-clean-validated'    => [
+					'module'         => 'protection',
+					'sub_module'     => 'captcha-validator',
+					'cleaner_method' => 'get_captcha_cleaner',
+					'db_method'      => 'clean_validated',
+					'message'        => __( 'Validated Captchas removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-clean-nonvalidated' => [
+					'module'         => 'protection',
+					'sub_module'     => 'captcha-validator',
+					'cleaner_method' => 'get_captcha_cleaner',
+					'db_method'      => 'clean_non_validated',
+					'message'        => __( 'Non Validated Captchas removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-log-clean-all'      => [
+					'module'         => 'log-cleaner',
+					'cleaner_method' => null,
+					'db_method'      => 'reset_table',
+					'message'        => __( 'Logs removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-log-clean-3-weeks'  => [
+					'module'         => 'log-cleaner',
+					'cleaner_method' => null,
+					'db_method'      => 'clean',
+					'message'        => __( 'Logs older than 3 Weeks have been removed from database', 'captcha-for-contact-7-captcha' )
+				],
+				'captcha-timer-clean-all'    => [
+					'module'         => 'timer',
+					'sub_module'     => null,
+					'cleaner_method' => 'get_timer_cleaner',
+					'db_method'      => 'reset_table',
+					'message'        => __( 'Timers removed from database', 'captcha-for-contact-7-captcha' )
+				],
+			];
+
+			$action_triggered = false;
+			$ui_manager       = $this->get_ui_manager();
+			$ui_message       = $ui_manager->get_ui_message();
+			$error_message    = __( 'Something went wrong, please try again later or contact the plugin author.', 'captcha-for-contact-form-7' );
+
+			foreach ( $clean_actions as $post_key => $action_data ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+				if ( isset( $_POST[ $post_key ] ) ) {
+					$action_triggered = true;
+					$this->get_logger()->info( "Cleanup action requested: '{$post_key}'" );
+
+					try {
+						// Access the main module instance.
+						$main_module = CF7Captcha::get_instance()->get_module( $action_data['module'] );
+
+						// The module name comes from the action table, so static analysis cannot
+						// tell which concrete class comes back — hence the annotation.
+						/** @var \f12_cf7_captcha\core\protection\Protection $main_module */
+						$cleaner_instance = $main_module;
+						if ( $action_data['sub_module'] !== null ) {
+							$cleaner_instance = $main_module->get_module( $action_data['sub_module'] );
+						}
+
+						// Two entries in the table above carry a null cleaner_method, so this guard
+						// is load-bearing — without it those two actions would call_user_func() on
+						// a null method name. PHPStan narrows the shape per element and loses that.
+						// @phpstan-ignore notIdentical.alwaysTrue
+						if ( $action_data['cleaner_method'] !== null ) {
+							$cleaner_instance = call_user_func( [ $cleaner_instance, $action_data['cleaner_method'] ] );
+						}
+
+						// Execute the database cleanup method.
+						$result = call_user_func( [ $cleaner_instance, $action_data['db_method'] ] );
+
+						// Check the result and display the appropriate message.
+						if ( $result !== null ) {
+							$ui_message->add( $action_data['message'], 'success' );
+							$this->get_logger()->info( "Action '{$post_key}' completed successfully." );
+						} else {
+							$ui_message->add( $error_message, 'error' );
+							$this->get_logger()->error( "Action '{$post_key}' failed." );
+						}
+					} catch ( \Exception $e ) {
+						$ui_message->add( $error_message, 'error' );
+						$this->get_logger()->critical( "Critical error during action '{$post_key}'.", [ 'exception' => $e->getMessage() ] );
+					}
+				}
+			}
+
+			// If a cleanup action was performed, suppress saving the UI settings.
+			if ( $action_triggered ) {
+				$this->get_logger()->info( 'Cleanup action detected. UI settings saving is suppressed.' );
+				add_filter( $this->get_domain() . '_ui_do_save_settings', '__return_false' );
+			}
+
+			return $settings;
+		}
+
+		public function on_save( $settings ): array {
+			$this->get_logger()->info( 'Starting save process for global settings.', [
+				'class'  => __CLASS__,
+				'method' => __METHOD__,
+			] );
+
+			$Controller    = CF7Captcha::get_instance();
+			try {
+				$Compatibility = $Controller->get_module( 'compatibility' );
+			} catch ( \Exception $e ) {
+				$this->get_logger()->error( 'Compatibility-Modul nicht verfügbar beim Speichern', [
+					'error' => $e->getMessage(),
+				] );
+				return $settings;
+			}
+			$Components    = $Compatibility->get_components();
+
+			$this->get_logger()->debug( 'Checking and saving status of individual components.' );
+			foreach ( $Components as $Component ) {
+				if ( ! isset( $Component['object'] ) ) {
+					$this->get_logger()->warning( 'Component was not initialized and will be skipped.', [ 'component' => $Component ] );
+					continue;
+				}
+
+				$Base_Controller = $Component['object'];
+				$field_name      = sprintf( 'protection_%s_enable', $Base_Controller->get_id() );
+
+				// Set the activation status based on the POST value.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+				$status                            = isset( $_POST[ $field_name ] ) ? 1 : 0;
+				$settings['global'][ $field_name ] = $status;
+
+				$this->get_logger()->debug( 'Status for component saved.', [
+					'component_id' => $Base_Controller->get_id(),
+					'status'       => $status
+				] );
+			}
+
+			// A list of options whose value should be set to 0 if they are not present in the POST request.
+			$options_to_zero = [
+				'protection_time_enable',
+				'protection_multiple_submission_enable',
+				'protection_ip_enable',
+				'protection_log_enable',
+				'protection_rules_url_enable',
+				'protection_rules_url_limit',
+				// This value should be treated as an integer, which sanitize_text_field does
+				'protection_rules_blacklist_enable',
+				'protection_rules_blacklist_greedy',
+				'protection_rules_bbcode_enable',
+				'protection_browser_enable',
+				'protection_javascript_enable',
+				'protection_gibberish_enable',
+				'protection_anonymous_metrics',
+				'protection_captcha_template',
+				// This value should be treated as an integer
+                'telemetry',
+				'agent_observe',
+				'agent_enforce',
+				'protection_whitelist_role_admin',
+				'protection_whitelist_role_logged_in',
+				'protection_global_asset_loading',
+				'protection_detailed_tracking',
+				'protection_log_plaintext',
+				'protection_api_log_responses',
+				'protection_api_shadow_mode',
+				'protection_mail_log_enable',
+				'protection_mail_log_sent',
+				'protection_mail_log_blocked',
+			];
+
+			$this->get_logger()->debug( 'Processing all POST values and sanitizing them.' );
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+			foreach ( $_POST as $key => $value ) {
+				if ( strpos( $key, 'protection_' ) === 0 || in_array( $key, [ 'telemetry', 'agent_observe', 'agent_enforce' ], true ) ) {
+					if ( is_array( $value ) ) {
+						$settings['global'][ $key ] = array_map( 'sanitize_text_field', $value );
+					} else {
+						// Handle textareas specially
+						if ( in_array( $key, [
+							'protection_rules_blacklist_value',
+							'protection_whitelist_emails',
+							'protection_whitelist_ips',
+							'protection_blacklist_ips',
+							'protection_asset_loading_urls'
+						], true ) ) {
+							$settings['global'][ $key ] = sanitize_textarea_field( $value );
+						} else {
+							$settings['global'][ $key ] = sanitize_text_field( $value );
+						}
+					}
+					$this->get_logger()->debug( 'New field adopted or existing one updated.', [ 'key' => $key ] );
+				}
+			}
+
+			// Validate hex colors for reload button styling
+			$color_fields = [
+				'protection_captcha_reload_bg_color'     => '#2196f3',
+				'protection_captcha_reload_border_color' => '',
+			];
+			foreach ( $color_fields as $color_key => $color_default ) {
+				if ( isset( $settings['global'][ $color_key ] ) ) {
+					$color = $settings['global'][ $color_key ];
+					if ( ! empty( $color ) && ! preg_match( '/^#[a-fA-F0-9]{6}$/', $color ) ) {
+						$settings['global'][ $color_key ] = $color_default;
+					}
+				}
+			}
+
+			// Validate numeric reload button settings
+			$numeric_fields = [
+				'protection_captcha_reload_padding'       => [ 'default' => '3', 'min' => 0, 'max' => 50 ],
+				'protection_captcha_reload_border_radius' => [ 'default' => '3', 'min' => 0, 'max' => 50 ],
+				'protection_captcha_reload_icon_size'     => [ 'default' => '16', 'min' => 8, 'max' => 64 ],
+			];
+			foreach ( $numeric_fields as $num_key => $constraints ) {
+				if ( isset( $settings['global'][ $num_key ] ) ) {
+					$val = (int) $settings['global'][ $num_key ];
+					if ( $val < $constraints['min'] || $val > $constraints['max'] ) {
+						$settings['global'][ $num_key ] = $constraints['default'];
+					}
+				}
+			}
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+			$settings['global']['telemetry'] = ( isset( $_POST['telemetry'] ) && (int) $_POST['telemetry'] === 1 ) ? 1 : 0;
+			$this->get_logger()->debug( 'Telemetry setting updated.', [ 'telemetry' => $settings['global']['telemetry'] ] );
+
+			// AI-agent observation toggle (unchecked checkbox sends no POST value).
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+			$settings['global']['agent_observe'] = ( isset( $_POST['agent_observe'] ) && (int) $_POST['agent_observe'] === 1 ) ? 1 : 0;
+			$this->get_logger()->debug( 'Agent observation setting updated.', [ 'agent_observe' => $settings['global']['agent_observe'] ] );
+
+			// AI-agent enforcement toggle (default off; unchecked = no POST value).
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+			$settings['global']['agent_enforce'] = ( isset( $_POST['agent_enforce'] ) && (int) $_POST['agent_enforce'] === 1 ) ? 1 : 0;
+			$this->get_logger()->debug( 'Agent enforcement setting updated.', [ 'agent_enforce' => $settings['global']['agent_enforce'] ] );
+
+			// Schedule or unschedule the telemetry cron based on the new setting
+			if ( $settings['global']['telemetry'] === 1 ) {
+				if ( ! wp_next_scheduled( 'f12_cf7_captcha_daily_telemetry' ) ) {
+					wp_schedule_event( time(), 'daily', 'f12_cf7_captcha_daily_telemetry' );
+				}
+			} else {
+				wp_clear_scheduled_hook( 'f12_cf7_captcha_daily_telemetry' );
+			}
+
+			// Process the blacklist values
+			$blacklist = $settings['global']['protection_rules_blacklist_value'] ?? '';
+			// Set the value in the settings array to an empty string, as it is stored separately
+			$settings['global']['protection_rules_blacklist_value'] = '';
+
+			if ( ! empty( $blacklist ) ) {
+				// Save the blacklist values in the WordPress option 'disallowed_keys'.
+				update_option( 'disallowed_keys', $blacklist );
+				$this->get_logger()->info( 'Blacklist values successfully saved in database option "disallowed_keys".' );
+			} else {
+				// Delete the option if the blacklist is empty.
+				delete_option( 'disallowed_keys' );
+				$this->get_logger()->info( 'Blacklist values were empty, option "disallowed_keys" deleted.' );
+			}
+
+			// Subsequently set missing checkbox values to 0
+			foreach ( $options_to_zero as $opt ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in admin form submission
+				if ( ! isset( $_POST[ $opt ] ) ) {
+					$settings['global'][ $opt ] = 0;
+					$this->get_logger()->debug( 'Unset field reset to 0.', [ 'key' => $opt ] );
+				}
+			}
+
+			$this->get_logger()->info( 'Save process for global settings completed.' );
+
+			return $settings;
+		}
+
+		/**
+		 * Render the license subpage content
+		 */
+		protected function the_content( $slug, $page, $settings ) {
+			$settings = $settings['global'];
+			?>
+            <div class="section-container">
+                <h2>
+					<?php esc_html_e( 'Available Protection Services', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-integrations' ); ?>
+                </h2>
+                <div class="section-wrapper">
+                    <div class="section advanced">
+                        <!-- SEPARATOR -->
+                        <div class="option captcha-components">
+                            <div class="label">
+                                <label for="protect_ip"><strong><?php esc_html_e( 'Enable/Disable', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Select the plugins that should be protected. You can enable multiple or only single elements. It is also possible to disable the protection for single formulars using hooks. Have a look at the documentation for further information', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+
+								<?php
+								$Controller = CF7Captcha::get_instance();
+								$Components = [];
+								try {
+									/** @var Compatibility $Compatibility */
+									$Compatibility = $Controller->get_module( 'compatibility' );
+									$Components    = $Compatibility->get_components();
+								} catch ( \Exception $e ) {
+									echo '<p style="color:red;">' . esc_html__( 'Error: Compatibility module could not be loaded.', 'captcha-for-contact-form-7' ) . '</p>';
+								}
+
+								ksort( $Components );
+
+								foreach ( $Components as $component ) {
+									/**
+									 * @var BaseController $Base_Controller
+									 */
+									$Base_Controller = $component['object'];
+
+									/**
+									 * Get the Name
+									 */
+									$name = $Base_Controller->get_name();
+
+									/**
+									 * Field Name created from the ID
+									 */
+									$id = $Base_Controller->get_id();
+
+									/**
+									 * Skip if the controller is not enabled / installed
+									 */
+									if ( ! $Base_Controller->is_installed() ) {
+										continue;
+									}
+
+									$field_name = sprintf( 'protection_%s_enable', $id );
+
+									$is_checked = (
+										! isset( $settings[ $field_name ] ) || $settings[ $field_name ] == 1
+									) ? 'checked="checked"' : '';
+
+
+									?>
+                                    <div class="toggle-item-wrapper">
+                                        <!-- SEPARATOR -->
+                                        <div class="f12-checkbox-toggle">
+                                            <div class="toggle-container">
+												<?php
+												echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+												?>
+                                                <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                       class="toggle-label"></label>
+                                            </div>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"><?php echo esc_html( $name ); ?></label>
+                                            <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"
+                                                   id="component-<?php esc_attr_e( $id ); ?>"></label>
+                                        </div>
+                                        <a href="#" class="f12-configure-btn"
+                                           data-panel="<?php echo esc_attr( 'f12-panel-integration-' . $id ); ?>"><?php esc_html_e( 'Configure', 'captcha-for-contact-form-7' ); ?></a>
+										<?php
+										$resolver         = new Settings_Resolver();
+										$int_overrides    = $resolver->get_integration_overrides( $id );
+										$int_enabled      = ! empty( $int_overrides['_enabled'] );
+										$int_override_cnt = 0;
+										if ( $int_enabled ) {
+											foreach ( $int_overrides as $k => $v ) {
+												if ( $k !== '_enabled' ) {
+													$int_override_cnt ++;
+												}
+											}
+										}
+										?>
+										<?php if ( $int_enabled && $int_override_cnt > 0 ) : ?>
+                                            <span class="f12-forms-badge f12-forms-badge--active" style="position:relative; z-index:11;">
+												<?php
+												echo esc_html( sprintf(
+													_n( '%d Override', '%d Overrides', $int_override_cnt, 'captcha-for-contact-form-7' ),
+													$int_override_cnt
+												) );
+												?>
+											</span>
+										<?php else : ?>
+                                            <span class="f12-forms-badge f12-forms-badge--global" style="position:relative; z-index:11;">
+												<?php esc_html_e( 'Global Settings', 'captcha-for-contact-form-7' ); ?>
+											</span>
+										<?php endif; ?>
+                                    </div>
+								<?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-sidebar">
+                        <div class="section">
+                            <h2>
+								<?php esc_html_e( 'Available Protection Services', 'captcha-for-contact-form-7' ); ?>
+                            </h2>
+                            <p>
+								<?php esc_html_e( 'This option allows you, to enable the captcha protection for WordPress, WooCommerce and supported plugins. You will only see plugins available on your WordPress installation.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <p>
+								<?php esc_html_e( 'It is possible to enable the protection only for parts of your system.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <h3>
+								<?php esc_html_e( 'Supported Plugins', 'captcha-for-contact-form-7' ); ?>
+                            </h3>
+                            <ul>
+								<?php foreach ( $Components as $component ):
+									/**
+									 * @var BaseController $Base_Controller
+									 */
+									$Base_Controller = $component['object'];
+
+									/**
+									 * Get the Name
+									 */
+									$name = $Base_Controller->get_name();
+									?>
+                                    <li><?php echo esc_html( $name ); ?></li>
+								<?php endforeach; ?>
+                            </ul>
+                            <h3>
+								<?php esc_html_e( 'Is your Plugin missing?', 'captcha-for-contact-form-7' ); ?>
+                            </h3>
+                            <p>
+								<?php echo wp_kses_post( sprintf( __( 'Feel free to open a feature request within the wordpress community board: <a href="%s">Click me.</a>', 'captcha-for-contact-form-7' ), 'https://wordpress.org/support/plugin/captcha-for-contact-form-7/' ) ); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-wrapper">
+                <div class="section">
+                    <div class="option">
+                        <div class="label">
+                            <label
+                                    for="protection_captcha_reload_icon_black"><?php esc_html_e( 'Reload Icon', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <!-- SEPARATOR -->
+                            <input
+                                    id="protection_captcha_reload_icon_black"
+                                    type="radio"
+                                    value="black"
+                                    name="protection_captcha_reload_icon"
+								<?php echo esc_attr( isset( $settings['protection_captcha_reload_icon'] ) && $settings['protection_captcha_reload_icon'] === 'black' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_reload_icon_black">
+                            <div style="width:16px; height:16px; background-color:#ccc; padding:3px; display:inline-block;">
+                            <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/reload-icon.png' ); ?>"
+                                 style="width:16px; height:16px;"/>
+                            </div>
+                            <?php esc_html_e( 'Black', 'captcha-for-contact-form-7' ); ?>
+                        </label>
+                    </span><br><br>
+
+                            <input
+                                    id="protection_captcha_reload_icon_white"
+                                    type="radio"
+                                    value="white"
+                                    name="protection_captcha_reload_icon"
+								<?php echo esc_attr( isset( $settings['protection_captcha_reload_icon'] ) && $settings['protection_captcha_reload_icon'] === 'white' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_reload_icon_white">
+                            <div style="width:16px; height:16px; background-color:#000; padding:3px; display:inline-block;">
+                                    <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/reload-icon-white.png' ); ?>"
+                                         style="width:16px; height:16px;"/>
+                            </div>
+                            <?php esc_html_e( 'White', 'captcha-for-contact-form-7' ); ?>
+                        </label>
+                    </span>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label><?php esc_html_e( 'Preview', 'captcha-for-contact-form-7' ); ?></label>
+                            <p style="padding-right:20px;"><?php esc_html_e( 'Live preview of the reload button with current settings.', 'captcha-for-contact-form-7' ); ?></p>
+                        </div>
+                        <div class="input">
+                            <div id="f12-reload-preview-wrapper" style="display:inline-flex; align-items:center; gap:12px; padding:15px 20px; background:#f9f9f9; border:1px solid #e0e0e0; border-radius:4px;">
+                                <span style="color:#555; font-size:13px;">3 + 7 =</span>
+                                <a href="#" id="f12-reload-preview-btn" onclick="return false;"
+                                   style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;
+                                          background-color:<?php echo esc_attr( $settings['protection_captcha_reload_bg_color'] ?? '#2196f3' ); ?>;
+                                          padding:<?php echo esc_attr( $settings['protection_captcha_reload_padding'] ?? '3' ); ?>px;
+                                          border-radius:<?php echo esc_attr( $settings['protection_captcha_reload_border_radius'] ?? '3' ); ?>px;
+                                          <?php
+                                          $preview_border = $settings['protection_captcha_reload_border_color'] ?? '';
+                                          if ( ! empty( $preview_border ) ) {
+                                              echo 'border:1px solid ' . esc_attr( $preview_border ) . ';';
+                                          }
+                                          ?>">
+                                    <img id="f12-reload-preview-icon-black"
+                                         src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/reload-icon.png' ); ?>"
+                                         style="width:<?php echo esc_attr( $settings['protection_captcha_reload_icon_size'] ?? '16' ); ?>px; height:<?php echo esc_attr( $settings['protection_captcha_reload_icon_size'] ?? '16' ); ?>px; display:<?php echo ( isset( $settings['protection_captcha_reload_icon'] ) && $settings['protection_captcha_reload_icon'] === 'white' ) ? 'none' : 'block'; ?>;"
+                                         alt="Preview" />
+                                    <img id="f12-reload-preview-icon-white"
+                                         src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/reload-icon-white.png' ); ?>"
+                                         style="width:<?php echo esc_attr( $settings['protection_captcha_reload_icon_size'] ?? '16' ); ?>px; height:<?php echo esc_attr( $settings['protection_captcha_reload_icon_size'] ?? '16' ); ?>px; display:<?php echo ( isset( $settings['protection_captcha_reload_icon'] ) && $settings['protection_captcha_reload_icon'] === 'white' ) ? 'block' : 'none'; ?>;"
+                                         alt="Preview" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label for="protection_captcha_reload_bg_color"><?php esc_html_e( 'Reload Button Background Color', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <input
+                                type="text"
+                                id="protection_captcha_reload_bg_color"
+                                name="protection_captcha_reload_bg_color"
+                                value="<?php echo esc_attr( $settings['protection_captcha_reload_bg_color'] ?? '#2196f3' ); ?>"
+                                class="f12-color-picker"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label for="protection_captcha_reload_border_color"><?php esc_html_e( 'Reload Button Border Color', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <input
+                                type="text"
+                                id="protection_captcha_reload_border_color"
+                                name="protection_captcha_reload_border_color"
+                                value="<?php echo esc_attr( $settings['protection_captcha_reload_border_color'] ?? '' ); ?>"
+                                class="f12-color-picker"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label for="protection_captcha_reload_padding"><?php esc_html_e( 'Reload Button Padding (px)', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <input
+                                type="number"
+                                id="protection_captcha_reload_padding"
+                                name="protection_captcha_reload_padding"
+                                value="<?php echo esc_attr( $settings['protection_captcha_reload_padding'] ?? '3' ); ?>"
+                                min="0"
+                                max="50"
+                                style="width:80px;"
+                            /> px
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label for="protection_captcha_reload_border_radius"><?php esc_html_e( 'Reload Button Border Radius (px)', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <input
+                                type="number"
+                                id="protection_captcha_reload_border_radius"
+                                name="protection_captcha_reload_border_radius"
+                                value="<?php echo esc_attr( $settings['protection_captcha_reload_border_radius'] ?? '3' ); ?>"
+                                min="0"
+                                max="50"
+                                style="width:80px;"
+                            /> px
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label for="protection_captcha_reload_icon_size"><?php esc_html_e( 'Reload Icon Size (px)', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <input
+                                type="number"
+                                id="protection_captcha_reload_icon_size"
+                                name="protection_captcha_reload_icon_size"
+                                value="<?php echo esc_attr( $settings['protection_captcha_reload_icon_size'] ?? '16' ); ?>"
+                                min="8"
+                                max="64"
+                                style="width:80px;"
+                            /> px
+                        </div>
+                    </div>
+
+                    <div class="option">
+                        <div class="label">
+                            <label
+                                    for="protection_captcha_template"><?php esc_html_e( 'Template', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <!-- SEPARATOR -->
+                            <input
+                                    id="protection_captcha_template_0"
+                                    type="radio"
+                                    value="0"
+                                    name="protection_captcha_template"
+								<?php echo esc_attr( isset( $settings['protection_captcha_template'] ) && $settings['protection_captcha_template'] == '0' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_template_0">
+                            <div style="border:3px solid #edeaea; border-radius:3px; display:inline-block;">
+                            <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/template-0.jpg' ); ?>"
+                                 style=""/>
+                            </div>
+                        </label>
+                    </span><br><br>
+
+                            <input
+                                    id="protection_captcha_template_1"
+                                    type="radio"
+                                    value="1"
+                                    name="protection_captcha_template"
+								<?php echo esc_attr( isset( $settings['protection_captcha_template'] ) && $settings['protection_captcha_template'] == '1' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_template_1">
+                            <div style="border:3px solid #edeaea; border-radius:3px; display:inline-block;">
+                                    <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/template-1.jpg' ); ?>"
+                                         style=""/>
+                            </div>
+                        </label>
+                    </span><br><br>
+
+                            <input
+                                    id="protection_captcha_template_2"
+                                    type="radio"
+                                    value="2"
+                                    name="protection_captcha_template"
+								<?php echo esc_attr( isset( $settings['protection_captcha_template'] ) && $settings['protection_captcha_template'] == '2' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_template_2">
+                            <div style="border:3px solid #edeaea; border-radius:3px; display:inline-block;">
+                            <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/template-2.jpg' ); ?>"
+                                 style=""/>
+                            </div>
+                        </label>
+                    </span><br><br>
+
+                            <input
+                                    id="protection_captcha_template_3"
+                                    type="radio"
+                                    value="3"
+                                    name="protection_captcha_template"
+								<?php echo esc_attr( isset( $settings['protection_captcha_template'] ) && $settings['protection_captcha_template'] == '3' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_template_3">
+                            <div style="border:3px solid #edeaea; border-radius:3px; display:inline-block;">
+                            <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/template-3.jpg' ); ?>"
+                                 style=""/>
+                            </div>
+                        </label>
+                    </span><br><br>
+
+                            <input
+                                    id="protection_captcha_template_4"
+                                    type="radio"
+                                    value="4"
+                                    name="protection_captcha_template"
+								<?php echo esc_attr( isset( $settings['protection_captcha_template'] ) && $settings['protection_captcha_template'] == '4' ? 'checked="checked"' : '' ); ?>
+                            />
+                            <span>
+                        <label for="protection_captcha_template_4">
+                            <div style="border:3px solid #edeaea; border-radius:3px; display:inline-block;">
+                            <img src="<?php echo esc_url( plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'core/assets/template-4.jpg' ); ?>"
+                                 style=""/>
+                            </div>
+                        </label>
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-wrapper">
+                <div class="section">
+
+                    <div class="option">
+						<?php
+
+						/**
+						 * @var Protection $Protection
+						 */
+						$Protection = CF7Captcha::get_instance()->get_module( 'protection' );
+
+						if ( $Protection->has_module( 'captcha-validator' ) ) :
+						/**
+						 * @var Captcha_Validator $Captcha_Validator
+						 */
+						$Captcha_Validator = $Protection->get_module( 'captcha-validator' );
+
+						$Captcha = $Captcha_Validator->factory();
+
+						$number_of_captchas               = $Captcha->get_count();
+						$number_of_validated_captchas     = $Captcha->get_count( 1 );
+						$number_of_non_validated_captchas = $Captcha->get_count( 0 );
+
+						?>
+                        <div class="label">
+                            <label for=""><?php esc_html_e( 'Captchas', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <!-- SEPARATOR -->
+                            <p style="margin-top:0;">
+                                <strong><?php esc_html_e( 'Delete Captcha Entries', 'captcha-for-contact-form-7' ); ?></strong>
+                            </p>
+                            <p>
+								<?php esc_html_e( 'This entries will be deleted using a WP Cronjob. If you want to reset it manually, use the buttons below.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <p>
+                                <strong><?php esc_html_e( 'Entries:', 'captcha-for-contact-form-7' ); ?></strong>
+								<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $number_of_captchas ) ); ?>
+                            </p>
+                            <p>
+                                <strong><?php esc_html_e( 'Validated:', 'captcha-for-contact-form-7' ); ?></strong>
+								<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $number_of_validated_captchas ) ); ?>
+                            </p>
+                            <p>
+                                <strong><?php esc_html_e( 'Non-Validated:', 'captcha-for-contact-form-7' ); ?></strong>
+								<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $number_of_non_validated_captchas ) ); ?>
+                            </p>
+                            <input type="submit" class="button" name="captcha-clean-all"
+                                   value="<?php esc_attr_e( 'Delete All', 'captcha-for-contact-form-7' ); ?>"/>
+                            <input type="submit" class="button" name="captcha-clean-validated"
+                                   value="<?php esc_attr_e( 'Delete Validated', 'captcha-for-contact-form-7' ); ?>"/>
+                            <input type="submit" class="button" name="captcha-clean-nonvalidated"
+                                   value="<?php esc_attr_e( 'Deleted Non-Validated', 'captcha-for-contact-form-7' ); ?>"/>
+                            <p>
+								<?php esc_html_e( 'Make sure to backup your database before clicking one of these buttons.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                        </div>
+						<?php else : ?>
+                        <div class="label">
+                            <label for=""><?php esc_html_e( 'Captchas', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <p><?php esc_html_e( 'Captcha management is not available in API mode.', 'captcha-for-contact-form-7' ); ?></p>
+                        </div>
+						<?php endif; ?>
+                    </div>
+                    <div class="option">
+						<?php
+						/**
+						 * @var Timer_Controller $Timer_Controller
+						 */
+						$Timer_Controller = CF7Captcha::get_instance()->get_module( 'timer' );
+
+						$CaptchaTimer = $Timer_Controller->factory();
+
+						$number_of_timers = $CaptchaTimer->get_count();
+
+						?>
+
+                        <div class="label">
+                            <label for=""><?php esc_html_e( 'Timers', 'captcha-for-contact-form-7' ); ?></label>
+                        </div>
+                        <div class="input">
+                            <!-- SEPARATOR -->
+                            <p style="margin-top:0;">
+                                <strong><?php esc_html_e( 'Delete Timer Entries', 'captcha-for-contact-form-7' ); ?></strong>
+                            </p>
+                            <p>
+								<?php esc_html_e( 'This entries will be deleted using a WP Cronjob. If you want to reset it manually, use the buttons below.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <p>
+                                <strong><?php esc_html_e( 'Entries:', 'captcha-for-contact-form-7' ); ?></strong>
+								<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $number_of_timers ) ); ?>
+                            </p>
+                            <input type="submit" class="button" name="captcha-timer-clean-all"
+                                   value="<?php esc_attr_e( 'Delete All', 'captcha-for-contact-form-7' ); ?>"/>
+                            <p>
+								<?php esc_html_e( 'Make sure to backup your database before clicking one of these buttons.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+
+                <h3>
+					<?php esc_html_e( 'Asset Loading', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-start' ); ?>
+                </h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_global_asset_loading"><strong><?php esc_html_e( 'Global Asset Loading', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'When enabled, the plugin loads its CSS and JS on every page. Enable this if captchas are missing on certain pages.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable global loading of all plugin assets (CSS/JS) on all pages. Use this if the automatic form detection does not work on certain pages.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_global_asset_loading';
+											$is_checked = ( isset( $settings[ $field_name ] ) && $settings[ $field_name ] == 1 ) ? 'checked="checked"' : '';
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php echo esc_attr( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php echo esc_attr( $field_name ); ?>">
+											<?php esc_html_e( 'Load assets on all pages', 'captcha-for-contact-form-7' ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php echo esc_attr( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_asset_loading_urls"><strong><?php esc_html_e( 'Custom URL Paths', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'One URL path per line (e.g. /my-login/). Plugin assets will always be loaded on pages matching these paths.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'URL paths (one per line) where assets should always be loaded. Use this for custom login pages or pages where form detection fails.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <textarea
+                                    id="protection_asset_loading_urls"
+                                    name="protection_asset_loading_urls"
+                                    rows="5"
+                                    style="width:100%;"
+                                    placeholder="/my-secret-login/"
+                                ><?php echo esc_textarea( $settings['protection_asset_loading_urls'] ?? '' ); ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+
+                <h3>
+					<?php esc_html_e( 'Minor Protection Services', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-modules' ); ?>
+                </h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for=""><strong><?php esc_html_e( 'Enable/Disable', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'There are multiple protection mechanism available that you can use to stop incoming spam. Feel free to enable / disable them as required.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_javascript_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Javascript Protection', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                            <p><?php esc_html_e( 'Check if the user has javascript enabled. Most likely bots don\'t use or understand javascript.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_browser_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Browser Protection', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                            <p><?php esc_html_e( 'Check if the user has a valid user agent.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_multiple_submission_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Multiple Submission Protection', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                            <p><?php esc_html_e( 'Ensure that a form can not submitted multiple times within 2 seconds.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-sidebar">
+                        <div class="section">
+                            <h2>
+								<?php esc_html_e( 'Minor Protection Services', 'captcha-for-contact-form-7' ); ?>
+                            </h2>
+                            <p>
+								<?php esc_html_e( 'Bots are getting smarter these days, therefor we added a few additional protection methods, that will help to filter spam even better.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <h3>
+                                <strong>
+									<?php esc_html_e( 'Javascript Protection', 'captcha-for-contact-form-7' ); ?>
+                                </strong>
+                            </h3>
+                            <p>
+								<?php esc_html_e( 'Recommendation: Enable. This will check if the user supports JavaScript. As most of the bots are not able to interpret JavaScript, this will remove a bunch of spam.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <h3>
+								<?php esc_html_e( 'Browser Protection', 'captcha-for-contact-form-7' ); ?>
+                            </h3>
+                            <p>
+								<?php esc_html_e( 'Recommendation: Enable. This will check if the user agent is valid. This can help to identify spam, you can use it to extend your protection.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <h3>
+								<?php esc_html_e( 'Multiple Submission Protection', 'captcha-for-contact-form-7' ); ?>
+                            </h3>
+                            <p>
+								<?php esc_html_e( 'This will ensure that the user is not able to submit the form multiple times between 2 seconds.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3>
+					<?php esc_html_e( 'Protection Rules', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-modules' ); ?>
+                </h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_rules_url_enable"><strong><?php esc_html_e( 'URL Limiter', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Blocks form submissions that contain more URLs than the configured limit. Useful against link spam.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable the URL Limiter to limit the number of allowed links in your forms.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_rules_url_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'URL Limiter', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="rule_url_limit"><strong><?php esc_html_e( 'Allowed Links:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p><?php esc_html_e( 'Defines how many links are allowed per Field.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="rule_url_limit"
+                                                    type="number"
+                                                    value="<?php echo esc_attr( $settings['protection_rules_url_limit'] ?? 0 ); ?>"
+                                                    name="protection_rules_url_limit"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_rules_error_message_url"><strong><?php esc_html_e( 'Error Message:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p><?php esc_html_e( 'Defines the error message that should be displayed if the limit has been reached.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_rules_error_message_url"
+                                                    type="text"
+                                                    value="<?php echo esc_attr( $settings['protection_rules_error_message_url'] ?? __( 'The Limit %d has been reached. Remove the %s to continue.', 'captcha-for-contact-form-7' ) ); ?>"
+                                                    name="protection_rules_error_message_url"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-sidebar">
+                        <div class="section">
+                            <h2>
+								<?php esc_html_e( 'URL Limiter', 'captcha-for-contact-form-7' ); ?>
+                            </h2>
+                            <p>
+								<?php esc_html_e( 'The URL Limiter is limiting the number of hyperlinks that can be included in the content of a form submission. Keep in mind, that the limit is by field not by form.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <p>
+								<?php esc_html_e( 'The custom error message will be displayed for website visitors if the error appears, therefor it would be helpful to explain them how to solve this issue', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_rules_bbcode_enable"><strong><?php esc_html_e( 'BBCode Limiter', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Blocks submissions containing BBCode tags like [url], [b], [img]. Common in automated spam.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable the BBCode limiter to mark BBCode as Spam on your website.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_rules_bbcode_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'BBCode Filter', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_rules_error_message_bbcode"><strong><?php esc_html_e( 'Error Message:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p><?php esc_html_e( 'Defines the error message that should be displayed if BBCode has been found.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_rules_error_message_bbcode"
+                                                    type="text"
+                                                    value="<?php echo esc_attr( $settings['protection_rules_error_message_bbcode'] ?? __( 'The Limit %d has been reached. Remove the %s to continue.', 'captcha-for-contact-form-7' ) ); ?>"
+                                                    name="protection_rules_error_message_bbcode"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-sidebar">
+                        <div class="section">
+                            <h2>
+								<?php esc_html_e( 'BBCode Limiter', 'captcha-for-contact-form-7' ); ?>
+                            </h2>
+                            <p>
+								<?php esc_html_e( 'The BBCode Limiter allows you to disable BBCode in your forms. BBCode, which stands for Bulletin Board Code, is a lightweight markup language used to format posts in many message boards, online forums, and comment sections. BBCode tags are similar to HTML but are simpler and safer.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-wrapper">
+                    <div class="section">
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_rules_blacklist_enable"><strong><?php esc_html_e( 'Blacklist', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Blocks submissions containing words from the blacklist. Enable "Greedy mode" to also match partial words (e.g. "spam" matches "spammer").', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable the Blacklist for your forms. This allows you to define custom text combinations as spam.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_rules_blacklist_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Blacklist', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="rule_blacklist_value"><strong><?php esc_html_e( 'Blacklisted Texts', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p>
+												<?php esc_html_e( 'Those are the values that will be triggering the blacklist to mark the input as spam.', 'captcha-for-contact-form-7' ); ?>
+                                            </p>
+                                            <p>
+												<?php esc_html_e( 'Use one word / sentence per line.', 'captcha-for-contact-form-7' ); ?>
+                                            </p>
+
+                                            <input type="button" class="button" id="syncblacklist"
+                                                   value="<?php esc_attr_e( 'Load predefined Blacklist', 'captcha-for-contact-form-7' ); ?>"/>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <textarea
+                                                    rows="20"
+                                                    id="rule_blacklist_value"
+                                                    name="protection_rules_blacklist_value"
+                                            ><?php
+												echo esc_textarea( stripslashes( $settings['protection_rules_blacklist_value'] ) );
+												?></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_rules_blacklist_greedy';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Make it greedy', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                            <p>
+												<?php esc_html_e( 'If the greedy filter is enabled, even parts of the word will causing the filter to trigger, e.g.: the word "com" is blacklisted and the greedy filter is enabled, this will cause "forge12.com", "composite" and "compose" also to be filtered.', 'captcha-for-contact-form-7' ); ?>
+                                            </p>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_rules_error_message_blacklist"><strong><?php esc_html_e( 'Error Message:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p><?php esc_html_e( 'Defines the error message that should be displayed if BBCode has been found.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_rules_error_message_blacklist"
+                                                    type="text"
+                                                    value="<?php echo esc_attr( $settings['protection_rules_error_message_blacklist'] ?? __( 'The Limit %d has been reached. Remove the %s to continue.', 'captcha-for-contact-form-7' ) ); ?>"
+                                                    name="protection_rules_error_message_blacklist"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-sidebar">
+                        <div class="section">
+                            <h2>
+								<?php esc_html_e( 'Blacklist', 'captcha-for-contact-form-7' ); ?>
+                            </h2>
+                            <p>
+								<?php esc_html_e( 'The blacklist is a list of prohibited or undesirable input values. When a user submits a form, the data provided is checked against the blacklist. If any part of the users input matches an entry on the blacklist, the form submission will be rejected and the user will be asked to provide different information.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <p>
+								<?php esc_html_e( 'You can import a predefined blacklist from us. The predefined list contains roundabout 40.000 entries in multiple languages.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <div class="option">
+                                <div class="input">
+                                    <p>
+                                        <strong><?php esc_html_e( 'Note', 'captcha-for-contact-form-7' ); ?>:</strong>
+                                    </p>
+                                    <p>
+										<?php esc_html_e( 'If you notice long loading times when submitting the form, reduce the entries in the list.', 'captcha-for-contact-form-7' ); ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <h3>
+								<?php esc_html_e( 'Make it greedy', 'captcha-for-contact-form-7' ); ?>
+                            </h3>
+                            <p>
+								<?php esc_html_e( 'Use the greed filter to find also parts of the word and mark them as blacklisted.', 'captcha-for-contact-form-7' ); ?>
+                            </p>
+                            <div class="option">
+                                <div class="input">
+                                    <p>
+                                        <strong><?php esc_html_e( 'Example', 'captcha-for-contact-form-7' ); ?>:</strong>
+                                    </p>
+                                    <p>
+										<?php esc_html_e( 'If you have an entry name "com" and enable the greedy filter, this will also trigger for composite, compose and .com', 'captcha-for-contact-form-7' ); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-container">
+                <h3>
+					<?php esc_html_e( 'IP Protection', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-modules' ); ?>
+                </h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_ip_enable"><strong><?php esc_html_e( 'IP Protection', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Limits how often an IP can submit forms. Blocks IPs that exceed the limit for a configurable duration.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable the IP Protection to automatically stop bots from submitting any forms as long as they are blocked.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_ip_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'IP Protection', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_ip_max_retries"><strong><?php esc_html_e( 'Max Retries:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p style="padding-right:20px;"><?php esc_html_e( 'Defines the number of retries till the IP gets automatically blocked.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_ip_max_retries"
+                                                    type="number"
+                                                    value="<?php echo esc_attr( $settings['protection_ip_max_retries'] ?? 3 ); ?>"
+                                                    name="protection_ip_max_retries"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_ip_max_retries_period"><strong><?php esc_html_e( 'Time interval:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p style="padding-right:20px;"><?php esc_html_e( 'Defines the time interval for detection of subsequent attacks.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_ip_max_retries_period"
+                                                    type="number"
+                                                    value="<?php echo esc_attr( $settings['protection_ip_max_retries_period'] ?? 300 ); ?>"
+                                                    name="protection_ip_max_retries_period"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_ip_block_time"><strong><?php esc_html_e( 'Unblock after X seconds:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p style="padding-right:20px;"><?php esc_html_e( 'The user will not be able to submit any forms until he gets unblocked after the given amount of seconds.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_ip_block_time"
+                                                    type="number"
+                                                    value="<?php echo esc_attr( $settings['protection_ip_block_time'] ?? 3600 ); ?>"
+                                                    name="protection_ip_block_time"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="option" style="padding:0px 10px;">
+                                        <div class="label">
+                                            <label for="protection_ip_period_between_submits"><strong><?php esc_html_e( 'Interval Protection:', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                            <p style="padding-right:20px;"><?php esc_html_e( 'All submissions faster than the given period seconds will automatically be marked as spam.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </div>
+                                        <div class="input">
+                                            <!-- SEPARATOR -->
+                                            <input
+                                                    id="protection_ip_period_between_submits"
+                                                    type="number"
+                                                    value="<?php echo esc_attr( $settings['protection_ip_period_between_submits'] ?? 60 ); ?>"
+                                                    name="protection_ip_period_between_submits"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protect_comments"><?php esc_html_e( 'IP Bans', 'captcha-for-contact-form-7' ); ?></label>
+                            </div>
+                            <div class="input">
+                                <!-- SEPARATOR -->
+                                <p style="margin-top:0;">
+                                    <strong><?php esc_html_e( 'Delete IP Bans Entries', 'captcha-for-contact-form-7' ); ?></strong>
+                                </p>
+                                <p>
+									<?php esc_html_e( 'This entries will be deleted after the blocked time is over using a WP Cronjob. If you want to reset it manually, use the button below.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                                <p>
+									<?php
+									$IP_Ban  = new IPBan( $this->UI_Manager->get_logger() );
+									$entries = $IP_Ban->get_count();
+									?>
+                                    <strong><?php esc_html_e( 'Entries:', 'captcha-for-contact-form-7' ); ?></strong>
+									<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $entries ) ); ?>
+                                </p>
+                                <input type="submit" class="button" name="captcha-ip-ban-clean-all"
+                                       value="<?php esc_attr_e( 'Delete All', 'captcha-for-contact-form-7' ); ?>"/>
+                                <p>
+									<?php esc_html_e( 'Make sure to backup your database before clicking one of these buttons.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protect_comments"><?php esc_html_e( 'IP Logs', 'captcha-for-contact-form-7' ); ?></label>
+                            </div>
+                            <div class="input">
+                                <!-- SEPARATOR -->
+                                <p style="margin-top:0;">
+                                    <strong><?php esc_html_e( 'Delete IP Log Entries', 'captcha-for-contact-form-7' ); ?></strong>
+                                </p>
+                                <p>
+									<?php esc_html_e( 'This entries will be deleted using a WP Cronjob. If you want to reset it manually, use the button below.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                                <p>
+									<?php
+									$IP_Log  = new IPLog( $this->UI_Manager->get_logger() );
+									$entries = $IP_Log->get_count();
+									?>
+                                    <strong><?php esc_html_e( 'Entries:', 'captcha-for-contact-form-7' ); ?></strong>
+									<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $entries ) ); ?>
+                                </p>
+                                <input type="submit" class="button" name="captcha-ip-log-clean-all"
+                                       value="<?php esc_attr_e( 'Delete All', 'captcha-for-contact-form-7' ); ?>"/>
+                                <p>
+									<?php esc_html_e( 'Make sure to backup your database before clicking one of these buttons.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-container">
+                <h3>
+					<?php esc_html_e( 'Logs', 'captcha-for-contact-form-7' ); ?>
+					<?php UI_Documentation::help_link( '#ss-logging' ); ?>
+                </h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_log_enable"><strong><?php esc_html_e( 'Submission Logging', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Logs all form submissions (passed and blocked) for debugging. Disable in production to save database space.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable the logs if you need further informations about verified and blocked submissions.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_log_enable';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Enable Logging', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="label">
+                                <label for="protect_comments"><?php esc_html_e( 'Logs', 'captcha-for-contact-form-7' ); ?></label>
+                            </div>
+                            <div class="input">
+                                <!-- SEPARATOR -->
+                                <p style="margin-top:0;">
+                                    <strong><?php esc_html_e( 'Delete Log Entries', 'captcha-for-contact-form-7' ); ?></strong>
+                                </p>
+                                <p>
+									<?php esc_html_e( 'This entries will be deleted using a WP Cronjob. If you want to reset it manually, use the button below.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                                <p>
+									<?php
+									$number_of_log_entries = Log_WordPress::get_instance()->get_count();
+
+									?>
+                                    <strong><?php esc_html_e( 'Entries:', 'captcha-for-contact-form-7' ); ?></strong>
+									<?php printf( esc_html__( '%s entries in the database', 'captcha-for-contact-form-7' ), esc_html( (string) $number_of_log_entries ) ); ?>
+                                </p>
+                                <input type="submit" class="button" name="captcha-log-clean-all"
+                                       value="<?php esc_attr_e( 'Delete All', 'captcha-for-contact-form-7' ); ?>"/>
+                                <input type="submit" class="button" name="captcha-log-clean-3-weeks"
+                                       value="<?php esc_attr_e( 'Delete older than 3 Weeks', 'captcha-for-contact-form-7' ); ?>"/>
+                                <p>
+									<?php esc_html_e( 'Make sure to backup your database before clicking one of these buttons.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3><?php esc_html_e( 'Detailed Tracking', 'captcha-for-contact-form-7' ); ?><?php UI_Documentation::help_link( '#ss-logging' ); ?></h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_detailed_tracking"><strong><?php esc_html_e( 'Enable Detailed Block Tracking', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'Required for the Analytics page. Logs each blocked submission with module name, reason code and IP hash.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'When enabled, every blocked submission is logged with a machine-readable reason code and a human-readable explanation of why it was blocked. This allows you to analyze exactly which protection methods are working and why.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_detailed_tracking';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Detailed Tracking', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                            <p><?php esc_html_e( 'Increases database storage usage. Old entries are automatically cleaned up based on the retention period below.', 'captcha-for-contact-form-7' ); ?></p>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_detailed_tracking_retention"><strong><?php esc_html_e( 'Retention Period (Days)', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p><?php esc_html_e( 'Block log entries older than this number of days are automatically deleted.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <input type="number" min="1" max="365" step="1"
+                                       id="protection_detailed_tracking_retention"
+                                       name="protection_detailed_tracking_retention"
+                                       value="<?php echo esc_attr( $settings['protection_detailed_tracking_retention'] ); ?>" />
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_audit_log_retention"><strong><?php esc_html_e( 'Audit Log Retention (Days)', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p><?php esc_html_e( 'Audit log entries (settings changes, cron jobs, errors) older than this number of days are automatically deleted.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <input type="number" min="7" max="365" step="1"
+                                       id="protection_audit_log_retention"
+                                       name="protection_audit_log_retention"
+                                       value="<?php echo esc_attr( $settings['protection_audit_log_retention'] ?? 90 ); ?>" />
+                            </div>
+                        </div>
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_log_plaintext"><strong><?php esc_html_e( 'Disable Log Anonymization (Debug Mode)', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'When enabled, IP addresses are stored in plain text instead of as hashes. Only use for debugging - not recommended in production (GDPR).', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'When enabled, email addresses and IP addresses are stored in plain text in the submission logs instead of being masked. This allows you to identify which user was blocked and contact them if needed.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_log_plaintext';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Plain Text Logs', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                                <div style="margin-top:10px; padding:12px 16px; background:#fef3c7; border:1px solid #f59e0b; border-radius:6px;">
+                                    <p style="margin:0; color:#92400e; font-size:13px;">
+                                        <strong>&#9888; <?php esc_html_e( 'Privacy Notice (GDPR / DSGVO)', 'captcha-for-contact-form-7' ); ?></strong><br>
+										<?php esc_html_e( 'Storing personal data (email addresses, IP addresses) in plain text may require a legal basis under GDPR Art. 6. Use this setting only for temporary debugging purposes to identify false-positive blocks. Disable it again after troubleshooting. Ensure your privacy policy covers the storage of submission data. We recommend keeping the retention period as short as possible while this setting is active.', 'captcha-for-contact-form-7' ); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <!-- Whitelist Section -->
+                <h3><?php esc_html_e( 'Whitelist Settings', 'captcha-for-contact-form-7' ); ?><?php UI_Documentation::help_link( '#ss-whitelist' ); ?></h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_whitelist_emails"><strong><?php esc_html_e( 'Whitelist Email Addresses', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'One email per line. If any form field contains a whitelisted email, the entire submission skips all protection checks.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p><?php esc_html_e( 'Add email addresses that should bypass all CAPTCHA checks, one per line.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <textarea
+                                        rows="10"
+                                        id="protection_whitelist_emails"
+                                        name="protection_whitelist_emails"
+                                ><?php echo esc_textarea( $settings['protection_whitelist_emails'] ); ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_whitelist_ips"><strong><?php esc_html_e( 'Whitelist IP Addresses', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'One IP per line. Whitelisted IPs skip all protection checks. Your current IP is shown below.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p><?php esc_html_e( 'Add IP addresses that should bypass all CAPTCHA checks, one per line.', 'captcha-for-contact-form-7' ); ?></p>
+                                <label><strong><?php esc_html_e( 'Your Current IP Address', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p><?php echo esc_html( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <textarea
+                                        rows="10"
+                                        id="protection_whitelist_ips"
+                                        name="protection_whitelist_ips"
+                                ><?php echo esc_textarea( $settings['protection_whitelist_ips'] ); ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_blacklist_ips"><strong><?php esc_html_e( 'Backlist IP Addresses', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'One IP per line. Blacklisted IPs are immediately blocked from submitting any form. The whitelist takes priority over the blacklist.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p><?php esc_html_e( 'Add IP addresses that should be blocked automatically, one per line.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <textarea
+                                        rows="10"
+                                        id="protection_blacklist_ips"
+                                        name="protection_blacklist_ips"
+                                ><?php echo esc_textarea( $settings['protection_blacklist_ips'] ); ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_whitelist_role_admin"><strong><?php esc_html_e( 'Whitelist for Administrator Role', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'When enabled, administrators skip all protection checks including captcha, timer and JS validation.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable this option to automatically whitelist all administrators while they are logged into the website.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_whitelist_role_admin';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Activate Whitelist for Administrator Role', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="label">
+                                <label for="protection_whitelist_role_logged_in"><strong><?php esc_html_e( 'Whitelist for Logged-In Users', 'captcha-for-contact-form-7' ); ?></strong><?php UI_Documentation::tooltip( __( 'When enabled, all logged-in users (any role) skip all protection checks. Disable if you want to protect forms even for registered users.', 'captcha-for-contact-form-7' ) ); ?></label>
+                                <p style="padding-right:20px;"><?php esc_html_e( 'Enable this option to automatically whitelist all Logged-in Users.', 'captcha-for-contact-form-7' ); ?></p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- SEPARATOR -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'protection_whitelist_role_logged_in';
+											$is_checked = $settings[ $field_name ] == 1 ? 'checked="checked"' : '';
+											$name       = __( 'Activate Whitelist for Logged-In Users', 'captcha-for-contact-form-7' );
+											echo sprintf( '<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>', esc_attr( $field_name ), esc_attr( $field_name ), esc_attr( $is_checked ) );
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <!-- Telemetry Section -->
+                <h3><?php esc_html_e( 'Telemetry', 'captcha-for-contact-form-7' ); ?></h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="telemetry"><strong><?php esc_html_e( 'Telemetry', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p style="padding-right:20px;">
+									<?php esc_html_e( 'Enable this option to allow anonymous telemetry data to be sent. This helps us improve and develop the plugin.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- TOGGLE -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'telemetry';
+											// Default = active (1), only if explicitly 0 -> deactivated
+											$is_checked = ( ( $settings[ $field_name ] ?? 1 ) == 1 ) ? 'checked="checked"' : '';
+											$name       = __( 'Enable Telemetry', 'captcha-for-contact-form-7' );
+
+											echo sprintf(
+												'<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>',
+												esc_attr( $field_name ),
+												esc_attr( $field_name ),
+												esc_attr( $is_checked )
+											);
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <!-- AI-Agent Observation Section (plan/54 Inc1) -->
+                <h3><?php esc_html_e( 'AI-Agent Observation', 'captcha-for-contact-form-7' ); ?></h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="agent_observe"><strong><?php esc_html_e( 'Observe AI crawlers', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p style="padding-right:20px;">
+									<?php esc_html_e( 'Record which AI agents (e.g. GPTBot, ClaudeBot, PerplexityBot) crawl your site and show them in your SilentShield dashboard. This runs entirely on the server, sets no cookies, blocks nothing, and only sends data for detected bots — never for your human visitors. IP addresses are pseudonymised. Legal basis: legitimate interest (Art. 6(1)(f) GDPR).', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- TOGGLE -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'agent_observe';
+											// Default = active (1), only if explicitly 0 -> deactivated
+											$is_checked = ( ( $settings[ $field_name ] ?? 1 ) == 1 ) ? 'checked="checked"' : '';
+											$name       = __( 'Observe AI crawlers', 'captcha-for-contact-form-7' );
+
+											echo sprintf(
+												'<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>',
+												esc_attr( $field_name ),
+												esc_attr( $field_name ),
+												esc_attr( $is_checked )
+											);
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <!-- AI-Agent Enforcement Section (plan/64 Inc3) -->
+                <h3><?php esc_html_e( 'AI-Agent Enforcement', 'captcha-for-contact-form-7' ); ?></h3>
+                <div class="section-wrapper">
+                    <div class="section">
+                        <div class="option">
+                            <div class="label">
+                                <label for="agent_enforce"><strong><?php esc_html_e( 'Block AI crawlers (enforce)', 'captcha-for-contact-form-7' ); ?></strong></label>
+                                <p style="padding-right:20px;">
+									<?php esc_html_e( 'Actually enforce the block rules you set in your SilentShield dashboard: disallowed AI bots get a 403 (throttled ones a 429). This runs on every front-end request and can block traffic — it is off by default and a deliberate choice. Only bots identifiable by their User-Agent and verifiable by their published IP ranges can be enforced; AI browsers on residential connections cannot. Leave this off to only observe.', 'captcha-for-contact-form-7' ); ?>
+                                </p>
+                            </div>
+                            <div class="input">
+                                <div class="toggle-item-wrapper">
+                                    <!-- TOGGLE -->
+                                    <div class="f12-checkbox-toggle">
+                                        <div class="toggle-container">
+											<?php
+											$field_name = 'agent_enforce';
+											// Default = OFF (0); only an explicit 1 enables enforcement.
+											$is_checked = ( ( $settings[ $field_name ] ?? 0 ) == 1 ) ? 'checked="checked"' : '';
+											$name       = __( 'Block AI crawlers (enforce)', 'captcha-for-contact-form-7' );
+
+											echo sprintf(
+												'<input name="%s" type="checkbox" value="1" id="%s" class="toggle-button" %s>',
+												esc_attr( $field_name ),
+												esc_attr( $field_name ),
+												esc_attr( $is_checked )
+											);
+											?>
+                                            <label for="<?php esc_attr_e( $field_name ); ?>"
+                                                   class="toggle-label"></label>
+                                        </div>
+                                        <label for="<?php esc_attr_e( $field_name ); ?>">
+											<?php echo esc_html( $name ); ?>
+                                        </label>
+                                        <label class="overlay" for="<?php esc_attr_e( $field_name ); ?>"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<?php
+			// Render hidden panels for each installed integration
+			$resolver = new Settings_Resolver();
+			$Controller_panels = CF7Captcha::get_instance();
+			$Components_panels = [];
+			try {
+				$Compatibility_panels = $Controller_panels->get_module( 'compatibility' );
+				$Components_panels    = $Compatibility_panels->get_components();
+			} catch ( \Exception $e ) {
+				// Already handled above
+			}
+
+			foreach ( $Components_panels as $component ) {
+				$Base_Controller_panel = $component['object'];
+				if ( ! $Base_Controller_panel->is_installed() ) {
+					continue;
+				}
+				$panel_id   = $Base_Controller_panel->get_id();
+				$panel_name = $Base_Controller_panel->get_name();
+				$overrides  = $resolver->get_integration_overrides( $panel_id );
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML from Override_Panel_Renderer is properly escaped internally
+				echo Override_Panel_Renderer::render_integration_panel( $panel_id, $panel_name, $settings, $overrides );
+			}
+
+			// Render the slide-in container shell
+			Override_Panel_Renderer::render_slide_in_container();
+
+			// Enqueue JS and localize data
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script(
+				'f12-forms-admin',
+				$this->get_ui_manager()->get_plugin_dir_url() . 'ui/assets/f12-forms-admin.js',
+				[ 'jquery', 'wp-color-picker' ],
+				'1.2',
+				true
+			);
+			wp_localize_script( 'f12-forms-admin', 'f12FormsAdmin', [
+				'restUrl'    => esc_url_raw( rest_url( 'f12-cf7-captcha/v1/' ) ),
+				'restNonce'  => wp_create_nonce( 'wp_rest' ),
+				'saving'     => __( 'Saving...', 'captcha-for-contact-form-7' ),
+				'saveLabel'  => __( 'Save', 'captcha-for-contact-form-7' ),
+				'msgSuccess' => __( 'Settings saved.', 'captcha-for-contact-form-7' ),
+				'msgError'   => __( 'Error saving settings.', 'captcha-for-contact-form-7' ),
+				'badgeGlobal' => __( 'Global Settings', 'captcha-for-contact-form-7' ),
+			] );
+		}
+
+		protected function the_sidebar( $slug, $page ) {
+			?>
+            <div class="box">
+                <div class="section">
+                    <h2>
+						<?php esc_html_e( 'Need help?', 'captcha-for-contact-form-7' ); ?>
+                    </h2>
+                    <p>
+						<?php echo wp_kses_post( sprintf( __( "Take a look at our <a href='%s' target='_blank'>Documentation</a>.", 'captcha-for-contact-form-7' ), 'https://www.forge12.com/blog/so-verwendest-du-das-wordpress-captcha-um-deine-webseite-zu-schuetzen/' ) ); ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="section">
+                    <h2>
+						<?php esc_html_e( 'Hooks:', 'captcha-for-contact-form-7' ); ?>
+                    </h2>
+                    <p>
+                        <strong><?php esc_html_e( "This hook can be used to skip specific protection methods for forms:", 'captcha-for-contact-form-7' ); ?></strong>
+                    </p>
+                    <div class="option">
+                        <div class="input">
+                            <p>
+                                apply_filters('f12-cf7-captcha-skip-validation', $enabled);
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    <p>
+                        <strong><?php esc_html_e( "This hook can be used to disable the protection for a plugin:", 'captcha-for-contact-form-7' ); ?></strong>
+                    </p>
+                    <p>
+						<?php esc_html_e( "Supported ids: avada, fluentform, elementor, cf7, wpforms, ultimatemember, gravityforms, wordpress_comments, wordpress, woocommerce.", 'captcha-for-contact-form-7' ); ?>
+                    </p>
+                    <div class="option">
+                        <div class="input">
+                            <p>
+                                apply_filters('f12_cf7_captcha_is_installed_{id}', $enabled);
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p>
+                        <strong><?php esc_html_e( "This hook can be used to manipulate the layout of the captcha field:", 'captcha-for-contact-form-7' ); ?></strong>
+                    </p>
+                    <div class="option">
+                        <div class="input">
+                            <p>
+                                apply_filters('f12-cf7-captcha-get-form-field-{type}', $captcha, $field_name, $label,
+                                $Captcha_Session, $atts);
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    <p>
+                        <strong><?php esc_html_e( "This hook can be used to load a custom the reload icon:", 'captcha-for-contact-form-7' ); ?></strong>
+                    </p>
+                    <div class="option">
+                        <div class="input">
+                            <p>
+                                apply_filters('f12-cf7-captcha-reload-icon', $image_url);
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<?php
+		}
+
+
+	}
+}

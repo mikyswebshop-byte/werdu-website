@@ -1,0 +1,1827 @@
+# Translation of Plugins - Shiptastic Integration for DHL - Stable (latest release) in German
+# This file is distributed under the same license as the Plugins - Shiptastic Integration for DHL - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-06-02 08:51:59+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.3\n"
+"Language: de\n"
+"Project-Id-Version: Plugins - Shiptastic Integration for DHL - Stable (latest release)\n"
+
+#: src/Package.php:138
+msgctxt "dhl"
+msgid "Not yet known; pickup location nearby."
+msgstr "Noch nicht bekannt; Abholstation in der Nähe."
+
+#: src/ShippingProvider/DeutschePost.php:377
+msgctxt "dhl"
+msgid "%1$s. Please check your <a href=\"%2$s\">settings</a>."
+msgstr "%1$s. Bitte prüfe Deine <a href=\"%2$s\">Einstellungen</a>."
+
+#: src/Api/ParcelTracking.php:15
+msgctxt "dhl"
+msgid "DHL DE Parcel Tracking"
+msgstr "DHL DE Paketverfolgung"
+
+#: src/Api/ParcelTracking.php:55
+msgctxt "dhl"
+msgid "Could not resolve remote shipment status."
+msgstr "Externer Sendungsstatus konnte nicht bestimmt werden."
+
+#: src/Api/ParcelTracking.php:84
+msgctxt "dhl"
+msgid "No xml element found."
+msgstr "Kein XML Element gefunden."
+
+#: src/ShippingProvider/DHL.php:189
+#: src/ShippingProvider/Services/DHLRetoure.php:55
+#: src/ShippingProvider/Services/DHLRetoure.php:186
+msgctxt "dhl"
+msgid "GoGreen Plus"
+msgstr "GoGreen Plus"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:61
+msgctxt "dhl"
+msgid "Enable the GoGreen Plus service for inlay returns."
+msgstr "Buche den GoGreen Service für Beilageretouren."
+
+#. Plugin Name of the plugin
+#: shiptastic-integration-for-dhl.php
+msgid "Shiptastic Integration for DHL"
+msgstr "Shiptastic Integration für DHL"
+
+#. Plugin URI of the plugin
+#: shiptastic-integration-for-dhl.php
+msgid "https://github.com/vendidero/shiptastic-integration-for-dhl"
+msgstr "https://github.com/vendidero/shiptastic-integration-for-dhl"
+
+#. Description of the plugin
+#: shiptastic-integration-for-dhl.php
+msgid "Create DHL and Deutsche Post labels for Shiptastic."
+msgstr "Erzeuge DHL und Deutsche Post Label für Shiptastic."
+
+#. Author of the plugin
+#: shiptastic-integration-for-dhl.php
+msgid "vendidero"
+msgstr "vendidero"
+
+#. Author URI of the plugin
+#: shiptastic-integration-for-dhl.php
+msgid "https://vendidero.de"
+msgstr "https://vendidero.de"
+
+#: includes/wc-stc-dhl-core-functions.php:60 src/Api/Paket.php:236
+msgctxt "dhl day context"
+msgid "None"
+msgstr "Keiner"
+
+#: includes/wc-stc-dhl-core-functions.php:90
+msgctxt "dhl"
+msgid "Delivery Duty Paid"
+msgstr "Delivery Duty Paid"
+
+#: includes/wc-stc-dhl-core-functions.php:91
+msgctxt "dhl"
+msgid "Delivery At Place"
+msgstr "Delivery At Place"
+
+#: includes/wc-stc-dhl-core-functions.php:92
+msgctxt "dhl"
+msgid "Delivery Duty Paid (excl. VAT )"
+msgstr "Delivered Duty Paid (exkl. MwSt.)"
+
+#: includes/wc-stc-dhl-core-functions.php:93
+msgctxt "dhl"
+msgid "Delivery Duty Paid (excl. Duties, taxes and VAT)"
+msgstr "Delivery Duty Paid (exkl. Zölle, Steuern und MwSt.)"
+
+#: includes/wc-stc-dhl-core-functions.php:121
+msgctxt "age context"
+msgid "None"
+msgstr "Keine"
+
+#: includes/wc-stc-dhl-core-functions.php:122
+msgctxt "dhl"
+msgid "Minimum age of 16"
+msgstr "Mindestens 16 Jahre"
+
+#: includes/wc-stc-dhl-core-functions.php:123
+msgctxt "dhl"
+msgid "Minimum age of 18"
+msgstr "Mindestens 18 Jahre"
+
+#: includes/wc-stc-dhl-core-functions.php:169
+msgctxt "dhl"
+msgid "Return shipment"
+msgstr "Zurücksenden"
+
+#: includes/wc-stc-dhl-core-functions.php:170
+msgctxt "dhl"
+msgid "Abandon shipment"
+msgstr "Sendung aufgeben"
+
+#: includes/wc-stc-dhl-core-functions.php:306
+#: src/ShippingProvider/DeutschePost.php:653 src/ShippingProvider/DHL.php:1092
+#: src/ShippingProvider/DHL.php:1463
+msgctxt "dhl"
+msgid "Packstation"
+msgstr "Packstation"
+
+#: includes/wc-stc-dhl-core-functions.php:307
+#: includes/wc-stc-dhl-core-functions.php:308
+msgctxt "dhl"
+msgid "Postfiliale"
+msgstr "Postfiliale"
+
+#: includes/wc-stc-dhl-core-functions.php:651
+msgctxt "dhl"
+msgid "Either your customer number or the participation number for <strong>%1$s</strong> is missing. Please validate your <a href=\"%2$s\">settings</a> and try again."
+msgstr "Entweder deine Kundennummer oder die Teilnahmenummer für <strong>%1$s</strong> fehlt. Bitte prüfe deine <a href=\"%2$s\">Einstellungen</a> und versuche es erneut."
+
+#: includes/wc-stc-dhl-core-functions.php:656
+msgctxt "dhl"
+msgid "Could not create billing number, participation number is missing."
+msgstr "Die Abrechnungsnummer konnte nicht erzeugt werden. Die Teilnahmenummer fehlt."
+
+#: src/Admin/Admin.php:49
+msgctxt "dhl"
+msgid "Preferred day: %1$s"
+msgstr "Wunschtag: %1$s"
+
+#: src/Admin/Admin.php:65 src/ParcelServices.php:58
+#: src/ShippingProvider/DHL.php:1204
+#: src/ShippingProvider/Services/PreferredDay.php:16
+#: src/ShippingProvider/Services/PreferredDay.php:44
+#: templates/checkout/dhl/preferred-services.php:30
+msgctxt "dhl"
+msgid "Delivery day"
+msgstr "Liefertag"
+
+#: src/Admin/Admin.php:75
+msgctxt "dhl"
+msgid "Delivery type"
+msgstr "Zustellvariante"
+
+#: src/Admin/Admin.php:82 src/Blocks/PreferredServices.php:319
+msgctxt "dhl"
+msgid "Preferred location"
+msgstr "Wunschort"
+
+#: src/Admin/Admin.php:89
+msgctxt "dhl"
+msgid "Preferred neighbor"
+msgstr "Wunschnachbar"
+
+#: src/Admin/Admin.php:96
+msgctxt "dhl"
+msgid "DHL Preferred Delivery"
+msgstr "DHL Wunschzustellung"
+
+#: src/Admin/Admin.php:111
+msgctxt "dhl"
+msgid "Refreshed data successfully."
+msgstr "Daten erfolgreich aktualisiert."
+
+#: src/Admin/Admin.php:111
+msgctxt "dhl"
+msgid "Error while refreshing data: %1$s"
+msgstr "Fehler beim Aktualisieren der Daten: %1$s"
+
+#: src/Admin/Admin.php:120
+msgctxt "dhl"
+msgid "New to DHL in Shiptastic? Learn how to <a href=\"%s\" target=\"_blank\">easily create DHL labels</a> to your shipments."
+msgstr "Du kennst DHL in Shiptastic noch nicht? Lerne wie du zu Sendungen <a href=\"%s\" target=\"_blank\">einfach DHL Labels erzeugst</a>."
+
+#: src/Admin/Admin.php:222 src/ShippingProvider/DeutschePost.php:234
+msgctxt "dhl"
+msgid "Charge (€)"
+msgstr "Aufladen (€)"
+
+#: src/Admin/Admin.php:227
+msgctxt "dhl"
+msgid "Charge Portokasse"
+msgstr "Portokasse aufladen"
+
+#: src/Admin/Admin.php:229
+msgctxt "dhl"
+msgid "The minimum amount is %1$s. Charging is only available with a valid SEPA mandate. You may use the <a href=\"%2$s\">web interface</a> instead."
+msgstr "Der Minimalbetrag beträgt %1$s. Das Aufladen ist nur über ein hinterlegtes SEPA Mandat möglich. Nutze alternativ bitte das <a href=\"%2$s\">Webinterface</a>."
+
+#: src/Admin/Admin.php:240
+msgctxt "dhl"
+msgid "Participation"
+msgstr "Teilnahme"
+
+#: src/Admin/Admin.php:246
+msgctxt "dhl"
+msgid "Product"
+msgstr "Produkt"
+
+#: src/Admin/Admin.php:247
+msgctxt "dhl"
+msgid "Participation Number"
+msgstr "Teilnahmenummer"
+
+#: src/Admin/Admin.php:247
+msgctxt "dhl"
+msgid "The participation number for the chosen product. Find your participation number in your DHL business customer portal."
+msgstr "Teilnahmenummer für das jeweilige Produkt. Die Teilnahmenummern findest du im Geschäftskundenportal."
+
+#: src/Admin/Admin.php:248 src/ShippingProvider/DHL.php:180
+msgctxt "dhl"
+msgid "GoGreen"
+msgstr "GoGreen"
+
+#: src/Admin/Admin.php:248
+msgctxt "dhl"
+msgid "Optionally choose a separate participation number for GoGreen. Leave empty in case your main participation number includes GoGreen already."
+msgstr "Wähle optional eine separate Teilnahmenummer für GoGreen. Leer lassen falls deine Standard-Teilnahmenummer bereits GoGreen beinhaltet."
+
+#: src/Admin/Admin.php:282
+msgctxt "dhl"
+msgid "Receiver Ids"
+msgstr "Empfänger IDs"
+
+#: src/Admin/Admin.php:289
+msgctxt "dhl"
+msgid "Receiver Id"
+msgstr "Empfänger ID"
+
+#: src/Admin/Admin.php:289
+msgctxt "dhl"
+msgid "Find your Receiver Ids within your DHL contract data."
+msgstr "Die Empfänger IDs findest du im DHL Geschäftskundenportal."
+
+#: src/Admin/Admin.php:290
+msgctxt "dhl"
+msgid "Country Code"
+msgstr "Ländercode"
+
+#: src/Admin/Admin.php:290
+msgctxt "dhl"
+msgid "Leave empty to use the Receiver Id as fallback."
+msgstr "Leer lassen, um diese Empfänger ID als Fallback zu verwenden."
+
+#: src/Admin/Admin.php:308
+msgctxt "dhl"
+msgid "+ Add receiver"
+msgstr "+ Empfänger hinzufügen"
+
+#: src/Admin/Admin.php:309
+msgctxt "dhl"
+msgid "Remove selected receiver(s)"
+msgstr "Ausgewählte Empfänger löschen"
+
+#: src/Admin/Admin.php:310
+msgctxt "dhl"
+msgid "Refresh via API"
+msgstr "Per API aktualisieren"
+
+#: src/Admin/Admin.php:332
+msgctxt "dhl"
+msgid "DHL Label"
+msgstr "DHL Label"
+
+#: src/Admin/Admin.php:344
+msgctxt "dhl"
+msgid "This label has been generated by the DHL for WooCommerce Plugin and is shown for legacy purposes."
+msgstr "Dieses Label wurde vom DHL for WooCommerce Plugin erzeugt und wird aus Kompatibilitäts-Gründen angezeigt."
+
+#: src/Admin/Admin.php:345
+msgctxt "dhl"
+msgid "Download label"
+msgstr "Label downloaden"
+
+#: src/Ajax.php:53
+msgctxt "dhl"
+msgid "There was an error while recharging the Portokasse."
+msgstr "Beim Aufladen der Portokasse trat ein Fehler auf."
+
+#: src/Ajax.php:63
+msgctxt "dhl"
+msgid "Portokasse recharged successfully."
+msgstr "Portokasse erfolgreich aufgeladen."
+
+#: src/Ajax.php:67
+msgctxt "dhl"
+msgid "Please choose an amount to charge the Portokasse."
+msgstr "Bitte wähle einen Betrag zum Aufladen der Portokasse aus."
+
+#: src/Api/ImProductList.php:239
+msgctxt "dhl"
+msgid "PRIO"
+msgstr "PRIO"
+
+#: src/Api/ImProductList.php:240
+msgctxt "dhl"
+msgid "Einschreiben (Einwurf)"
+msgstr "Einschreiben (Einwurf)"
+
+#: src/Api/ImProductList.php:241
+msgctxt "dhl"
+msgid "Einschreiben"
+msgstr "Einschreiben"
+
+#: src/Api/ImProductList.php:242
+msgctxt "dhl"
+msgid "Einschreiben (Eigenhändig)"
+msgstr "Einschreiben (Eigenhändig)"
+
+#: src/Api/ImProductList.php:243
+msgctxt "dhl"
+msgid "Alterssichtprüfung 16"
+msgstr "Alterssichtprüfung 16"
+
+#: src/Api/ImProductList.php:244
+msgctxt "dhl"
+msgid "Alterssichtprüfung 18"
+msgstr "Alterssichtprüfung 18"
+
+#: src/Api/ImProductList.php:245
+msgctxt "dhl"
+msgid "Zusatzentgelt MBf"
+msgstr "Zusatzentgelt MBf"
+
+#: src/Api/ImProductList.php:246
+msgctxt "dhl"
+msgid "Unterschrift"
+msgstr "Unterschrift"
+
+#: src/Api/ImProductList.php:247
+msgctxt "dhl"
+msgid "Tracked"
+msgstr "Tracked"
+
+#: src/Api/ImProductList.php:248
+msgctxt "dhl"
+msgid "Rückschein"
+msgstr "Rückschein"
+
+#: src/Api/ImProductList.php:345
+msgctxt "dhl"
+msgid "No Internetmarke product data found."
+msgstr "Keine Produkte der Internetmarke gefunden."
+
+#: src/Api/Internetmarke.php:131
+msgctxt "dhl"
+msgid "until %s"
+msgstr "bis %s"
+
+#: src/Api/Internetmarke.php:214
+msgctxt "dhl"
+msgid "Length: %s"
+msgstr "Länge: %s"
+
+#: src/Api/Internetmarke.php:218
+msgctxt "dhl"
+msgid "Width: %s"
+msgstr "Breite: %s"
+
+#: src/Api/Internetmarke.php:222
+msgctxt "dhl"
+msgid "Height: %s"
+msgstr "Höhe: %s"
+
+#: src/Api/Internetmarke.php:226
+msgctxt "dhl"
+msgid "Weight: %s"
+msgstr "Gewicht: %s"
+
+#: src/Api/Internetmarke.php:233
+msgctxt "dhl"
+msgid "Total"
+msgstr "Gesamt"
+
+#: src/Api/Internetmarke.php:357
+msgctxt "dhl"
+msgid "There was an unknown error when calling the Deutsche Post API."
+msgstr "Beim Abruf der Deutsche Post API gab es einen unerwarteten Fehler."
+
+#: src/Api/Internetmarke.php:54 src/Api/InternetmarkeAuth.php:63
+msgctxt "dhl"
+msgid "Error while authenticating with Internetmarke"
+msgstr "Fehler bei der Authentifizierung mit der Internetmarke"
+
+#: src/Api/InternetmarkeRest.php:16
+msgctxt "dhl"
+msgid "Internetmarke REST"
+msgstr "Internetmarke REST"
+
+#: src/Api/InternetmarkeRest.php:43
+msgctxt "dhl"
+msgid "Your Internetmarke <a href=\"%s\">API credentials</a> seem to be invalid or the API access has not yet been approved."
+msgstr "Deine Internetmarke <a href=\"%s\">API Zugangsdaten</a> scheinen fehlerhaft oder die API-Verbindung nicht bestätigt zu sein."
+
+#: src/Api/InternetmarkeRest.php:145 src/Api/LabelRest.php:56
+#: src/Api/ReturnRest.php:46
+msgctxt "dhl"
+msgid "Could not fetch shipment %d."
+msgstr "Sendung %d konnte nicht gefunden werden."
+
+#: src/Api/InternetmarkeRest.php:261
+msgctxt "dhl"
+msgid "Error while downloading the PDF stamp."
+msgstr "Fehler beim Download des PDF Labels."
+
+#: src/Api/InternetmarkeRest.php:268
+msgctxt "dhl"
+msgid "Invalid stamp response."
+msgstr "Fehlerhafte Label Rückmeldung."
+
+#: src/Api/LabelRest.php:20
+msgctxt "dhl"
+msgid "DHL Paket Label REST"
+msgstr "DHL Paket Label REST"
+
+#: src/Api/LabelRest.php:266
+msgctxt "dhl"
+msgid "Your shipper address is incomplete (%1$s). Please validate your <a href=\"%2$s\">settings</a> and try again."
+msgstr "Deine Absenderadresse ist nicht komplett (%1$s). Bitte prüfe deine <a href=\"%2$s\">Einstellungen</a> und versuche es erneut."
+
+#: src/Api/LabelRest.php:378
+msgctxt "dhl"
+msgid "Only %1$s shipment items can be processed, your shipment has %2$s items."
+msgstr "Es können maximal %1$s Sendungspositionen verarbeitet werden - die vorliegende Sendung beinhaltet %2$s Positionen."
+
+#: src/Api/LabelRest.php:479
+msgctxt "dhl"
+msgid "There was an error generating the label. Please try again or consider switching to sandbox mode."
+msgstr "Beim Erzeugen des Labels gab es einen Fehler. Bitte versuche es erneut oder erwäge den Wechsel in den Sandbox-Modus."
+
+#: src/Api/LabelRest.php:577
+msgctxt "dhl"
+msgid "You've explicitly booked the additional insurance service resulting in additional fees although the value of goods does not exceed EUR 500. The label has been created anyway."
+msgstr "Du hast explizit den Service Transportversicherung gebucht, der höhere Kosten verursacht obwohl der Warenwert der Sendung 500 Euro nicht übersteigt. Das Label wurde dennoch erstellt."
+
+#: src/Api/LabelRest.php:586 src/Api/ReturnRest.php:203
+msgctxt "dhl"
+msgid "Error while creating and uploading the label"
+msgstr "Fehler beim Erstellen und hochladen des Labels"
+
+#: src/Api/LabelRest.php:767
+msgctxt "dhl"
+msgid "Your DHL API credentials seem to be invalid."
+msgstr "Deine DHL API Zugangsdaten scheinen fehlerhaft zu sein."
+
+#: src/Api/LabelRest.php:772 src/Api/MyAccount.php:41
+msgctxt "dhl"
+msgid "Unknown DHL API error."
+msgstr "Unbekannter DHL API Fehler."
+
+#: src/Api/LocationFinder.php:13
+msgctxt "dhl"
+msgid "DHL LocationFinder"
+msgstr "DHL LocationFinder"
+
+#: src/Api/LocationFinder.php:81
+msgctxt "dhl location name"
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
+#: src/Api/LocationFinder.php:150
+msgctxt "dhl"
+msgid "At least shipping city or zip is required."
+msgstr "Entweder eine Stadt oder die Postleitzahl wird benötigt."
+
+#: src/Api/MyAccount.php:12
+msgctxt "dhl"
+msgid "DHL Paket MyAccount"
+msgstr "DHL Paket MyAccount"
+
+#: src/Api/OAuthPaket.php:75
+msgctxt "dhl"
+msgid "Error while authenticating with DHL."
+msgstr "Fehler beim Login via DHL."
+
+#: src/Api/PaketRest.php:40
+msgctxt "dhl"
+msgid "Your DHL <a href=\"%s\">API credentials</a> seem to be invalid."
+msgstr "Deine DHL <a href=\"%s\">API Zugangsdaten</a> scheinen fehlerhaft zu sein."
+
+#: src/Api/PaketRest.php:82
+msgctxt "dhl"
+msgid "POST error or timeout occurred. Please try again later."
+msgstr "POST Fehler oder Zeitüberschreitung. Bitte später erneut versuchen."
+
+#: src/Api/ParcelServices.php:13
+msgctxt "dhl"
+msgid "DHL Paket Parcel Services"
+msgstr "DHL Paket Parcel Services"
+
+#: src/Api/ParcelServices.php:44
+msgctxt "dhl"
+msgid "Please provide the receiver postnumber."
+msgstr "Bitte gib die Empfänger Postnummer an."
+
+#: src/Api/ParcelServices.php:48
+msgctxt "dhl"
+msgid "Please provide the shipment start date."
+msgstr "Bitte gib das Startdatum der Sendung an."
+
+#: src/Api/ReturnRest.php:13
+msgctxt "dhl"
+msgid "DHL Paket Return REST"
+msgstr "DHL Paket Return REST"
+
+#: src/Blocks/PreferredServices.php:163
+msgctxt "dhl"
+msgid "Preferred day enabled"
+msgstr "Wunschtag aktiviert"
+
+#: src/Blocks/PreferredServices.php:169
+msgctxt "dhl"
+msgid "Preferred day costs"
+msgstr "Wunschtag Gebühr"
+
+#: src/Blocks/PreferredServices.php:175 src/Blocks/PreferredServices.php:307
+msgctxt "dhl"
+msgid "Preferred day"
+msgstr "Wunschtag"
+
+#: src/Blocks/PreferredServices.php:181
+msgctxt "dhl"
+msgid "Preferred delivery costs"
+msgstr "Wunschzustellung Kosten"
+
+#: src/Blocks/PreferredServices.php:187
+msgctxt "dhl"
+msgid "Preferred delivery type enabled"
+msgstr "Wunschzustellung aktiviert"
+
+#: src/Blocks/PreferredServices.php:193 src/Blocks/PreferredServices.php:337
+msgctxt "dhl"
+msgid "Preferred delivery type"
+msgstr "Wunschzustellung"
+
+#: src/Blocks/PreferredServices.php:199
+msgctxt "dhl"
+msgid "Preferred location enabled"
+msgstr "Wunschort aktiviert"
+
+#: src/Blocks/PreferredServices.php:205
+msgctxt "dhl"
+msgid "Preferred neighbor enabled"
+msgstr "Wunschnachbar aktiviert"
+
+#: src/Blocks/PreferredServices.php:211
+msgctxt "dhl"
+msgid "Available preferred days"
+msgstr "Verfügbare Wunschtage"
+
+#: src/Blocks/PreferredServices.php:219
+msgctxt "dhl"
+msgid "The preferred day."
+msgstr "Der Wunschtag."
+
+#: src/Blocks/PreferredServices.php:225
+msgctxt "dhl"
+msgid "The formatted week day."
+msgstr "Der formatierte Wochentag."
+
+#: src/Blocks/PreferredServices.php:231
+msgctxt "dhl"
+msgid "The preferred day date."
+msgstr "Datum des Wunschtags."
+
+#: src/Blocks/PreferredServices.php:313
+msgctxt "dhl"
+msgid "Preferred location type"
+msgstr "Wunschort Typ"
+
+#: src/Blocks/PreferredServices.php:325 src/Blocks/PreferredServices.php:331
+msgctxt "dhl"
+msgid "Preferred neighbor name"
+msgstr "Wunschnachbar Name"
+
+#: src/Label/DHL.php:88
+msgctxt "dhl full name"
+msgid "%1$s"
+msgstr "%1$s"
+
+#: src/Label/Label.php:62 src/Order.php:296
+msgctxt "dhl time-span"
+msgid "%1$s-%2$s"
+msgstr "%1$s - %2$s"
+
+#: src/Package.php:959
+msgctxt "dhl"
+msgid "Germany"
+msgstr "Deutschland"
+
+#: src/ParcelServices.php:65
+msgctxt "dhl"
+msgid "Delivery time"
+msgstr "Lieferzeit"
+
+#: src/ParcelServices.php:72 src/ShippingProvider/DHL.php:1151
+#: src/ShippingProvider/Services/PreferredLocation.php:15
+#: src/ShippingProvider/Services/PreferredLocation.php:42
+#: templates/checkout/dhl/preferred-services.php:82
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:187
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Drop-off location"
+msgstr "Ablageort"
+
+#: src/ParcelServices.php:77 src/ShippingProvider/DHL.php:1160
+#: src/ShippingProvider/Services/PreferredNeighbour.php:15
+#: src/ShippingProvider/Services/PreferredNeighbour.php:42
+#: templates/checkout/dhl/preferred-services.php:75
+#: templates/checkout/dhl/preferred-services.php:91
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:195
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Neighbor"
+msgstr "Nachbar"
+
+#: src/ParcelServices.php:84 templates/checkout/dhl/preferred-services.php:104
+msgctxt "dhl"
+msgid "Delivery Type"
+msgstr "Zustellvariante"
+
+#: src/ParcelServices.php:214
+msgctxt "dhl"
+msgid "DHL Delivery day"
+msgstr "DHL Liefertag"
+
+#: src/ParcelServices.php:220
+msgctxt "dhl"
+msgid "DHL Home Delivery"
+msgstr "DHL Zustellung zur Haustür"
+
+#: src/ParcelServices.php:449
+msgctxt "dhl"
+msgid "Sorry, but the delivery day you have chosen is no longer available."
+msgstr "Entschuldigung, der von dir ausgewählte Liefertag steht leider nicht mehr zur Verfügung."
+
+#: src/ParcelServices.php:472
+msgctxt "dhl"
+msgid "Please choose a drop-off location."
+msgstr "Bitte wähle einen Ablageort aus."
+
+#: src/ParcelServices.php:484
+msgctxt "dhl"
+msgid "Please choose name and address of your preferred neighbor."
+msgstr "Bitte wähle einen Namen und die Adresse deines Wunschnachbars."
+
+#: src/ParcelServices.php:569
+msgctxt "dhl delivery type context"
+msgid "Shop"
+msgstr "Shop"
+
+#: src/ParcelServices.php:570
+msgctxt "dhl delivery type context"
+msgid "Home"
+msgstr "Haustür"
+
+#: src/ShippingProvider/DeutschePost.php:81
+msgctxt "dhl"
+msgid "Deutsche Post"
+msgstr "Deutsche Post"
+
+#: src/ShippingProvider/DeutschePost.php:89
+msgctxt "dhl"
+msgid "Integration for products of the Deutsche Post through Internetmarke."
+msgstr "Integration von Produkten der Deutschen Post über die Internetmarke."
+
+#: src/ShippingProvider/DeutschePost.php:115
+msgctxt "dhl"
+msgid "Printing"
+msgstr "Druck"
+
+#: src/ShippingProvider/DeutschePost.php:118
+msgctxt "dhl"
+msgid "Choose a print format which will be selected by default when creating labels. Manually <a href=\"%s\">refresh</a> available print formats to make sure the list is up-to-date."
+msgstr "Wähle ein Seitenformat aus, das für den Druck der Labels standardmäßig verwendet wird. Du kannst die Liste auch manuell <a href=\"%s\">aktualisieren</a>, falls notwendig."
+
+#: src/ShippingProvider/DeutschePost.php:121
+msgctxt "dhl"
+msgid "Print X-axis column"
+msgstr "Druckspalte X-Achse"
+
+#: src/ShippingProvider/DeutschePost.php:123
+msgctxt "dhl"
+msgid "Adjust the print X-axis start column for the label."
+msgstr "Passe die Druck-Startspalte der X-Achse für das Label an."
+
+#: src/ShippingProvider/DeutschePost.php:134
+msgctxt "dhl"
+msgid "Print Y-axis column"
+msgstr "Druckspalte Y-Achse"
+
+#: src/ShippingProvider/DeutschePost.php:136
+msgctxt "dhl"
+msgid "Adjust the print Y-axis start column for the label."
+msgstr "Passe die Druck-Startspalte der Y-Achse für das Label an."
+
+#: src/ShippingProvider/DeutschePost.php:184
+msgctxt "dhl"
+msgid "Username"
+msgstr "Benutzer"
+
+#: src/ShippingProvider/DeutschePost.php:186
+msgctxt "dhl"
+msgid "Your credentials to the <a href=\"%s\" target=\"_blank\">Portokasse</a>. Please test your credentials before connecting."
+msgstr "Deine Zugangsdaten zur <a href=\"%s\" target=\"_blank\">Portokasse</a>. Bitte teste deine Zugangsdaten bevor du eine Verbindung aufbaust."
+
+#: src/ShippingProvider/DeutschePost.php:194
+msgctxt "dhl"
+msgid "Password"
+msgstr "Passwort"
+
+#: src/ShippingProvider/DeutschePost.php:222
+msgctxt "dhl"
+msgid "Portokasse"
+msgstr "Portokasse"
+
+#: src/ShippingProvider/DeutschePost.php:227
+msgctxt "dhl"
+msgid "Balance"
+msgstr "Guthaben"
+
+#: src/ShippingProvider/DeutschePost.php:254
+msgctxt "dhl"
+msgid "Products"
+msgstr "Produkte"
+
+#: src/ShippingProvider/DeutschePost.php:257
+msgctxt "dhl"
+msgid "Refresh available products"
+msgstr "Verfügbare Produkte aktualisieren"
+
+#: src/ShippingProvider/DeutschePost.php:448
+#: src/ShippingProvider/DeutschePost.php:599
+msgctxt "dhl"
+msgid "Sorry but none of your selected <a href=\"%s\">Deutsche Post Products</a> is available for this shipment. Please verify your shipment data (e.g. weight) and try again."
+msgstr "Leider sind keine der von dir ausgewählten <a href=\"%s\">Deutsche Post Produkte</a> verfügbar für diese Sendung. Bitte prüfe die Sendungsdaten (z.B. Gewicht) und versuche es erneut."
+
+#: src/ShippingProvider/DeutschePost.php:461
+msgctxt "dhl"
+msgid "Print X-Position"
+msgstr "Druckspalte X-Achse"
+
+#: src/ShippingProvider/DeutschePost.php:474
+msgctxt "dhl"
+msgid "Print Y-Position"
+msgstr "Druckspalte Y-Achse"
+
+#: src/ShippingProvider/DeutschePost.php:583
+msgctxt "dhl"
+msgid "The services chosen are not available for the current product."
+msgstr "Die ausgewählten Services sind für dieses Produkt nicht verfügbar."
+
+#: src/ShippingProvider/DeutschePost.php:625
+msgctxt "dhl"
+msgid "Deutsche Post product is missing for %s."
+msgstr "Deutsche Post Produkt fehlt oder ist nicht verfügbar für %s."
+
+#: src/ShippingProvider/DeutschePost.php:654 src/ShippingProvider/DHL.php:1093
+msgctxt "dhl"
+msgid "Enable delivery to Packstation."
+msgstr "Aktiviere den Versand an Packstationen."
+
+#: src/ShippingProvider/DeutschePost.php:655 src/ShippingProvider/DHL.php:1094
+msgctxt "dhl"
+msgid "Let customers choose a Packstation as delivery address."
+msgstr "Kunden eine Packstation als Lieferadresse auswählen lassen."
+
+#: src/ShippingProvider/DHL.php:34
+msgctxt "dhl"
+msgid "DHL"
+msgstr "DHL"
+
+#: src/ShippingProvider/DHL.php:42
+msgctxt "dhl"
+msgid "Complete DHL integration supporting labels and preferred delivery."
+msgstr "Erzeuge bequem DHL Labels u.a. mit Wunschzustellung und Lieferungen an Packstationen."
+
+#: src/ShippingProvider/DHL.php:73 src/ShippingProvider/DHL.php:86
+msgctxt "dhl"
+msgid "Reference 1"
+msgstr "Referenz 1"
+
+#: src/ShippingProvider/DHL.php:74
+msgctxt "dhl"
+msgid "#{shipment_number}, order {order_number}"
+msgstr "#{shipment_number}, Bestellung {order_number}"
+
+#: src/ShippingProvider/DHL.php:78
+msgctxt "dhl"
+msgid "Inlay return reference"
+msgstr "Referenz Beilageretoure"
+
+#: src/ShippingProvider/DHL.php:79 src/ShippingProvider/DHL.php:87
+msgctxt "dhl"
+msgid "Return #{shipment_number}, order {order_number}"
+msgstr "Retoure #{shipment_number}, Bestellung {order_number}"
+
+#: src/ShippingProvider/DHL.php:119
+msgctxt "dhl"
+msgid "DHL Paket PRIO"
+msgstr "DHL Paket PRIO"
+
+#: src/ShippingProvider/DHL.php:128
+msgctxt "dhl"
+msgid "DHL Paket Taggleich"
+msgstr "DHL Paket Taggleich"
+
+#: src/ShippingProvider/DHL.php:137
+msgctxt "dhl"
+msgid "DHL Kleinpaket"
+msgstr "DHL Kleinpaket"
+
+#: src/ShippingProvider/DHL.php:146
+msgctxt "dhl"
+msgid "DHL Warenpost International"
+msgstr "DHL Warenpost International"
+
+#: src/ShippingProvider/DHL.php:154
+msgctxt "dhl"
+msgid "DHL Europaket (B2B)"
+msgstr "DHL Europaket (B2B)"
+
+#: src/ShippingProvider/DHL.php:162
+msgctxt "dhl"
+msgid "DHL Paket Connect"
+msgstr "DHL Paket Connect"
+
+#: src/ShippingProvider/DHL.php:170
+msgctxt "dhl"
+msgid "DHL Paket International"
+msgstr "DHL Paket International"
+
+#: src/ShippingProvider/DHL.php:181 src/ShippingProvider/DHL.php:190
+msgctxt "dhl"
+msgid "Ship your parcels climate friendly."
+msgstr "Versende Pakete klimafreundlich."
+
+#: src/ShippingProvider/DHL.php:207
+msgctxt "dhl"
+msgid "No Neighbor"
+msgstr "Keine Nachbarschaftszustellung"
+
+#: src/ShippingProvider/DHL.php:208
+msgctxt "dhl"
+msgid "Do not deliver to neighbors."
+msgstr "Schließe eine Ersatzzustellung beim Nachbarn aus."
+
+#: src/ShippingProvider/DHL.php:218
+msgctxt "dhl"
+msgid "Recipient signature"
+msgstr "Empfängerunterschrift"
+
+#: src/ShippingProvider/DHL.php:219
+msgctxt "dhl"
+msgid "Let recipients sign delivery instead of DHL driver."
+msgstr "Lasse den Empfänger der Lieferung anstelle des DHL Fahrers unterschreiben."
+
+#: src/ShippingProvider/DHL.php:229
+msgctxt "dhl"
+msgid "Named person only"
+msgstr "Persönliche Übergabe"
+
+#: src/ShippingProvider/DHL.php:230
+msgctxt "dhl"
+msgid "Do only delivery to named person."
+msgstr "Lasse Pakete nur an den Empfänger persönlich oder an eine bevollmächtigte Person übergeben."
+
+#: src/ShippingProvider/DHL.php:242
+msgctxt "dhl"
+msgid "Bulky Goods"
+msgstr "Sperrgut"
+
+#: src/ShippingProvider/DHL.php:243
+msgctxt "dhl"
+msgid "Deliver as bulky goods."
+msgstr "Sende Pakete als Sperrgut."
+
+#: src/ShippingProvider/DHL.php:251
+msgctxt "dhl"
+msgid "Retail Outlet Routing"
+msgstr "Filialrouting"
+
+#: src/ShippingProvider/DHL.php:252
+msgctxt "dhl"
+msgid "Send undeliverable items to nearest retail outlet instead of immediate return."
+msgstr "Sende unzustellbare Sendungen in die nächstgelegene Filiale zur Abholung anstelle diese direkt zurückzusenden."
+
+#: src/ShippingProvider/DHL.php:262
+msgctxt "dhl"
+msgid "Premium"
+msgstr "Premium"
+
+#: src/ShippingProvider/DHL.php:263
+msgctxt "dhl"
+msgid "Premium delivery for international shipments."
+msgstr "Premium Lieferung für internationale Sendungen."
+
+#: src/ShippingProvider/DHL.php:272
+msgctxt "dhl"
+msgid "Endorsement"
+msgstr "Vorabverfügung"
+
+#: src/ShippingProvider/DHL.php:273
+msgctxt "dhl"
+msgid "Select how DHL should handle international shipments that could not be delivered."
+msgstr "Wähle aus wie DHL internationale Sendungen behandeln soll, die nicht zugestellt werden können."
+
+#: src/ShippingProvider/DHL.php:285
+msgctxt "dhl"
+msgid "Economy"
+msgstr "Economy"
+
+#: src/ShippingProvider/DHL.php:286
+msgctxt "dhl"
+msgid "Economy delivery for international shipments."
+msgstr "Economy Lieferung für internationale Sendungen."
+
+#: src/ShippingProvider/DHL.php:297
+msgctxt "dhl"
+msgid "Postal Delivery Duty Paid"
+msgstr "Postal Delivery Duty Paid"
+
+#: src/ShippingProvider/DHL.php:298
+msgctxt "dhl"
+msgid "DHL takes care of customs clearance and export duties (Postal Delivered Duty Paid)."
+msgstr "Der Versender bezahlt alle Abfuhrabgaben für den Empfänger. Die Abrechnung erfolgt über DHL (Postal Delivered Duty Paid)."
+
+#: src/ShippingProvider/DHL.php:310
+msgctxt "dhl-print-format"
+msgid "Default (User configuration)"
+msgstr "Standard (Benutzerkonfiguration)"
+
+#: src/ShippingProvider/DHL.php:316
+msgctxt "dhl-print-format"
+msgid "A4"
+msgstr "A4"
+
+#: src/ShippingProvider/DHL.php:317
+msgctxt "dhl-print-format"
+msgid "910-300-700"
+msgstr "910-300-700"
+
+#: src/ShippingProvider/DHL.php:318
+msgctxt "dhl-print-format"
+msgid "910-300-700-oZ"
+msgstr "910-300-700-oZ"
+
+#: src/ShippingProvider/DHL.php:319
+msgctxt "dhl-print-format"
+msgid "910-300-710"
+msgstr "910-300-710"
+
+#: src/ShippingProvider/DHL.php:320
+msgctxt "dhl-print-format"
+msgid "910-300-600"
+msgstr "910-300-600"
+
+#: src/ShippingProvider/DHL.php:321
+msgctxt "dhl-print-format"
+msgid "910-300-610"
+msgstr "910-300-610"
+
+#: src/ShippingProvider/DHL.php:322
+msgctxt "dhl-print-format"
+msgid "910-300-400"
+msgstr "910-300-400"
+
+#: src/ShippingProvider/DHL.php:323
+msgctxt "dhl-print-format"
+msgid "910-300-410"
+msgstr "910-300-410"
+
+#: src/ShippingProvider/DHL.php:324
+msgctxt "dhl-print-format"
+msgid "910-300-300"
+msgstr "910-300-300"
+
+#: src/ShippingProvider/DHL.php:325
+msgctxt "dhl-print-format"
+msgid "910-300-300-oz"
+msgstr "910-300-300-oz"
+
+#: src/ShippingProvider/DHL.php:341
+msgctxt "dhl-print-format"
+msgid "100x70mm"
+msgstr "100x70mm"
+
+#: src/ShippingProvider/DHL.php:372 src/ShippingProvider/DHL.php:379
+msgctxt "dhl"
+msgid "Retoure"
+msgstr "Retoure"
+
+#: src/ShippingProvider/DHL.php:375
+msgctxt "dhl"
+msgid "Adjust handling of return shipments through the DHL Retoure API. Make sure that your %s contains DHL Retoure Online."
+msgstr "Passe die Bearbeitung von Retourensendungen mit Hilfe der DHL Retoure API an. Stelle sicher, dass dein %s DHL Retoure Online enthält."
+
+#: src/ShippingProvider/DHL.php:375
+msgctxt "dhl"
+msgid "contract"
+msgstr "Vertrag"
+
+#: src/ShippingProvider/DHL.php:380
+msgctxt "dhl"
+msgid "Create retoure labels to return shipments."
+msgstr "Retourenlabels zu Retourensendungen erstellen."
+
+#: src/ShippingProvider/DHL.php:380
+msgctxt "dhl"
+msgid "By enabling this option you might generate retoure labels for return shipments and send them to your customer via email."
+msgstr "Mit der Aktivierung dieser Option kannst du Retourenlabels zu Retourensendungen erstellen und diese per E-Mail an den Kunden weiterleiten."
+
+#: src/ShippingProvider/DHL.php:420
+msgctxt "dhl"
+msgid "Encodable"
+msgstr "Leitcodierbar"
+
+#: src/ShippingProvider/DHL.php:421
+msgctxt "dhl"
+msgid "Labels will only be created if an address is encodable by DHL."
+msgstr "Labels werden nur erstellt wenn die Adresse von DHL erfolgreich geprüft wurde."
+
+#: src/ShippingProvider/DHL.php:426
+msgctxt "dhl"
+msgid "Choose this option if you want to make sure that by default labels are only generated for encodable addresses."
+msgstr "Wähle diese Option aus, um sicherzustellen, dass Labels nur erzeugt werden, wenn die dazugehörige Empfängeradresse leitcodierbar ist."
+
+#: src/ShippingProvider/DHL.php:430
+msgctxt "dhl"
+msgid "Sync (IdentCheck)"
+msgstr "Synchronisation (Ident-Check)"
+
+#: src/ShippingProvider/DHL.php:431
+msgctxt "dhl"
+msgid "Verify identity and age if shipment contains applicable items."
+msgstr "Aktiviere die Identitätsprüfung, falls die Sendung zu prüfende Positionen beinhaltet."
+
+#: src/ShippingProvider/DHL.php:431
+msgctxt "dhl"
+msgid "Germanized offers an %s to be enabled for certain products and/or product categories. By checking this option labels for shipments with applicable items will automatically have the identity check service enabled."
+msgstr "Germanized bietet eine %s an, die für spezielle Produkte aktiviert werden kann. Nach Aktivierung dieser Option, wird der Service für die Identitätsprüfung automatisch aktiviert, falls eine Sendung zu prüfenden Produkte beinhaltet."
+
+#: src/ShippingProvider/DHL.php:431 src/ShippingProvider/DHL.php:443
+msgctxt "dhl"
+msgid "age verification checkbox"
+msgstr "Checkbox zur Altersprüfung"
+
+#: src/ShippingProvider/DHL.php:442
+msgctxt "dhl"
+msgid "Sync (Visual Check)"
+msgstr "Synchronisation (Visuell)"
+
+#: src/ShippingProvider/DHL.php:443
+msgctxt "dhl"
+msgid "Visually verify age if shipment contains applicable items."
+msgstr "Aktiviere die Alterssichtprüfung, falls die Sendung zu prüfende Positionen beinhaltet."
+
+#: src/ShippingProvider/DHL.php:443
+msgctxt "dhl"
+msgid "Germanized offers an %s to be enabled for certain products and/or product categories. By checking this option labels for shipments with applicable items will automatically have the visual age check service enabled."
+msgstr "Germanized bietet eine %s an, die für spezielle Produkte aktiviert werden kann. Nach Aktivierung dieser Option, wird der Service für die Alterssichtprüfung automatisch aktiviert, falls eine Sendung zu prüfenden Produkte beinhaltet."
+
+#: src/ShippingProvider/DHL.php:459
+msgctxt "dhl"
+msgid "Default Incoterms"
+msgstr "Versandbedingungen"
+
+#: src/ShippingProvider/DHL.php:464
+msgctxt "dhl"
+msgid "Please select a default incoterms option."
+msgstr "Bitte wähle eine Standard-Versandbedingung aus."
+
+#: src/ShippingProvider/DHL.php:570
+msgctxt "dhl"
+msgid "Preferred delivery"
+msgstr "Wunschzustellung"
+
+#: src/ShippingProvider/DHL.php:586
+msgctxt "dhl"
+msgid "Receiver"
+msgstr "Empfänger"
+
+#: src/ShippingProvider/DHL.php:614
+msgctxt "dhl"
+msgid "Duties"
+msgstr "Zollabgabe"
+
+#: src/ShippingProvider/DHL.php:628
+msgctxt "dhl"
+msgid "Valid address only"
+msgstr "Nur valide Adressen"
+
+#: src/ShippingProvider/DHL.php:689
+msgctxt "dhl"
+msgid "Receiver is missing or does not exist."
+msgstr "Empfänger fehlt oder existiert nicht."
+
+#: src/ShippingProvider/DHL.php:719
+msgctxt "dhl"
+msgid "%s duties element does not exist."
+msgstr "%s Zollabgabe existiert nicht."
+
+#: src/ShippingProvider/DHL.php:876
+msgctxt "dhl"
+msgid "Customer Number (EKP)"
+msgstr "Kundennummer (EKP)"
+
+#: src/ShippingProvider/DHL.php:878
+msgctxt "dhl"
+msgid "Your 10 digits DHL customer number, also called \"EKP\". Find your %s in the DHL business portal."
+msgstr "Deine 10-stellige DHL Kundennummer (EKP). Finde deine %s im DHL Geschäftskundenportal."
+
+#: src/ShippingProvider/DHL.php:878
+msgctxt "dhl"
+msgid "customer number"
+msgstr "Kundennummer"
+
+#: src/ShippingProvider/DHL.php:891
+msgctxt "dhl"
+msgid "API"
+msgstr "API"
+
+#: src/ShippingProvider/DHL.php:902
+msgctxt "dhl"
+msgid "Enable Sandbox"
+msgstr "Sandbox aktivieren"
+
+#: src/ShippingProvider/DHL.php:903
+msgctxt "dhl"
+msgid "Activate Sandbox mode for testing purposes."
+msgstr "Aktiviere den Sandbox Modus."
+
+#: src/ShippingProvider/DHL.php:910
+msgctxt "dhl"
+msgid "Live Username"
+msgstr "Benutzer"
+
+#: src/ShippingProvider/DHL.php:912
+msgctxt "dhl"
+msgid "Your username (<strong>not</strong> your email address) to the DHL business customer portal. Please make sure to test your access data in advance %s."
+msgstr "Dein Benutzername (<strong>nicht</strong> die E-Mail-Adresse) zum DHL Geschäftskundenportal. Bitte teste deine Zugangsdaten vorab %s."
+
+#: src/ShippingProvider/DHL.php:912 src/ShippingProvider/DHL.php:925
+#: src/ShippingProvider/DHL.php:937 src/ShippingProvider/DHL.php:950
+msgctxt "dhl"
+msgid "here"
+msgstr "hier"
+
+#: src/ShippingProvider/DHL.php:923
+msgctxt "dhl"
+msgid "Live Password"
+msgstr "Passwort"
+
+#: src/ShippingProvider/DHL.php:925
+msgctxt "dhl"
+msgid "Your password to the DHL business customer portal. Please note the new assignment of the password to 3 (Standard User) or 12 (System User) months and make sure to test your access data in advance %s."
+msgstr "Dein Passwort zum DHL Geschäftskundenportal. Bitte beachte den Ablauf der Gültigkeit des Passworts nach 3 (Standard-Benutzer) bzw. 12 (System-Benutzer) Monaten und teste deine Zugangsdaten vorab %s."
+
+#: src/ShippingProvider/DHL.php:935
+msgctxt "dhl"
+msgid "Sandbox Username"
+msgstr "Sandbox Benutzername"
+
+#: src/ShippingProvider/DHL.php:937
+msgctxt "dhl"
+msgid "Your username (<strong>not</strong> your email address) to the DHL developer portal. Please make sure to test your access data in advance %s."
+msgstr "Dein Benutzername (<strong>nicht</strong> die E-Mail-Adresse) zum DHL Entwicklerportal. Bitte teste deine Zugangsdaten vorab %s."
+
+#: src/ShippingProvider/DHL.php:948
+msgctxt "dhl"
+msgid "Sandbox Password"
+msgstr "Sandbox Passwort"
+
+#: src/ShippingProvider/DHL.php:950
+msgctxt "dhl"
+msgid "Your password for the DHL developer portal. Please test your access data in advance %s."
+msgstr "Dein Passwort zum DHL Entwicklerportal. Bitte teste deine Zugangsdaten vorab %s."
+
+#: src/ShippingProvider/DHL.php:966
+msgctxt "dhl"
+msgid "Products and Participation Numbers"
+msgstr "Produkte und Teilnahmenummern"
+
+#: src/ShippingProvider/DHL.php:969
+msgctxt "dhl"
+msgid "Learn how to <a href=\"%1$s\" target=\"_blank\">find your participation numbers</a> in your DHL business portal."
+msgstr "Finde heraus wie du deine <a href=\"%1$s\" target=\"_blank\">Teilnahmenummern</a> im DHL Geschäftskundenportal findest."
+
+#: src/ShippingProvider/DHL.php:974
+msgctxt "dhl"
+msgid "Inlay Returns"
+msgstr "Beilageretouren"
+
+#: src/ShippingProvider/DHL.php:999
+msgctxt "dhl"
+msgid "Participation Numbers"
+msgstr "Teilnahmenummern"
+
+#: src/ShippingProvider/DHL.php:1010
+msgctxt "dhl"
+msgid "Bank Account"
+msgstr "Bankkonto"
+
+#: src/ShippingProvider/DHL.php:1013
+msgctxt "dhl"
+msgid "Enter your bank details needed for services that use COD."
+msgstr "Gib hier deine Bankdaten an, die für die Bezahlung per Nachnahme verwendet werden sollen."
+
+#: src/ShippingProvider/DHL.php:1017
+msgctxt "dhl"
+msgid "Holder"
+msgstr "Kontoinhaber"
+
+#: src/ShippingProvider/DHL.php:1025
+msgctxt "dhl"
+msgid "Bank Name"
+msgstr "Name der Bank"
+
+#: src/ShippingProvider/DHL.php:1033
+msgctxt "dhl"
+msgid "IBAN"
+msgstr "IBAN"
+
+#: src/ShippingProvider/DHL.php:1041
+msgctxt "dhl"
+msgid "BIC"
+msgstr "BIC"
+
+#: src/ShippingProvider/DHL.php:1049
+msgctxt "dhl"
+msgid "Payment Reference"
+msgstr "Zahlungsreferenz"
+
+#: src/ShippingProvider/DHL.php:1054 src/ShippingProvider/DHL.php:1064
+msgctxt "dhl"
+msgid "Use these placeholders to add info to the payment reference: %s. This text is limited to 35 characters."
+msgstr "Nutze diese Platzhalter um Informationen als Zahlungsreferenz hinzufügen: %s. Der Text ist auf 35 Zeichen begrenzt."
+
+#: src/ShippingProvider/DHL.php:1059
+msgctxt "dhl"
+msgid "Payment Reference 2"
+msgstr "Zahlungsreferenz 2"
+
+#: src/ShippingProvider/DHL.php:1102
+msgctxt "dhl"
+msgid "Postoffice"
+msgstr "Postfiliale"
+
+#: src/ShippingProvider/DHL.php:1103
+msgctxt "dhl"
+msgid "Enable delivery to Post Offices."
+msgstr "Aktiviere den Versand an Postfilialen."
+
+#: src/ShippingProvider/DHL.php:1104
+msgctxt "dhl"
+msgid "Let customers choose a Post Office as delivery address."
+msgstr "Kunden eine Postfiliale als Lieferadresse auswählen lassen."
+
+#: src/ShippingProvider/DHL.php:1112
+msgctxt "dhl"
+msgid "Parcel Shop"
+msgstr "Paketshop"
+
+#: src/ShippingProvider/DHL.php:1113
+msgctxt "dhl"
+msgid "Enable delivery to Parcel Shops."
+msgstr "Lieferung an Paketshops aktivieren."
+
+#: src/ShippingProvider/DHL.php:1114
+msgctxt "dhl"
+msgid "Let customers choose a Parcel Shop as delivery address."
+msgstr "Kunden einen Paketshop als Lieferadresse auswählen lassen."
+
+#: src/ShippingProvider/DHL.php:1152
+#: src/ShippingProvider/Services/PreferredLocation.php:16
+msgctxt "dhl"
+msgid "Enable drop-off location delivery."
+msgstr "Lieferung an einen Ablageort aktivieren."
+
+#: src/ShippingProvider/DHL.php:1152
+#: src/ShippingProvider/Services/PreferredLocation.php:17
+msgctxt "dhl"
+msgid "Enabling this option will display options for the user to select their preferred delivery location during the checkout."
+msgstr "Diese Option aktiviert die Auswahl eines Wunschorts durch den Kunden in der Kasse ."
+
+#: src/ShippingProvider/DHL.php:1161
+#: src/ShippingProvider/Services/PreferredNeighbour.php:16
+msgctxt "dhl"
+msgid "Enable delivery to a neighbor."
+msgstr "Lieferung an Nachbarn aktivieren."
+
+#: src/ShippingProvider/DHL.php:1161
+#: src/ShippingProvider/Services/PreferredNeighbour.php:17
+msgctxt "dhl"
+msgid "Enabling this option will display options for the user to deliver to their preferred neighbor during the checkout."
+msgstr "Diese Option aktiviert die Auswahl eines Wunschnachbarn durch den Kunden in der Kasse."
+
+#: src/ShippingProvider/DHL.php:1169
+msgctxt "dhl"
+msgid "Delivery Type (CDP)"
+msgstr "Zustellvariante (CDP)"
+
+#: src/ShippingProvider/DHL.php:1170
+msgctxt "dhl"
+msgid "Allow your international customers to choose between home and closest droppoint delivery."
+msgstr "Erlaube internationalen Kunden zwischen einer Zustellung nach Hause oder einer Abholstation zu wählen."
+
+#: src/ShippingProvider/DHL.php:1170
+msgctxt "dhl"
+msgid "Display options for the user to select their preferred delivery type during checkout. Currently available for <a href=\"%s\">certain countries only</a>."
+msgstr "Stelle dem Kunden eine Auswahlmöglichkeit der Zustellvariante in der Kasse zur Verfügung. Aktuell nur für <a href=\"%s\">ausgewählte Länder</a> verfügbar."
+
+#: src/ShippingProvider/DHL.php:1178
+msgctxt "dhl"
+msgid "Default Delivery Type"
+msgstr "Standard Zustellvariante"
+
+#: src/ShippingProvider/DHL.php:1180
+msgctxt "dhl"
+msgid "Select the default delivery type presented to the customer during checkout."
+msgstr "Wähle die Standard-Zustellvariante aus, die dem Kunden in der Kasse angeboten wird."
+
+#: src/ShippingProvider/DHL.php:1191
+msgctxt "dhl"
+msgid "Home Delivery Fee"
+msgstr "Gebühr Haustürzustellung"
+
+#: src/ShippingProvider/DHL.php:1193
+msgctxt "dhl"
+msgid "Insert gross value as surcharge for home deliveries for countries which support closest droppoint deliveries. Insert 0 to offer service for free."
+msgstr "Füge einen Bruttopreis als Gebühr für die Lieferung zur Haustür (CDP) hinzu. Setze den Wert auf 0 um den Service kostenlos anzubieten."
+
+#: src/ShippingProvider/DHL.php:1205
+#: src/ShippingProvider/Services/PreferredDay.php:17
+msgctxt "dhl"
+msgid "Enable delivery day delivery."
+msgstr "Aktiviere die Lieferung am Liefertag."
+
+#: src/ShippingProvider/DHL.php:1205
+#: src/ShippingProvider/Services/PreferredDay.php:18
+msgctxt "dhl"
+msgid "Enabling this option will display options for the user to select their delivery day of delivery during the checkout."
+msgstr "Diese Option aktiviert die Auswahl eines Liefertages durch den Kunden in der Kasse."
+
+#: src/ShippingProvider/DHL.php:1213
+msgctxt "dhl"
+msgid "Fee"
+msgstr "Gebühr"
+
+#: src/ShippingProvider/DHL.php:1215
+msgctxt "dhl"
+msgid "Insert gross value as surcharge for delivery day delivery. Insert 0 to offer service for free."
+msgstr "Füge einen Bruttopreis als Gebühr für die Lieferung am Liefertag hinzu. Setze den Wert auf 0 um den Service kostenlos anzubieten."
+
+#: src/ShippingProvider/DHL.php:1226
+msgctxt "dhl"
+msgid "Cut-off time"
+msgstr "Cut-off-Zeit"
+
+#: src/ShippingProvider/DHL.php:1230
+msgctxt "dhl"
+msgid "The cut-off time is the latest possible order time up to which the minimum delivery day (day of order + 2 working days) can be guaranteed. As soon as the time is exceeded, the earliest delivery day displayed in the frontend will be shifted to one day later (day of order + 3 working days)."
+msgstr "Die Cut-off-Zeit ist der späteste, mögliche Bestellzeitpunkt bis zu dem der früheste Liefertag (Tag der Bestellung + 2 Werktage) garantiert werden kann. Nach Überschreitung dieses Zeitpunktes, wird der früheste verfügbare Liefertag in der Kasse um einen Tag erhöht (Tag der Bestellung + 3 Werktage)."
+
+#: src/ShippingProvider/DHL.php:1236
+msgctxt "dhl"
+msgid "Preparation days"
+msgstr "Bearbeitungstage"
+
+#: src/ShippingProvider/DHL.php:1240
+msgctxt "dhl"
+msgid "If you need more time to prepare your shipments you might want to add a static preparation time to the possible starting date for delivery day delivery."
+msgstr "Falls du mehr Zeit für die Bearbeitung der Sendungen benötigst, kannst du hier eine statische Anzahl an Tagen hinterlegen, die zum frühesten auswählbaren Liefertag hinzugefügt werden."
+
+#: src/ShippingProvider/DHL.php:1251
+msgctxt "dhl"
+msgid "Exclude days of transfer"
+msgstr "Übergabetage ausschließen"
+
+#: src/ShippingProvider/DHL.php:1252
+msgctxt "dhl"
+msgid "Monday"
+msgstr "Montag"
+
+#: src/ShippingProvider/DHL.php:1253
+msgctxt "dhl"
+msgid "Exclude days from transferring shipments to DHL."
+msgstr "Schließe bestimmte Wochentage für die Übergabe an DHL aus."
+
+#: src/ShippingProvider/DHL.php:1263
+msgctxt "dhl"
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: src/ShippingProvider/DHL.php:1273
+msgctxt "dhl"
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: src/ShippingProvider/DHL.php:1283
+msgctxt "dhl"
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: src/ShippingProvider/DHL.php:1293
+msgctxt "dhl"
+msgid "Friday"
+msgstr "Freitag"
+
+#: src/ShippingProvider/DHL.php:1303
+msgctxt "dhl"
+msgid "Saturday"
+msgstr "Samstag"
+
+#: src/ShippingProvider/DHL.php:1313
+msgctxt "dhl"
+msgid "Exclude gateways"
+msgstr "Zahlungsarten ausschließen"
+
+#: src/ShippingProvider/DHL.php:1315
+msgctxt "dhl"
+msgid "Select payment gateways to be excluded from showing preferred services."
+msgstr "Wähle Zahlungsarten aus, für die die Wunschzustellung-Services nicht zur Verfügung stehen sollen."
+
+#: src/ShippingProvider/DHL.php:1341
+msgctxt "dhl"
+msgid "Custom shipper"
+msgstr "Individueller Absender"
+
+#: src/ShippingProvider/DHL.php:1342
+msgctxt "dhl"
+msgid "Use a custom shipper address managed within your DHL business profile."
+msgstr "Individuelle Absenderreferenz aus dem DHL Geschäftskonto verwenden."
+
+#: src/ShippingProvider/DHL.php:1342
+msgctxt "dhl"
+msgid "Choose this option if you want to use a <a href=\"%s\" target=\"_blank\">custom address</a> profile managed within your DHL business profile as shipper reference for your labels."
+msgstr "Aktiviere diese Option falls du eine <a href=\"%s\" target=\"_blank\">individuelle Absenderreferenz</a> als Referenz beim Erstellen der Labels verwenden möchtest."
+
+#: src/ShippingProvider/DHL.php:1350
+msgctxt "dhl"
+msgid "Shipper reference"
+msgstr "Absenderreferenz"
+
+#: src/ShippingProvider/DHL.php:1351
+msgctxt "dhl"
+msgid "Insert the <a href=\"%s\" target=\"_blank\">address reference</a> you have chosen within the DHL business portal for your custom shipper address."
+msgstr "Füge hier deine <a href=\"%s\" target=\"_blank\">individuelle Absenderreferenz</a> aus dem DHL Geschäftskonto ein."
+
+#: src/ShippingProvider/DHL.php:1390
+msgctxt "dhl"
+msgid "Customer Number"
+msgstr "Kundennummer"
+
+#: src/ShippingProvider/DHL.php:1390
+msgctxt "dhl"
+msgid "Insert your DHL business customer number (EKP) here. If you are not yet a business customer you might want to create a new account first."
+msgstr "Füge hier deine DHL Kundennummer (EKP) ein. Wenn du noch kein Geschäftskunde bist, solltest du dich zuerst als Geschäftskunde bei DHL registrieren."
+
+#: src/ShippingProvider/DHL.php:1403
+msgctxt "dhl"
+msgid "API Access"
+msgstr "API Zugriff"
+
+#: src/ShippingProvider/DHL.php:1403
+msgctxt "dhl"
+msgid "To create labels and embed DHL services, our software needs access to the API. You will need to fill out the username and password fields accordingly."
+msgstr "Um Labels erzeugen und die DHL Services nutzen zu können benötigt unsere Software Zugang zur API. Du solltest hier deine Zugangsdaten zum DHL Geschäftskundenportal eingeben."
+
+#: src/ShippingProvider/DHL.php:1421
+msgctxt "dhl"
+msgid "Zones"
+msgstr "Zonen"
+
+#: src/ShippingProvider/DHL.php:1421
+msgctxt "dhl"
+msgid "Configure separate service(s) based on your customer's location."
+msgstr "Buche spezielle Services basierend auf dem Ort deiner Kunden."
+
+#: src/ShippingProvider/DHL.php:1439
+msgctxt "dhl"
+msgid "Automation"
+msgstr "Automatisierung"
+
+#: src/ShippingProvider/DHL.php:1439
+msgctxt "dhl"
+msgid "You might want to save some time and generate labels automatically as soon as a shipment switches to a certain status."
+msgstr "Wenn du Administrationsaufwand sparen möchtest, kannst du Labels automatisch erzeugen lassen, sobald eine Sendung in einen bestimmten Status wechselt."
+
+#: src/ShippingProvider/DHL.php:1463
+msgctxt "dhl"
+msgid "Allow your customers to ship to a packstation (and/or other DHL location types as configured below)."
+msgstr "Lasse deine Kunden eine Packstation (und/oder andere DHL Standorte, wie im Folgenden konfiguriert) als Lieferadresse auswählen."
+
+#: src/ShippingProvider/PickupLocation.php:65
+msgctxt "dhl"
+msgid "Customer Number (Post Number)"
+msgstr "DHL Kundennummer (Postnummer)"
+
+#: src/ShippingProvider/Services/AdditionalInsurance.php:15
+msgctxt "dhl"
+msgid "Additional Insurance"
+msgstr "Transportversicherung"
+
+#: src/ShippingProvider/Services/AdditionalInsurance.php:16
+msgctxt "dhl"
+msgid "Add an additional insurance to labels."
+msgstr "Füge eine Transportversicherung zur Sendung hinzu."
+
+#: src/ShippingProvider/Services/AdditionalInsurance.php:44
+msgctxt "dhl"
+msgid "Value of Goods"
+msgstr "Warenwert"
+
+#: src/ShippingProvider/Services/CashOnDelivery.php:15
+msgctxt "dhl"
+msgid "Cash on Delivery"
+msgstr "Bar bei Lieferung"
+
+#: src/ShippingProvider/Services/CashOnDelivery.php:58
+msgctxt "dhl"
+msgid "COD Amount"
+msgstr "Nachnahme Betrag"
+
+#: src/ShippingProvider/Services/ClosestDropPoint.php:15
+msgctxt "dhl"
+msgid "Closest Droppoint (CDP)"
+msgstr "Closest Droppoint (CDP)"
+
+#: src/ShippingProvider/Services/ClosestDropPoint.php:16
+msgctxt "dhl"
+msgid "Ship to a parcel shop or parcel locker in the vicinity of your customer’s home address."
+msgstr "Versende an einen Paketshop oder eine Packstation in der Nähe des Kunden."
+
+#: src/ShippingProvider/Services/DHLRetoure.php:16
+msgctxt "dhl"
+msgid "Inlay Return Label"
+msgstr "Beilageretoure"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:17
+msgctxt "dhl"
+msgid "Additionally create inlay return labels for shipments that support returns."
+msgstr "Erzeuge zusätzlich Beilage-Retourenlabels für Sendungen die Retouren unterstützen."
+
+#: src/ShippingProvider/Services/DHLRetoure.php:86
+msgctxt "dhl"
+msgid "Name"
+msgstr "Name"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:95
+msgctxt "dhl"
+msgid "Company"
+msgstr "Firma"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:108
+#: src/ShippingProvider/Services/DHLRetoure.php:221
+msgctxt "dhl"
+msgid "Street"
+msgstr "Straße"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:117
+msgctxt "dhl"
+msgid "Street No"
+msgstr "Hausnummer"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:134
+#: src/ShippingProvider/Services/DHLRetoure.php:222
+msgctxt "dhl"
+msgid "Postcode"
+msgstr "Postleitzahl"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:143
+#: src/ShippingProvider/Services/DHLRetoure.php:223
+msgctxt "dhl"
+msgid "City"
+msgstr "Stadt"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:160
+msgctxt "dhl"
+msgid "Phone"
+msgstr "Telefon"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:169
+msgctxt "dhl"
+msgid "Email"
+msgstr "E-Mail"
+
+#: src/ShippingProvider/Services/DHLRetoure.php:228
+msgctxt "dhl"
+msgid "%s of the return address is a mandatory field."
+msgstr "%s der Rücksendeadresse ist ein Pflichtfeld."
+
+#: src/ShippingProvider/Services/DHLRetoure.php:233
+msgctxt "dhl"
+msgid "Please either add a return company or name."
+msgstr "Bitte gib entweder einen Firmennamen oder Namen für die Rücksendeadresse an."
+
+#: src/ShippingProvider/Services/IdentCheck.php:16
+msgctxt "dhl"
+msgid "Ident-Check"
+msgstr "Ident-Check"
+
+#: src/ShippingProvider/Services/IdentCheck.php:17
+msgctxt "dhl"
+msgid "Use the DHL Ident-Check service to make sure your parcels are only released to the recipient in person."
+msgstr "Verwende den DHL Service Ident-Check um sicherzustellen, dass Pakete nur an den Empfänger persönlich übergeben werden."
+
+#: src/ShippingProvider/Services/IdentCheck.php:38
+#: src/ShippingProvider/Services/IdentCheck.php:114
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:38
+msgctxt "dhl"
+msgid "Minimum age"
+msgstr "Mindestalter"
+
+#: src/ShippingProvider/Services/IdentCheck.php:45
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:45
+msgctxt "dhl"
+msgid "Choose this option if you want to let DHL check your customer's identity and age."
+msgstr "Wähle diese Option aus, wenn du das Alter und die Identität durch DHL prüfen lassen möchtest."
+
+#: src/ShippingProvider/Services/IdentCheck.php:99
+msgctxt "dhl"
+msgid "Date of Birth"
+msgstr "Geburtsdatum"
+
+#: src/ShippingProvider/Services/IdentCheck.php:138
+msgctxt "dhl"
+msgid "There was an error parsing the date of birth for the identity check."
+msgstr "Beim Einlesen des Geburtsdatums für den Ident-Check trat ein Problem auf."
+
+#: src/ShippingProvider/Services/IdentCheck.php:142
+msgctxt "dhl"
+msgid "The minimum age (IdentCheck) supplied is invalid."
+msgstr "Das Mindestalter (Ident-Check) ist ungültig."
+
+#: src/ShippingProvider/Services/IdentCheck.php:146
+msgctxt "dhl"
+msgid "Either a minimum age or a date of birth is need for the ident check."
+msgstr "Entweder ein Mindestalter oder ein Geburtsdatum muss zum Ident-Check hinzugefügt werden."
+
+#: src/ShippingProvider/Services/PreferredDay.php:92
+msgctxt "dhl"
+msgid "Please choose a valid preferred delivery day."
+msgstr "Bitte wähle einen verfügbaren Zustelltag aus."
+
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:16
+msgctxt "dhl"
+msgid "Visual Age check"
+msgstr "Alterssichtprüfung"
+
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:17
+msgctxt "dhl"
+msgid "Let DHL handle the age check for you at the point of delivery."
+msgstr "DHL übernimmt die Überprüfung des Alters bei der Zustellung."
+
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:74
+msgctxt "dhl"
+msgid "Minimum Age"
+msgstr "Mindestalter"
+
+#: src/ShippingProvider/Services/VisualCheckOfAge.php:106
+msgctxt "dhl"
+msgid "The minimum age (VisualCheckOfAge) supplied is invalid."
+msgstr "Das Mindestalter (Alterssichtprüfung) ist ungültig."
+
+#: templates/checkout/dhl/preferred-services.php:24
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:293
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "DHL Preferred Delivery. Delivered just as you wish."
+msgstr "DHL Wunschzustellung. Gebracht wie gewünscht."
+
+#: templates/checkout/dhl/preferred-services.php:30
+msgctxt "dhl"
+msgid "Choose one of the displayed days as your delivery day for your parcel delivery. Other days are not possible due to delivery processes."
+msgstr "Du hast die Möglichkeit, einen der angezeigten Tage als Liefertag für die Lieferung deiner Waren auszuwählen. Andere Tage sind aufgrund der Lieferprozesse aktuell nicht möglich."
+
+#: templates/checkout/dhl/preferred-services.php:34
+#: templates/checkout/dhl/preferred-services.php:115
+msgctxt "dhl"
+msgid "incl. VAT"
+msgstr "inkl. MwSt."
+
+#: templates/checkout/dhl/preferred-services.php:34
+#: templates/checkout/dhl/preferred-services.php:115
+msgctxt "dhl"
+msgid "excl. VAT"
+msgstr "zzgl. MwSt."
+
+#: templates/checkout/dhl/preferred-services.php:58
+msgctxt "dhl"
+msgid "Drop-off location or neighbor"
+msgstr "Ablageort oder Nachbar"
+
+#: templates/checkout/dhl/preferred-services.php:64
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:181
+#: build/checkout.js:1
+msgctxt "dhl location context"
+msgid "None"
+msgstr "Keine"
+
+#: templates/checkout/dhl/preferred-services.php:69
+msgctxt "dhl"
+msgid "Location"
+msgstr "Ort"
+
+#: templates/checkout/dhl/preferred-services.php:82
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:110
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Choose a weather-protected and non-visible place on your property, where we can deposit the parcel in your absence."
+msgstr "Bestimme einen wettergeschützten und nicht einsehbaren Platz auf deinem Grundstück, an dem wir das Paket während deiner Abwesenheit hinterlegen dürfen."
+
+#: templates/checkout/dhl/preferred-services.php:84
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:116
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "e.g. Garage, Terrace"
+msgstr "z.B. Garage, Terrasse"
+
+#: templates/checkout/dhl/preferred-services.php:91
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:139
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Determine a person in your immediate neighborhood whom we can hand out your parcel in your absence. This person should live in the same building, directly opposite or next door."
+msgstr "Bestimme eine Person in deiner unmittelbaren Nachbarschaft, bei der wir dein Paket während deiner Abwesenheit abgeben dürfen. Diese sollte im gleichen Haus, direkt gegenüber oder nebenan wohnen."
+
+#: templates/checkout/dhl/preferred-services.php:93
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:145
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "First name, last name of neighbor"
+msgstr "Vorname, Nachname des Nachbars"
+
+#: templates/checkout/dhl/preferred-services.php:94
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:158
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Street, number, postal code, city"
+msgstr "Straße, Hausnummer, Postleitzahl, Stadt"
+
+#: templates/checkout/dhl/preferred-services.php:113
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:229
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Delivery to nearby parcel store/locker or to the front door."
+msgstr "Zustellung an einen Paketshop/Packstation in der Nähe oder an die Haustür."
+
+#: templates/checkout/dhl/preferred-services.php:115
+msgctxt "dhl"
+msgid "(+%1$s %2$s)*"
+msgstr "(+%1$s %2$s)*"
+
+#: templates/checkout/dhl/preferred-services.php:116
+#: assets/js/blocks/checkout/slotfills/preferred-services.js:242
+#: build/checkout.js:1
+msgctxt "dhl"
+msgid "Delivery usually to the front door."
+msgstr "Zustellung in der Regel an die Haustür."
+
+#: templates/checkout/dhl/preferred-services.php:34
+msgctxt "dhl"
+msgid "There is a surcharge of %1$s %2$s for this service.*"
+msgstr "Für diesen Service fällt ein Aufpreis in Höhe von %1$s %2$s an.*"
+
+#: src/ShippingProvider/DHL.php:110
+msgctxt "dhl"
+msgid "DHL Paket"
+msgstr "DHL Paket"
+
+#: src/Api/Paket.php:219
+msgctxt "dhl"
+msgid "Sun"
+msgstr "So."
+
+#: src/Api/Paket.php:213
+msgctxt "dhl"
+msgid "Mon"
+msgstr "Mo."
+
+#: src/Api/Paket.php:214
+msgctxt "dhl"
+msgid "Tue"
+msgstr "Di."
+
+#: src/Api/Paket.php:215
+msgctxt "dhl"
+msgid "Wed"
+msgstr "Mi."
+
+#: src/Api/Paket.php:216
+msgctxt "dhl"
+msgid "Thu"
+msgstr "Do."
+
+#: src/Api/Paket.php:217
+msgctxt "dhl"
+msgid "Fri"
+msgstr "Fr."
+
+#: src/Api/Paket.php:218
+msgctxt "dhl"
+msgid "Sat"
+msgstr "Sa."

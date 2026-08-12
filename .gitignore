@@ -141,3 +141,36 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# ============================================================
+# WERDU.DE — WordPress security & backup exclusions
+# ============================================================
+
+# Live WordPress config (DB credentials, secret keys, API tokens)
+wp-config.php
+wp-config1.php
+wp-config[0-9]*.php
+
+# Duplicator plugin: full site + database backups (contains customer/order data)
+dup-installer/
+*installer-backup.php
+dup-database*.sql
+dup-archive*.txt
+dup-archive*.zip
+
+# Misc backups / trash
+trash/
+*.bk
+*.bak
+*.sql
+
+# WordPress runtime logs / temp upgrade folders
+wp-content/debug.log
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+wp-content/wflogs/
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store

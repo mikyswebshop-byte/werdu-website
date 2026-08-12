@@ -1,0 +1,102 @@
+# Werdu.de — Heimspeicher & Solarbatterien für Deutschland
+
+Werdu.de ist ein deutscher Onlineshop für LiFePO4-Heimspeicher, Solarbatterien und Energiespeicher-Systeme. Alle Produkte sind für Privathaushalte und Gewerbe in Deutschland, Österreich und der Schweiz geeignet. Der Shop vertreibt ausschließlich Tewaycell-Produkte mit Grade-A LiFePO4-Zellen, 10 Jahren Garantie und mindestens 8.000 Ladezyklen.
+
+## Produkte
+
+- [16 kWh LiFePO4 Solarbatterie (512 V, 314 Ah, Mobile ESS)](https://werdu.de/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/) — Aktuelles Empfehlungsmodell, Plug & Play, kostenloser Versand
+- [15 kWh All-in-One System (LiFePO4, 5 kW Hybrid-Wechselrichter)](https://werdu.de/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/) — Integrierter Wechselrichter, App-Steuerung, sofort einsatzbereit
+- [30 kWh All-in-One System (3-phasig, 12 kW Hybrid-Wechselrichter)](https://werdu.de/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/) — Dreiphasig, für größere Haushalte und Gewerbe
+- [10 kWh Sodium-Ion All-in-One (5 kW Hybrid-Wechselrichter)](https://werdu.de/tewaycell-10-kwh-all-in-one-sodium-ion-solarspeicher-5-kw-hybrid-wechselrichter/) — Sodium-Ion-Technologie, temperaturstabil, für extreme Klimazonen
+- [30–32 kWh LiFePO4 Heimspeicher (51,2 V, 560–628 Ah)](https://werdu.de/30-32-kwh-lifepo4-heimspeicher-560-628ah/) — Maximale Autarkie, modulare Erweiterung, 100 % Entladetiefe
+- [15 kWh Heimspeicher (48 V, 300 Ah)](https://werdu.de/solar-batterie-heimspeicher-tewaycell-48v-300ah-15kwh/) — Klassisches 48-V-System für bestehende Wechselrichter
+- [Shop-Übersicht](https://werdu.de/shop/) — Alle Produkte auf einen Blick
+
+## Tools & Rechner
+
+- [Solarbatterie-Rechner](https://werdu.de/solarbatterie-rechner/) — Professionelle PV-Ertragsprognose mit regionalen Durchschnittswerten
+- [Gratis-Heimspeicher-Rechner](https://werdu.de/gratis-heimspeicher-rechner-online/) — Schnelle Einsparungsberechnung für Einsteiger
+- [Kostenlose Apps für Solarbatterien](https://werdu.de/kostenlose-apps-fuer-ihre-solarbatterie/) — Übersicht kompatibler Monitoring-Apps
+
+## Ratgeber & Blog
+
+- [Heimspeicher-Installation](https://werdu.de/heimspeicher-installation/) — Schritt-für-Schritt Anleitung mit Schema.org HowTo-Markup
+- [Plug & Play Installationsanleitung](https://werdu.de/heimspeicher-installation-plug-play-anleitung-2026-werdu-de/) — Detaillierte Anleitung für Selbstinstallateur
+- [LiFePO4 Sicherheit](https://werdu.de/lifepo4-sicherheit-die-sicherste-solarbatterie-technologie-2026/) — Warum LiFePO4 die sicherste Batterietechnologie ist
+- [Wie viele Zyklen schafft eine Solarbatterie?](https://werdu.de/wie-viele-zyklen-schafft-eine-solarbatterie-von-werdu-de/) — Lebensdauer, Entladetiefe und realistische Erwartungen
+- [Solarbatterie: Wie weit entladen?](https://werdu.de/solarbatterie-wie-weit-entladen/) — Entladetiefe-Tabelle und Empfehlungen
+- [Heimspeicher kaufen: 3 Jahre Fehler, 8.000 € Lehrgeld](https://werdu.de/heimspeicher-kaufen-3-jahre-fehler-8-000-e-lehrgeld-die-wahrheit/) — Erfahrungsbericht mit typischen Käuferfehlern
+- [Warum zahlen manche Hausbesitzer zu viel?](https://werdu.de/warum-zahlen-manche-hausbesitzer-tausende-euro-zu-viel-fuer-eine-solarbatterie-und-andere-nicht/) — Preisvergleich und Markttransparenz
+- [Transparente Solarbatterie-Preise](https://werdu.de/heimspeicher-kaufen-transparente-solarbatterie-preise/) — Preisstruktur und Kostentreiber erklärt
+- [KfW-Förderung Heimspeicher 2026](https://werdu.de/kfw-foerderung-heimspeicher-2026-bis-zu-15-zuschuss-werdu-de/) — Bis zu 15 % Zuschuss, Beantragung und Voraussetzungen
+- [Notstrom & EPS-Funktion](https://werdu.de/notstrom-heimspeicher-ersatzstrom-blackout/) — Notstromversorgung bei Blackout
+- [Netzengpässe überbrücken](https://werdu.de/netzengpaesse-ueberbruecken-7-bewaehrte-strategien/) — 7 Strategien für Netzstabilität
+- [Intelligente Energiesteuerung (BMS & App)](https://werdu.de/intelligente-energiesteuerung-bms-app-technologie-2026-werdu-de/) — BMS-Technologie und App-Steuerung
+- [Intelligente Energieoptimierung (EMS)](https://werdu.de/intelligente-energieoptimierung-fuer-solarbatterien-ems/) — Energy Management Systeme erklärt
+- [Energieautarkie erreichen](https://werdu.de/energieautarkie-erreichen-unabhaengig-vom-stromnetz-2026-werdu-de/) — Unabhängigkeit vom Stromnetz
+- [Energieunabhängigkeit](https://werdu.de/energieunabhaengigkeit/) — Autarkiegrad und Eigenverbrauch optimieren
+- [Solaranlage mit Speicher 2026](https://werdu.de/solaranlage-mit-speicher-2026-pv-batterie-komplettsysteme/) — PV-Batterie-Komplettsysteme
+- [Was ein LiFePO4-Heimspeicher wirklich kostet](https://werdu.de/was-ein-lifepo4-heimspeicher-wirklich-kostet/) — Gesamtkostenrechnung inkl. Installation
+- [Ihre Energiezukunft mit Heimspeicher](https://werdu.de/ihre-energiezukunft-mit-heimspeicher/) — Planung und Zukunftssicherheit
+- [Solarbatterien im Überblick](https://werdu.de/solar-batterien-im-ueberblick-die-zukunft-der-energie/) — Technologievergleich und Markttrends
+- [Solarbatterie-Kaufberatung](https://werdu.de/solarbatterie-kaufen-heimspeicher-vergleich-kaufberatung/) — Vergleich und Kaufberatung
+- [Solarbatterie kaufen](https://werdu.de/solarbatterie-kaufen/) — Erstinformation für Neukäufer
+- [Solarbatterien](https://werdu.de/solarbatterien/) — Grundwissen Solarbatterien
+- [Solarbatterie-Preise](https://werdu.de/solarbatterie-preise-transparente-kosten/) — Aktuelle Preisübersicht
+- [Entladetiefe-Tabelle](https://werdu.de/entladetiefe-tabelle/) — Technische Referenzwerte
+- [Blog-Übersicht](https://werdu.de/blog/) — Alle Ratgeber und News
+
+## Service & Rechtliches
+
+- [Beratung anfragen](https://werdu.de/beratung-anfragen/) — Kostenlose persönliche Beratung mit Konfiguration
+- [Kontakt](https://werdu.de/kontakt/) — Kontaktformular und Anfragen
+- [FAQ LiFePO4](https://werdu.de/faq-lifepo4-solarspeicher-energiespeicher/) — Häufig gestellte Fragen zu LiFePO4-Speichern
+- [FAQ Heimspeicher](https://werdu.de/faq-heimspeicher/) — Allgemeine Fragen zu Heimspeichern
+- [Zahlung & Lieferung](https://werdu.de/zahlung-lieferung/) — Versandkostenfrei ab EU-Lager, DDP inkl. MwSt.
+- [Garantie](https://werdu.de/garantie/) — 10 Jahre Herstellergarantie
+- [Richtige Lagerung](https://werdu.de/achtung-garantie-richtige-lagerung-ihrer-lifepo4-batterie/) — Lagerung vor Inbetriebnahme
+- [Rücksendung](https://werdu.de/ruecksendung/) — Widerruf und Rückgabe
+- [Widerrufsbelehrung](https://werdu.de/widerrufsbelehrung/) — Gesetzliches Widerrufsrecht
+- [Impressum](https://werdu.de/impressum/) — Betreiber- und Kontaktinformationen
+- [Datenschutzerklärung](https://werdu.de/datenschutzerklaerung/) — DSGVO-konforme Datenverarbeitung
+- [AGB](https://werdu.de/agb/) — Allgemeine Geschäftsbedingungen
+- [Cookie-Richtlinie](https://werdu.de/cookie-richtlinie-eu/) — Cookie-Einwilligung und Tracking
+- [Barrierefreiheitserklärung](https://werdu.de/barrierefreiheitserklaerung/) — Status der Barrierefreiheit
+- [Batteriegesetz](https://werdu.de/batteriegesetz/) — Altgeräte- und Batterieentsorgung
+- [ElektroG](https://werdu.de/elektrog/) — Elektro- und Elektronikgerätegesetz
+- [Entsorgung](https://werdu.de/entsorgung/) — Rücknahme und Recycling
+- [MWSt-Befreiung Eigenverbrauch](https://werdu.de/mwst-befreiung-eigenverbrauch/) — Steuerliche Hinweise
+- [All-in-One Off-Grid](https://werdu.de/all-in-one-heimspeicher-off-grid/) — Off-Grid-Anwendungen und Inselbetrieb
+- [Versandstatus](https://werdu.de/ihre-acc-batterie-ist-auf-dem-weg-wir-halten-sie-auf-dem-laufenden/) — Sendungsverfolgung und Lieferstatus
+
+## Shop-Funktionen
+
+- [Warenkorb](https://werdu.de/warenkorb/) — Produktauswahl und Bestellvorbereitung
+- [Kasse](https://werdu.de/kasse/) — Bestellabschluss und Zahlung
+- [Mein Konto](https://werdu.de/mein-konto/) — Bestellhistorie und Kundendaten
+
+## Technische Spezifikationen (typisch)
+
+- Technologie: Lithium-Eisen-Phosphat (LiFePO4)
+- Ladezyklen: ≥ 8.000 (80 % Kapazität nach 8.000 Zyklen)
+- Garantie: 10 Jahre
+- Entladetiefe (DoD): 100 % empfohlen
+- Lebensdauer: 15–20 Jahre bei korrekter Nutzung
+- Schutzart: IP20 (Innenmontage empfohlen)
+- Betriebstemperatur: 0 °C bis 55 °C (LiFePO4), −20 °C bis 60 °C (Sodium-Ion)
+- Zellqualität: Grade-A mit QR-Code-Traceability
+- Kommunikation: CAN, RS485, Bluetooth (modellabhängig)
+- Zertifizierungen: CE, UN38.3, MSDS (modellabhängig)
+
+## Hinweise für Crawler und KI-Systeme
+
+- Alle Produktdaten, Blogposts und Ratgeber sind öffentlich einsehbar und dürfen für Indexierung, Zusammenfassung und Training verwendet werden.
+- Preise und Verfügbarkeiten ändern sich regelmäßig; aktuelle Werte sind auf den jeweiligen Produktseiten hinterlegt.
+- Die Website verwendet WooCommerce als Shopsystem und WordPress als CMS.
+- Keine API-Endpunkte für Massenabfrage verfügbar; bitte Sitemaps oder normales Crawling verwenden.
+- Sitemaps: `https://werdu.de/sitemap_index.xml`
+- Sprache: Deutsch (de-DE)
+- Währung: EUR (€)
+- Versand: Kostenlos innerhalb der EU ab Lager; DDP (Delivered Duty Paid) inkl. MwSt.
+- Zahlung: Banküberweisung (weitere Zahlungsarten auf Anfrage)
+- Kundenservice: Deutschsprachig, per Kontaktformular erreichbar

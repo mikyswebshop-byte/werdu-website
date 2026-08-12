@@ -1,0 +1,107 @@
+# WERDU.DE - PROJECT CONTEXT & INSTRUCTIONS
+
+## 1. PROJECT OVERVIEW & ARCHITECTURE
+- Website Domain: https://werdu.de
+- Environment: WordPress environment located in `/httpdocs`.
+- Primary Business Model: Direct-to-consumer sales of home battery storage systems (Heimspeicher / LiFePO4 batteries) in Germany. Transparent pricing is available directly on the site.
+- Primary Goal: Achieve #1 Rankings, top conversion rates, and dominate AI Search (AIO / GEO - ChatGPT Search, Perplexity, Google SGE/AIO) for home energy storage in Germany (2026).
+
+## 2. CALCULATORS & LEAD FLOW ARCHITECTURE
+We have 3 Calculators on the site:
+1. Calculator 1 (Main/Detailed): https://werdu.de/solarbatterie-rechner/
+2. Calculator 2 (Homepage Preview/Quick): https://werdu.de/
+3. Calculator 3 (Gratis Online Rechner): https://werdu.de/gratis-heimspeicher-rechner-online/
+
+Flow Requirements:
+- Calculators MUST NOT generate individual automated PDF quotes or formal price quotes, as transparent prices are already listed online in `/shop/`.
+- Calculator output MUST redirect or pass parameters directly to the consultation page: `https://werdu.de/beratung-anfragen/`.
+- On `https://werdu.de/beratung-anfragen/`, the user's calculated parameters (e.g., consumption, PV size, recommended kWh capacity) MUST pre-fill into the lead contact form so the customer can submit their details.
+- Calculator 2 (Homepage) and Calculator 3 MUST act as quick previews and seamlessly pass parameters (via URL query parameters or session storage) to Calculator 1 or directly to `https://werdu.de/beratung-anfragen/`.
+
+## 3. NEW FEATURE: LOCAL INSTALLER OPTION
+- We do not issue complex custom quotes, but we are implementing an optional Installer Shipping & Setup Option.
+- Option Details: Customers can select an additional service fee (+150€ to +300€).
+- Mechanics: When selected, the battery is shipped directly to the nearest certified local installer. Upon delivery, the installer handles the physical installation at the customer's house.
+- UX Integration: Integrate this choice clearly on product pages, checkout (`/kasse/`), and inside the consultation flow (`/beratung-anfragen/`).
+
+## 4. SEO & AIO (AI OPTIMIZATION) STRICT GUIDELINES
+- All PHP, JS, CSS, and HTML modifications must comply with 2026 technical SEO and Generative Engine Optimization (GEO/AIO) standards.
+- Structured Data (JSON-LD): Implement/verify `SoftwareApplication`, `FAQPage`, `HowTo`, `Product`, `LocalBusiness` / `Service`, and `BreadcrumbList`. Ensure JSON-LD includes `areaServed` where applicable.
+- Answer Engine Optimization (AIO): Use clear Answer-First (BLUF - Bottom Line Up Front) formatting in headers (H2/H3) and introductory paragraphs so AI crawlers can extract direct answers.
+- Performance: Code must be optimized for Core Web Vitals (no blocking scripts, clean isolation, modular CSS/JS).
+
+## 5. STRICT CODE & EXECUTION RULES FOR CURSOR
+- NEVER remove existing core functionality without replacement.
+- DO NOT invent non-existent file paths or missing functions. Always inspect existing code files first.
+- Maintain absolute isolation for calculator scripts (e.g., `#werdu-calc-isolated`) to avoid theme CSS/JS conflicts.
+- Ensure all German text produced is grammatically flawless, natural, and highly professional.
+- Do not leave unfinished TODO comments in production code.
+
+## 6. COMPLETE SITE MAP REFERENCE
+Main Pages:
+- https://werdu.de/
+- https://werdu.de/solarbatterie-rechner/
+- https://werdu.de/gratis-heimspeicher-rechner-online/
+- https://werdu.de/beratung-anfragen/
+- https://werdu.de/heimspeicher-installation/
+- https://werdu.de/heimspeicher-systeme/
+- https://werdu.de/heimspeicher-kosten-pro-kwh/
+- https://werdu.de/all-in-one-heimspeicher-off-grid/
+- https://werdu.de/solarbatterien/
+- https://werdu.de/shop/
+- https://werdu.de/warenkorb/
+- https://werdu.de/kasse/
+- https://werdu.de/mein-konto/
+- https://werdu.de/faq-heimspeicher/
+- https://werdu.de/kostenlose-apps-fuer-ihre-solarbatterie/
+- https://werdu.de/ueber-uns/
+- https://werdu.de/kontakt/
+- https://werdu.de/zahlung-und-lieferung/
+- https://werdu.de/heimspeicher-versand-lieferbedingungen/
+- https://werdu.de/mwst-befreiung-eigenverbrauch/
+- https://werdu.de/garantie/
+- https://werdu.de/achtung-garantie-richtige-lagerung-ihrer-lifepo4-batterie/
+- https://werdu.de/dachbrand-pv-anlage/
+- https://werdu.de/batteriegesetz/
+- https://werdu.de/entsorgung/
+- https://werdu.de/elektrog/
+- https://werdu.de/impressum/
+- https://werdu.de/agb/
+- https://werdu.de/datenschutzerklaerung/
+- https://werdu.de/cookie-richtlinie-eu/
+- https://werdu.de/widerrufsbelehrung/
+- https://werdu.de/vertrag-widerrufen/
+
+Products:
+- https://werdu.de/30-32-kwh-lifepo4-heimspeicher-560-628ah/
+- https://werdu.de/16-kwh-heimspeicher-lifepo4-solarbatterie/
+- https://werdu.de/32-kwh-lifepo4-heimspeicher-628ah/
+- https://werdu.de/16-kwh-lifepo4-heimspeicher-51-2v-314ah/
+- https://werdu.de/sodium-ion-solarspeicher-10-kwh-mit-5-kw-wechselrichter/
+- https://werdu.de/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/
+- https://werdu.de/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/
+
+Blog Posts:
+- https://werdu.de/blog/
+- https://werdu.de/energieautarkie-erreichen-unabhaengig-vom-stromnetz-2026-werdu-de/
+- https://werdu.de/heimspeicher-kaufen-3-jahre-fehler-8-000-e-lehrgeld-die-wahrheit/
+- https://werdu.de/notstrom-heimspeicher-ersatzstrom-blackout/
+- https://werdu.de/solarbatterie-preise-transparente-kosten/
+- https://werdu.de/solarbatterie-kaufen/
+- https://werdu.de/heimspeicher-kaufen-transparente-solarbatterie-preise/
+- https://werdu.de/solarbatterie-wie-weit-entladen/
+- https://werdu.de/entladetiefe-tabelle/
+- https://werdu.de/intelligente-energieoptimierung-fuer-solarbatterien-ems/
+- https://werdu.de/solarbatterie-kaufen-heimspeicher-vergleich-kaufberatung/
+- https://werdu.de/solar-batterien-im-ueberblick-die-zukunft-der-energie/
+- https://werdu.de/netzengpaesse-ueberbruecken-7-bewaehrte-strategien/
+- https://werdu.de/was-ein-lifepo4-heimspeicher-wirklich-kostet/
+- https://werdu.de/lifepo4-sicherheit-die-sicherste-solarbatterie-technologie-2026/
+- https://werdu.de/wie-viele-zyklen-schafft-eine-solarbatterie-von-werdu-de/
+- https://werdu.de/solaranlage-mit-speicher-2026-pv-batterie-komplettsysteme/
+- https://werdu.de/ihre-energiezukunft-mit-heimspeicher/
+- https://werdu.de/heimspeicher-installation-plug-play-anleitung-2026-werdu-de/
+- https://werdu.de/energieunabhaengigkeit/
+- https://werdu.de/warum-zahlen-manche-hausbesitzer-tausende-euro-zu-viel-fuer-eine-solarbatterie-und-andere-nicht/
+- https://werdu.de/kfw-foerderung-heimspeicher-2026-bis-zu-15-zuschuss-werdu-de/
+- https://werdu.de/intelligente-energiesteuerung-bms-app-technologie-2026-werdu-de/

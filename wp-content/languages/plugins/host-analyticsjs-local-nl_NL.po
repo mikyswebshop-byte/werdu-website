@@ -1,0 +1,174 @@
+# Translation of Plugins - CAOS | Host Google Analytics Locally - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - CAOS | Host Google Analytics Locally - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-02-18 11:39:27+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.3\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - CAOS | Host Google Analytics Locally - Stable (latest release)\n"
+
+#. Author of the plugin
+#: host-analyticsjs-local.php
+msgid "Daan from Daan.dev"
+msgstr "Daan from Daan.dev"
+
+#: includes/admin/settings/class-help.php:75
+#: includes/admin/settings/class-help.php:78
+msgid "Visit Daan.dev"
+msgstr "Bezoek Daan.dev"
+
+#. Plugin URI of the plugin
+#: host-analyticsjs-local.php
+msgid "https://daan.dev/wordpress/caos/"
+msgstr "https://daan.dev/wordpress/caos/"
+
+#: includes/admin/settings/class-basic.php:150
+msgid "Tracking Code"
+msgstr "Trackingcode"
+
+#: includes/admin/settings/class-extensions.php:35
+msgid "Stealth Mode (Pro)"
+msgstr "Stealth modus (Pro)"
+
+#: includes/admin/settings/class-advanced.php:159
+msgid "Path"
+msgstr "Pad"
+
+#: includes/admin/settings/class-advanced.php:160
+msgid "Event Category"
+msgstr "Gebeurtenis categorie"
+
+#: includes/class-cron.php:35
+msgid "%s already exists."
+msgstr "%s bestaat al."
+
+#: includes/admin/class-settings.php:426
+msgid "Help"
+msgstr "Hulp"
+
+#: includes/admin/settings/class-help.php:51
+msgid "User Manual"
+msgstr "Gebruikershandboek"
+
+#: includes/admin/settings/class-help.php:56
+msgid "Get Support"
+msgstr "Krijg ondersteuning"
+
+#: includes/admin/settings/class-advanced.php:69
+msgid "e.g. /uploads/caos/"
+msgstr "bijv. /uploads/caos/"
+
+#: includes/admin/settings/class-basic.php:125
+msgid "e.g. cookie_accepted"
+msgstr "bijv. cookie_accepted"
+
+#: includes/admin/settings/class-basic.php:138
+msgid "e.g. true"
+msgstr "bijv. waar"
+
+#: includes/admin/settings/class-help.php:41
+msgid "Need Help?"
+msgstr "Hulp nodig?"
+
+#: includes/admin/settings/class-advanced.php:259
+msgid "This will remove the settings from the database upon plugin deletion!"
+msgstr "Dit zal al jouw instellingen verwijderen uit de database, wanneer je deze plugin verwijderd!"
+
+#: includes/admin/settings/class-advanced.php:259
+#: includes/admin/settings/class-basic.php:65
+msgid "Warning!"
+msgstr "Waarschuwing!"
+
+#: includes/admin/class-settings.php:409
+msgid "Advanced Settings"
+msgstr "Geavanceerde instellingen"
+
+#: includes/admin/settings/class-basic.php:221
+msgid "Copy this to the theme or plugin which should handle displaying the snippet."
+msgstr "Kopieer en plak dit waar de tracking code uiteindelijk weergegeven dient te worden."
+
+#: includes/admin/settings/class-basic.php:215
+msgid "Tracking-code"
+msgstr "Trackingcode"
+
+#: includes/admin/settings/class-basic.php:140
+msgid "The value of the above specified cookie set by your Cookie Notice when user accepts."
+msgstr "De waarde van de hierboven gespecificeerde cookie, ingesteld door jouw Cookiewaarschuwing, wanneer de gebruiker accepteert."
+
+#: includes/admin/settings/class-basic.php:127
+msgid "The cookie name set by your Cookie Notice plugin when user accepts."
+msgstr "De naam van de cookie, ingesteld door jouw Cookiewaarschuwing plugin, wanneer een gebruiker heeft geaccepteerd."
+
+#: includes/admin/settings/class-basic.php:96
+msgid "Allow tracking..."
+msgstr "Tracking toestaan..."
+
+#: includes/admin/class-settings.php:372
+msgid "Basic Settings"
+msgstr "Basisinstellingen"
+
+#: includes/admin/class-settings.php:179
+msgid "CAOS | Complete Analytics Optimization Suite"
+msgstr "CAOS | Complete Analytics Optimalisatie Suite"
+
+#: includes/admin/class-settings.php:175
+msgid "You're not cool enough to access this page."
+msgstr "Je bent niet cool genoeg om deze pagina te bekijken."
+
+#: includes/admin/class-settings.php:445
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/admin/class-settings.php:275
+msgid "Date/Time cannot be formatted to locale"
+msgstr "Datum/tijd kan niet correct worden weergegeven"
+
+#: includes/admin/class-settings.php:263
+msgid "Date/Time cannot be set"
+msgstr "Datum/tijd kan niet ingesteld worden"
+
+#. Plugin Name of the plugin
+#: host-analyticsjs-local.php
+msgid "CAOS"
+msgstr "CAOS"
+
+#: includes/admin/settings/class-basic.php:62
+msgid "Track logged in Administrators"
+msgstr "Volg ingelogde beheerders"
+
+#: includes/admin/settings/class-advanced.php:89
+msgid "Serve from CDN"
+msgstr "Laden van CDN"
+
+#: includes/admin/settings/class-basic.php:123
+msgid "Cookie Name"
+msgstr "Cookie naam"
+
+#: includes/admin/settings/class-advanced.php:256
+msgid "Remove settings at Uninstall"
+msgstr "Verwijder instellingen bij deinstallatie"
+
+#: includes/admin/settings/class-basic.php:136
+msgid "Cookie Value"
+msgstr "Cookie waarde"
+
+#. Author URI of the plugin
+#: host-analyticsjs-local.php
+msgid "https://daan.dev/"
+msgstr "https://daan.dev/"
+
+#: includes/admin/settings/class-help.php:31
+msgid "Thank you for using %s!"
+msgstr "Bedankt voor het gebruiken van %s!"
+
+#: includes/admin/settings/class-advanced.php:93
+msgid "If you're using a CDN, enter the URL here to serve <code>gtag.js</code> from your CDN."
+msgstr "Als je een CDN gebruikt, voer dan hier de URL in om <code>gtag.js</code> vanaf je CDN te serveren."
+
+#: includes/admin/settings/class-basic.php:157
+msgid "Read more"
+msgstr "Lees verder"

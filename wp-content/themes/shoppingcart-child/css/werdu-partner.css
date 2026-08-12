@@ -1,0 +1,595 @@
+/* ============================================================
+   WERDU Partner werden — balanced white / orange B2B landing
+   Backgrounds: #ffffff · Primary CTA/active/checkmarks: #ff6600
+   Fine accents: blue #1a73e8 · green #28a745 · purple / dark-red borders
+   ============================================================ */
+#werdu-partner {
+  --wp-bg: #ffffff;
+  --wp-orange: #ff6600;
+  --wp-blue: #1a73e8;
+  --wp-green: #28a745;
+  --wp-purple: #6f42c1;
+  --wp-darkred: #8b0000;
+  --wp-text: #1a1a2e;
+  --wp-muted: #5f6368;
+  --wp-border: #e8eaed;
+  --wp-radius: 14px;
+  --wp-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--wp-bg);
+  color: var(--wp-text);
+  font-family: var(--wp-font);
+  line-height: 1.65;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
+}
+#werdu-partner *,
+#werdu-partner *::before,
+#werdu-partner *::after { box-sizing: border-box; }
+
+#werdu-partner .wp-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px 64px;
+}
+
+/* Hero — pure white, clean */
+#werdu-partner .wp-hero {
+  background: var(--wp-bg);
+  text-align: center;
+  padding: 56px 16px 36px;
+  border-bottom: 1px solid var(--wp-border);
+  margin-bottom: 40px;
+}
+#werdu-partner .wp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--wp-green);
+  border: 1px solid var(--wp-green);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+#werdu-partner .wp-hero h1 {
+  margin: 0 0 14px;
+  font-size: clamp(1.75rem, 4vw, 2.45rem);
+  font-weight: 800;
+  color: var(--wp-text);
+  line-height: 1.2;
+}
+#werdu-partner .wp-hero-lead {
+  margin: 0 auto;
+  max-width: 720px;
+  font-size: 1.05rem;
+  color: var(--wp-muted);
+}
+#werdu-partner .wp-hero-cta {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Buttons — orange only on primary CTA */
+#werdu-partner .wp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+#werdu-partner .wp-btn-primary {
+  background: var(--wp-orange);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.28);
+}
+#werdu-partner .wp-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.35);
+  color: #fff;
+}
+#werdu-partner .wp-btn-secondary {
+  background: #ffffff;
+  color: var(--wp-blue);
+  border: 1px solid var(--wp-blue);
+}
+#werdu-partner .wp-btn-secondary:hover {
+  background: #e8f0fe;
+  color: var(--wp-blue);
+}
+
+/* Cards — white, fine 1px accent borders */
+#werdu-partner .wp-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+#werdu-partner .wp-card {
+  background: #ffffff;
+  border-radius: var(--wp-radius);
+  padding: 28px 26px;
+  border: 1px solid var(--wp-border);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#werdu-partner .wp-card:hover,
+#werdu-partner .wp-card:focus {
+  outline: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+#werdu-partner .wp-card--montage {
+  border: 1px solid var(--wp-purple);
+}
+#werdu-partner .wp-card--b2b {
+  border: 1px solid var(--wp-blue);
+}
+#werdu-partner .wp-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-card-price {
+  margin: 0 0 12px !important;
+  font-size: 1.05rem !important;
+  font-weight: 800;
+  color: var(--wp-text) !important;
+}
+#werdu-partner .wp-card-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  background: #ffffff;
+}
+#werdu-partner .wp-card--montage .wp-card-tag {
+  color: var(--wp-purple);
+  border: 1px solid var(--wp-purple);
+}
+#werdu-partner .wp-card--b2b .wp-card-tag {
+  color: var(--wp-blue);
+  border: 1px solid var(--wp-blue);
+}
+#werdu-partner .wp-card p {
+  margin: 0 0 16px;
+  color: var(--wp-muted);
+  font-size: 0.98rem;
+}
+#werdu-partner .wp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#werdu-partner .wp-list li {
+  position: relative;
+  padding: 8px 0 8px 28px;
+  color: var(--wp-text);
+  font-size: 0.95rem;
+}
+/* Key checkmarks — Werdu Orange (balanced, not overwhelming) */
+#werdu-partner .wp-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  color: var(--wp-orange);
+  font-weight: 800;
+}
+
+/* Geo notice — blue fine accent */
+#werdu-partner .wp-geo {
+  display: none;
+  align-items: flex-start;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--wp-blue);
+  border-left: 4px solid var(--wp-blue);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  color: var(--wp-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+#werdu-partner .wp-geo.is-visible { display: flex; }
+#werdu-partner .wp-geo-icon {
+  color: var(--wp-blue);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  flex-shrink: 0;
+  border: 1px solid var(--wp-blue);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+#werdu-partner .wp-geo [data-wp-plz],
+#werdu-partner .wp-geo [data-wp-city] {
+  color: var(--wp-orange);
+  font-weight: 800;
+}
+
+/* Form section — white + fine dark-red outline */
+#werdu-partner .wp-form-section {
+  background: #ffffff;
+  border: 1px solid var(--wp-darkred);
+  border-radius: var(--wp-radius);
+  padding: 36px 28px;
+  margin-bottom: 48px;
+}
+#werdu-partner .wp-form-section h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-form-section > .wp-form-intro {
+  text-align: center;
+  color: var(--wp-muted);
+  margin: 0 0 28px;
+  font-size: 0.98rem;
+}
+
+#werdu-partner .wp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 18px;
+}
+#werdu-partner .wp-field { display: flex; flex-direction: column; gap: 6px; }
+#werdu-partner .wp-field--full { grid-column: 1 / -1; }
+#werdu-partner .wp-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-field label .req { color: var(--wp-orange); }
+#werdu-partner .wp-field input,
+#werdu-partner .wp-field select,
+#werdu-partner .wp-field textarea,
+#werdu-partner .wpcf7-form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+#werdu-partner .wpcf7-form select,
+#werdu-partner .wpcf7-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--wp-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #ffffff;
+  color: var(--wp-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#werdu-partner .wp-field input:focus,
+#werdu-partner .wp-field select:focus,
+#werdu-partner .wp-field textarea:focus,
+#werdu-partner .wpcf7-form input:focus,
+#werdu-partner .wpcf7-form select:focus,
+#werdu-partner .wpcf7-form textarea:focus {
+  outline: none;
+  border-color: var(--wp-orange);
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.12);
+}
+#werdu-partner .wp-partner-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+#werdu-partner .wp-type-option {
+  border: 1px solid var(--wp-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #ffffff;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+#werdu-partner .wp-type-option:has(input:checked),
+#werdu-partner .wp-type-option.is-active {
+  border-color: var(--wp-orange);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.12);
+}
+#werdu-partner .wp-type-option input { margin-right: 8px; accent-color: var(--wp-orange); }
+#werdu-partner .wp-type-option strong { display: block; font-size: 0.95rem; }
+#werdu-partner .wp-type-option small { color: var(--wp-muted); font-size: 0.8rem; }
+
+#werdu-partner .wp-submit-wrap {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  text-align: center;
+}
+#werdu-partner .wp-submit-wrap .wp-btn-primary,
+#werdu-partner .wpcf7-submit {
+  background: var(--wp-orange) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 16px 36px !important;
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
+  cursor: pointer;
+  width: auto;
+  min-width: 240px;
+}
+#werdu-partner .wp-form-msg {
+  display: none;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+#werdu-partner .wp-form-msg.is-ok {
+  display: block;
+  background: #ffffff;
+  color: var(--wp-green);
+  border: 1px solid var(--wp-green);
+}
+#werdu-partner .wp-form-msg.is-err {
+  display: block;
+  background: #ffffff;
+  color: var(--wp-darkred);
+  border: 1px solid var(--wp-darkred);
+}
+
+/* Process steps */
+#werdu-partner .wp-process {
+  margin-bottom: 40px;
+}
+#werdu-partner .wp-process h2 {
+  text-align: center;
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin: 0 0 24px;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+#werdu-partner .wp-step {
+  background: #ffffff;
+  border: 1px solid var(--wp-border);
+  border-top: 3px solid var(--wp-orange);
+  border-radius: var(--wp-radius);
+  padding: 22px 18px;
+  text-align: center;
+}
+#werdu-partner .wp-step-num {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--wp-orange);
+  font-weight: 800;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 102, 0, 0.35);
+}
+#werdu-partner .wp-step h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+#werdu-partner .wp-step p {
+  margin: 0;
+  color: var(--wp-muted);
+  font-size: 0.92rem;
+}
+
+#werdu-partner .wp-footnote {
+  text-align: center;
+  color: var(--wp-muted);
+  font-size: 0.85rem;
+  margin-top: 28px;
+}
+#werdu-partner .wp-footnote a {
+  color: var(--wp-blue);
+}
+
+/* TOC */
+#werdu-partner .partner-toc {
+  background: #ffffff;
+  border: 1px solid var(--wp-blue);
+  border-radius: var(--wp-radius);
+  padding: 22px 24px;
+  margin: 0 0 36px;
+}
+#werdu-partner .partner-toc h3 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--wp-text);
+}
+#werdu-partner .partner-toc ul {
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+#werdu-partner .partner-toc li {
+  margin: 6px 0;
+  color: var(--wp-text);
+}
+#werdu-partner .partner-toc a {
+  color: var(--wp-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+#werdu-partner .partner-toc a:hover {
+  color: var(--wp-orange);
+  text-decoration: underline;
+}
+
+/* Long-form prose */
+#werdu-partner .wp-prose {
+  margin: 0 0 40px;
+}
+#werdu-partner .wp-prose h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: var(--wp-text);
+  line-height: 1.25;
+}
+#werdu-partner .wp-prose h3 {
+  margin: 22px 0 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-prose p {
+  margin: 0 0 14px;
+  color: var(--wp-muted);
+  font-size: 1.02rem;
+  max-width: 72ch;
+}
+#werdu-partner .wp-prose a {
+  color: var(--wp-blue);
+  font-weight: 600;
+}
+#werdu-partner .wp-section-lead {
+  text-align: center;
+  margin: 0 auto 22px !important;
+  color: var(--wp-muted);
+  max-width: 640px;
+}
+#werdu-partner .wp-closing-cta-wrap {
+  margin-top: 20px !important;
+}
+
+/* Media */
+#werdu-partner .wp-media {
+  margin: 28px 0;
+  padding: 0;
+  background: #ffffff;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius);
+  overflow: hidden;
+  max-width: 640px;
+}
+#werdu-partner .wp-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+}
+#werdu-partner .wp-media figcaption {
+  padding: 10px 14px 14px;
+  font-size: 0.88rem;
+  color: var(--wp-muted);
+  border-top: 1px solid var(--wp-border);
+}
+
+/* Comparison table */
+#werdu-partner .wp-table-wrap {
+  overflow-x: auto;
+  margin: 18px 0 22px;
+  border: 1px solid var(--wp-border);
+  border-radius: var(--wp-radius);
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
+}
+#werdu-partner .wp-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  font-size: 0.95rem;
+}
+#werdu-partner .wp-compare-table th,
+#werdu-partner .wp-compare-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--wp-border);
+  text-align: left;
+  vertical-align: top;
+}
+#werdu-partner .wp-compare-table thead th {
+  background: #ffffff;
+  border-bottom: 2px solid var(--wp-orange);
+  font-weight: 800;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-compare-table tbody th {
+  font-weight: 700;
+  color: var(--wp-text);
+  width: 22%;
+}
+#werdu-partner .wp-compare-table tbody td {
+  color: var(--wp-muted);
+}
+#werdu-partner .wp-compare-table tbody tr:last-child th,
+#werdu-partner .wp-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* FAQ */
+#werdu-partner .wp-faq {
+  margin: 0 0 48px;
+  background: #ffffff;
+  border: 1px solid var(--wp-green);
+  border-radius: var(--wp-radius);
+  padding: 28px 24px;
+}
+#werdu-partner .wp-faq > h2 {
+  margin: 0 0 18px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+}
+#werdu-partner .wp-faq-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--wp-border);
+}
+#werdu-partner .wp-faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+#werdu-partner .wp-faq-item h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--wp-text);
+}
+#werdu-partner .wp-faq-item p {
+  margin: 0;
+  color: var(--wp-muted);
+  font-size: 0.98rem;
+  max-width: 75ch;
+}
+
+/* Fluent Forms inside partner page */
+#werdu-partner .fluentform,
+#werdu-partner .ff-el-form-control {
+  max-width: 100%;
+}
+
+@media (max-width: 800px) {
+  #werdu-partner .wp-cards,
+  #werdu-partner .wp-form-grid,
+  #werdu-partner .wp-partner-type,
+  #werdu-partner .wp-steps {
+    grid-template-columns: 1fr;
+  }
+  #werdu-partner .wp-form-section { padding: 28px 18px; }
+  #werdu-partner .wp-hero { padding: 40px 12px 28px; }
+  #werdu-partner .partner-toc,
+  #werdu-partner .wp-faq { padding: 18px 16px; }
+  #werdu-partner .wp-media { max-width: 100%; }
+}

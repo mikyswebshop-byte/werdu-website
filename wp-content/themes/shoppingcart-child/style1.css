@@ -1,0 +1,388 @@
+/* ============================================
+   WERDU CHILD THEME — STYLE.CSS
+   Shoppingcart Child Theme
+   Version: 7.1.1
+   ============================================ */
+
+/* ===== ALGEMENE VEILIGHEID ===== */
+html, body {
+    overflow-x: hidden;
+}
+
+/* ============================================
+   BLOG STIJLEN
+   ============================================ */
+
+.werdu-lagerung-container { 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 0 15px; 
+    box-sizing: border-box;
+}
+
+.werdu-lagerung-hero { 
+    background: linear-gradient(135deg, #c0392b 0%, #e67e22 100%); 
+    padding: 60px 20px; 
+    text-align: center; 
+    color: white; 
+    border-radius: 0 0 20px 20px; 
+}
+
+.werdu-lagerung-hero h1 { 
+    font-size: clamp(1.8em, 4vw, 2.5em); 
+    margin-bottom: 15px; 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+    color: #ffffff !important;
+    word-wrap: break-word;
+}
+
+.werdu-lagerung-hero p { 
+    font-size: 1.1em; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    opacity: 0.95; 
+    color: #ffffff !important;
+}
+
+.werdu-lagerung-section { 
+    padding: 40px 0; 
+    background: white; 
+}
+
+.werdu-lagerung-section h2 { 
+    color: #c0392b; 
+    font-size: 1.6em; 
+    margin: 35px 0 15px; 
+    border-bottom: 2px solid #c0392b; 
+    padding-bottom: 8px; 
+    word-wrap: break-word;
+}
+
+.werdu-lagerung-section h3 { 
+    color: #c0392b; 
+    font-size: 1.2em; 
+    margin: 25px 0 10px; 
+    word-wrap: break-word;
+}
+
+.werdu-lagerung-section p { 
+    color: #333; 
+    line-height: 1.7; 
+    font-size: 1em; 
+    margin-bottom: 15px; 
+    word-wrap: break-word;
+}
+
+/* Rode boxen */
+.werdu-box-red { 
+    background: linear-gradient(90deg, #d35400 0%, #e67e22 100%);
+    border-left: 5px solid #a04000; 
+    padding: 25px; 
+    margin: 25px 0; 
+    border-radius: 0 12px 12px 0; 
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    word-wrap: break-word;
+}
+
+.werdu-box-red p,
+.werdu-box-red ul,
+.werdu-box-red li,
+.werdu-box-red strong,
+.werdu-box-red h4 {
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+.werdu-box-red h4 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+/* Info boxen — blauw */
+.werdu-box-blue { 
+    background: #eaf2f8; 
+    border-left: 5px solid #2980b9; 
+    padding: 20px; 
+    margin: 20px 0; 
+    border-radius: 0 8px 8px 0; 
+    word-wrap: break-word;
+}
+
+.werdu-box-blue h4 {
+    word-wrap: break-word;
+}
+
+/* Waarschuwing box */
+.werdu-warning-box {
+    background: #fdedec;
+    border-left: 5px solid #c0392b;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    word-wrap: break-word;
+}
+
+/* Lijsten */
+.werdu-red-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.werdu-red-list li {
+    margin-bottom: 12px;
+    padding-left: 28px;
+    position: relative;
+    color: #ffffff !important;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.werdu-red-list li:before {
+    content: "\26A0\FE0F";
+    position: absolute;
+    left: 0;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.werdu-valid-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.werdu-valid-list li {
+    margin-bottom: 10px;
+    padding-left: 28px;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.werdu-valid-list li:before {
+    content: "\2705";
+    position: absolute;
+    left: 0;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* Stappen */
+.werdu-step-item { 
+    display: flex; 
+    gap: 15px; 
+    margin-bottom: 20px; 
+    padding: 15px; 
+    background: #f8f9fa; 
+    border-radius: 10px; 
+}
+
+.werdu-step-number { 
+    min-width: 40px; 
+    height: 40px; 
+    background: #c0392b; 
+    color: white; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.2em; 
+    font-weight: bold; 
+    flex-shrink: 0;
+}
+
+.werdu-step-content h4 { 
+    color: #c0392b; 
+    margin-bottom: 5px; 
+    font-size: 1.1em; 
+    word-wrap: break-word;
+}
+
+.werdu-step-content p {
+    word-wrap: break-word;
+}
+
+/* Tabellen */
+.werdu-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+    max-width: 100%;
+}
+
+.werdu-danger-table {
+    width: 100%;
+    min-width: 500px;
+    border-collapse: collapse;
+}
+
+.werdu-danger-table th {
+    background: linear-gradient(90deg, #d35400, #e67e22);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.werdu-danger-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    word-wrap: break-word;
+}
+
+.werdu-danger-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* CTA box */
+.werdu-cta-box-red { 
+    background: linear-gradient(90deg, #d35400, #e67e22); 
+    color: white; 
+    padding: 35px; 
+    text-align: center; 
+    border-radius: 12px; 
+    margin: 35px 0; 
+    word-wrap: break-word;
+}
+
+.werdu-cta-box-red h4,
+.werdu-cta-box-red p {
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+.werdu-btn-white { 
+    display: inline-block; 
+    background: white; 
+    color: #d35400; 
+    padding: 12px 35px; 
+    border-radius: 50px; 
+    font-weight: bold; 
+    text-decoration: none; 
+    margin-top: 15px; 
+}
+
+/* ============================================
+   BLOG RESPONSIVE
+   ============================================ */
+@media (max-width: 960px) {
+    .werdu-lagerung-container {
+        padding: 0 16px;
+    }
+    .werdu-lagerung-hero { 
+        padding: 40px 16px; 
+        border-radius: 0 0 16px 16px;
+    }
+    .werdu-lagerung-section { 
+        padding: 30px 0; 
+    }
+    .werdu-lagerung-section h2 {
+        font-size: 1.4em;
+    }
+    .werdu-box-red,
+    .werdu-box-blue,
+    .werdu-warning-box {
+        padding: 20px;
+        margin: 20px 0;
+    }
+    .werdu-step-item { 
+        gap: 12px; 
+        padding: 12px; 
+    }
+    .werdu-cta-box-red {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) { 
+    .werdu-lagerung-hero { 
+        padding: 35px 15px; 
+    }
+    .werdu-lagerung-hero h1 {
+        font-size: clamp(1.5em, 5vw, 1.8em);
+    }
+    .werdu-lagerung-section h2 {
+        font-size: 1.3em;
+    }
+    .werdu-step-item { 
+        flex-direction: column; 
+        text-align: center;
+    }
+    .werdu-step-number {
+        margin: 0 auto;
+    }
+    .werdu-danger-table {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .werdu-lagerung-container {
+        padding: 0 12px;
+    }
+    .werdu-lagerung-hero { 
+        padding: 30px 12px; 
+        border-radius: 0 0 12px 12px;
+    }
+    .werdu-lagerung-hero h1 {
+        font-size: 1.4em;
+    }
+    .werdu-lagerung-hero p {
+        font-size: 1em;
+    }
+    .werdu-lagerung-section { 
+        padding: 20px 0; 
+    }
+    .werdu-lagerung-section h2 {
+        font-size: 1.2em;
+        margin: 25px 0 12px;
+    }
+    .werdu-lagerung-section h3 {
+        font-size: 1.1em;
+    }
+    .werdu-box-red,
+    .werdu-box-blue,
+    .werdu-warning-box {
+        padding: 16px;
+        margin: 16px 0;
+        border-radius: 0 8px 8px 0;
+    }
+    .werdu-box-red h4 {
+        font-size: 1.1em;
+    }
+    .werdu-red-list li,
+    .werdu-valid-list li {
+        padding-left: 24px;
+        margin-bottom: 10px;
+        font-size: 0.95em;
+    }
+    .werdu-step-item { 
+        padding: 12px; 
+        margin-bottom: 15px;
+    }
+    .werdu-step-number { 
+        min-width: 36px; 
+        height: 36px; 
+        font-size: 1em; 
+    }
+    .werdu-step-content h4 { 
+        font-size: 1em; 
+    }
+    .werdu-danger-table th,
+    .werdu-danger-table td {
+        padding: 8px;
+        font-size: 0.85em;
+    }
+    .werdu-cta-box-red {
+        padding: 20px;
+        margin: 25px 0;
+    }
+    .werdu-cta-box-red h4 {
+        font-size: 1.1em;
+    }
+    .werdu-btn-white { 
+        padding: 10px 25px; 
+        font-size: 0.95em;
+    }
+}

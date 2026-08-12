@@ -1,0 +1,103 @@
+# 🔒 BLOKKEER PHP EXECUTION
+
+<FilesMatch "\.(php|php\.|phtml|php3|php4|php5|php7|phps)$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order deny,allow
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
+# Extra bescherming tegen script execution
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .phps
+
+# CGI en scripts blokkeren
+Options -ExecCGI
+AddHandler cgi-script .php .phtml .php3 .pl .py .jsp .asp .htm .shtml .sh .cgi
+# BEGIN ShortPixelWebp
+# Die Direktiven (Zeilen) zwischen „BEGIN ShortPixelWebp“ und „END ShortPixelWebp“ sind
+# dynamisch generiert und sollten nur über WordPress-Filter geändert werden.
+# Alle Änderungen an den Direktiven zwischen diesen Markierungen werden überschrieben.
+
+           <IfModule mod_rewrite.c>
+           RewriteEngine On
+RewriteOptions Inherit
+           ##### Directives for delivering AVIF files, if they exist #####
+           # Does the browser support avif?
+           RewriteCond %{HTTP_ACCEPT} image/avif
+           # AND is the request a JPG, PNG, or WebP? (no GIFs because the animation is sometimes lost in AVIF);
+		   # (also grab the basepath %1 to match in the next rule)
+           RewriteCond %{REQUEST_URI} ^(.+)\.(?:jpe?g|png|webp)$
+           # AND does a .avif image exist?
+           RewriteCond %{DOCUMENT_ROOT}/%1.avif -f
+           # THEN send the avif image and set the env var avif
+           RewriteRule (.+)\.(?:jpe?g|png|webp)$ $1.avif [NC,T=image/avif,E=avif,L]
+
+           # Does the browser support avif?
+           RewriteCond %{HTTP_ACCEPT} image/avif
+           # AND is the request a JPG, PNG, or WebP? (no GIFs because the animation is sometimes lost in AVIF);
+		   # (also grab the basepath %1 to match in the next rule)
+           RewriteCond %{REQUEST_URI} ^(.+)\.(?:jpe?g|png|webp)$
+           # AND does a .jpg.avif image exist?
+           RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.avif -f
+           # THEN send the avif image and set the env var avif
+           RewriteRule ^(.+)$ $1.avif [NC,T=image/avif,E=avif,L]
+
+           </IfModule>
+           <IfModule mod_headers.c>
+           # If REDIRECT_avif env var exists, append Accept to the Vary header
+           Header append Vary Accept env=REDIRECT_avif
+
+           <FilesMatch ".(webp)$">
+               Header set Cache-Control "max-age=31536000, public"
+           </FilesMatch>
+           </IfModule>
+           <IfModule mod_mime.c>
+               AddType image/avif .avif
+           </IfModule>
+                 
+           <IfModule mod_rewrite.c>
+             RewriteEngine On
+RewriteOptions Inherit
+             ##### TRY FIRST the file appended with .webp (ex. test.jpg.webp) #####
+             # Is the browser Chrome?
+             RewriteCond %{HTTP_USER_AGENT} Chrome [OR]
+             # OR Is this request from Page Speed
+             RewriteCond %{HTTP_USER_AGENT} "Google Page Speed Insights" [OR]
+             # OR does this browser explicitly support webp
+             RewriteCond %{HTTP_ACCEPT} image/webp
+             # AND NOT MS EDGE 42/17 - doesnt work.
+             RewriteCond %{HTTP_USER_AGENT} !Edge/17
+             # AND is the request a jpg, png, or gif?
+             RewriteCond %{REQUEST_URI} ^(.+)\.(?:jpe?g|png|gif)$
+             # AND does a .ext.webp image exist?
+             RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.webp -f
+             # THEN send the webp image and set the env var webp
+             RewriteRule ^(.+)$ $1.webp [NC,T=image/webp,E=webp,L]
+             ##### IF NOT, try the file with replaced extension (test.webp) #####
+             RewriteCond %{HTTP_USER_AGENT} Chrome [OR]
+             RewriteCond %{HTTP_USER_AGENT} "Google Page Speed Insights" [OR]
+             RewriteCond %{HTTP_ACCEPT} image/webp
+             RewriteCond %{HTTP_USER_AGENT} !Edge/17
+             # AND is the request a jpg, png, or gif? (also grab the basepath %1 to match in the next rule)
+             RewriteCond %{REQUEST_URI} ^(.+)\.(?:jpe?g|png|gif)$
+             # AND does a .webp image exist?
+             RewriteCond %{DOCUMENT_ROOT}/%1.webp -f
+             # THEN send the webp image and set the env var webp
+             RewriteRule (.+)\.(?:jpe?g|png|gif)$ $1.webp [NC,T=image/webp,E=webp,L]
+           </IfModule>
+           <IfModule mod_headers.c>
+             # If REDIRECT_webp env var exists, append Accept to the Vary header
+             Header append Vary Accept env=REDIRECT_webp
+             <FilesMatch ".(avif)$">
+               Header set Cache-Control "max-age=31536000, public"
+             </FilesMatch>
+           </IfModule>
+           <IfModule mod_mime.c>
+             AddType image/webp .webp
+           </IfModule>
+           
+# END ShortPixelWebp

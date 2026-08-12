@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="//werdu.de/main-sitemap.xsl"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<sitemap>
+		<loc>https://werdu.de/post-sitemap.xml</loc>
+		<lastmod>2026-08-10T05:13:42+00:00</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>https://werdu.de/page-sitemap.xml</loc>
+		<lastmod>2026-08-09T22:05:42+00:00</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>https://werdu.de/product-sitemap.xml</loc>
+		<lastmod>2026-08-04T14:36:34+00:00</lastmod>
+	</sitemap>
+</sitemapindex>
