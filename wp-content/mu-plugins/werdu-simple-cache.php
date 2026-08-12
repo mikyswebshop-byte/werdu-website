@@ -122,7 +122,36 @@ class Werdu_Simple_Cache {
     private function get_cache_file() {
         $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $url = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        return $this->dir . md5($url) . '.html';
+        return $this->dir . md5($url . '|v=' . $this->content_version()) . '.html';
+    }
+
+    /**
+     * Fingerprint gebaseerd op de laatste wijzigingsdatum van de mu-plugins
+     * die de gerenderde output beïnvloeden (content-filters, /kontakt/-fix,
+     * SEO-injectie). Zodra een van deze bestanden wordt aangepast/gedeployed
+     * verandert deze fingerprint automatisch, waardoor de cache-KEY wijzigt
+     * en oude, verouderde HTML-snapshots stilzwijgend worden genegeerd — een
+     * MISS genereert direct een verse cache met de nieuwste output. Geen
+     * handmatige "Cache legen"-klik meer nodig na elke deploy.
+     */
+    private function content_version() {
+        static $version = null;
+        if (null !== $version) return $version;
+
+        $files = [
+            WP_CONTENT_DIR . '/mu-plugins/werdu-homepage-seo-upgrade.php',
+            WP_CONTENT_DIR . '/mu-plugins/fix-calculator-links.php',
+        ];
+
+        $stamp = 0;
+        foreach ($files as $f) {
+            if (file_exists($f)) {
+                $stamp = max($stamp, filemtime($f));
+            }
+        }
+
+        $version = (string) $stamp;
+        return $version;
     }
 
     private function send_headers($status, $is_gzip = false) {
@@ -205,7 +234,7 @@ class Werdu_Simple_Cache {
         $scheme = parse_url($url, PHP_URL_SCHEME) ?: 'https';
         $host = parse_url($url, PHP_URL_HOST);
         $path = parse_url($url, PHP_URL_PATH) ?: '/';
-        $hash = md5($scheme . '://' . $host . $path);
+        $hash = md5($scheme . '://' . $host . $path . '|v=' . $this->content_version());
         @unlink($this->dir . $hash . '.html');
         @unlink($this->dir . $hash . '.html.gz');
     }
