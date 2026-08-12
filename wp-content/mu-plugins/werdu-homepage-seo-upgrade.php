@@ -452,6 +452,137 @@ function werdu_home_seo_base_css() {
   background-color: var(--werdu-orange-hover) !important;
   transform: translateY(-2px);
 }
+
+/* ============================================
+   DESIGN SYSTEM 2.0 — Apple/Stripe-level polish
+   ============================================
+   Extra tokens naast de bestaande --werdu-* variabelen (niets wordt
+   hernoemd of verwijderd). De selectors hieronder zijn geverifieerd tegen
+   de daadwerkelijke, live gerenderde homepage-DOM (test.werdu.de) — géén
+   giswerk en géén ":contains()"-constructies (die zijn ongeldige CSS en
+   maken de hele regel onbruikbaar). Tekst-gebaseerde targeting (bv. een
+   CTA-link zonder eigen class herkennen op zijn tekst) gebeurt via de
+   auto-tag-JS in werdu_home_seo_print_interactions_js(), die daar een
+   class aan toevoegt waarop hieronder wordt gestyled. */
+:root {
+  --werdu-primary: #0F172A;
+  --werdu-accent: #0284C7;
+  --werdu-accent-glow: rgba(2, 132, 199, 0.15);
+  --werdu-brand-orange: #F97316;
+  --werdu-brand-orange-dark: #EA580C;
+  --werdu-shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --werdu-shadow-glow: 0 0 35px rgba(2, 132, 199, 0.2);
+}
+
+/* Wechselrichter-vertrouwensbanner (echte class: .werdu-compat-marquee) —
+   luxe dark-slate gradient + glazen pill-badges per merk. */
+.werdu-compat-marquee {
+  background: linear-gradient(135deg, var(--werdu-primary) 0%, #1E293B 100%) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--werdu-shadow-lg) !important;
+}
+
+.werdu-compat-brand {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 6px 16px;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;
+}
+
+.werdu-compat-brand:hover {
+  background: var(--werdu-accent);
+  border-color: var(--werdu-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+}
+
+.werdu-compat-sep {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Autarkie-Rechner velden (echte classes: .werdu-calc-container met
+   .werdu-calc-input / .werdu-calc-select) — subtiele blauwe focus-glow
+   bovenop de bestaande oranje focus-ring van de container/label hierboven. */
+.werdu-calc-container input[type="text"],
+.werdu-calc-container input[type="number"],
+.werdu-calc-container input[type="email"],
+.werdu-calc-container select {
+  background: #F8FAFC;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Bestseller-productkaarten (echte class: .werdu-product-card) — zachte
+   hover-lift met schaduw en accentkleur op de rand. */
+.werdu-product-card {
+  border-radius: 16px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.werdu-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--werdu-shadow-lg) !important;
+  border-color: var(--werdu-accent);
+}
+
+/* High-conversion CTA-gradient — op de bevestigde CTA-classes én op elke
+   link die de auto-tag-JS als CTA herkent (.werdu-cta-auto). */
+.werdu-calc-cta,
+.werdu-seo-cta,
+.btn-3d,
+.werdu-cta-auto {
+  background: linear-gradient(135deg, var(--werdu-brand-orange) 0%, var(--werdu-brand-orange-dark) 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.4) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease !important;
+}
+
+.werdu-calc-cta:hover,
+.werdu-seo-cta:hover,
+.btn-3d:hover,
+.werdu-cta-auto:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px -5px rgba(249, 115, 22, 0.5) !important;
+  filter: brightness(1.05);
+}
+
+/* Bestaande (native) FAQ-blok "Wie lange hält…" deelt de .werdu-faq-item
+   class met ons eigen accordion-blok verderop op de pagina. Dit voegt
+   alleen wat ademruimte toe aan de platte h3/p-variant (die geen
+   .werdu-faq-header/.werdu-faq-answer-wrapper kinderen heeft) — de eigen
+   accordion-structuur blijft volledig ongemoeid. */
+.werdu-faq-item > .werdu-faq-question,
+.werdu-faq-item > .werdu-faq-answer {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .werdu-compat-brand,
+  .werdu-product-card,
+  .werdu-calc-cta,
+  .werdu-seo-cta,
+  .btn-3d,
+  .werdu-cta-auto {
+    transition: opacity 0.2s ease;
+  }
+  .werdu-compat-brand:hover,
+  .werdu-product-card:hover,
+  .werdu-calc-cta:hover,
+  .werdu-seo-cta:hover,
+  .btn-3d:hover,
+  .werdu-cta-auto:hover {
+    transform: none;
+  }
+}
 CSS;
 }
 
@@ -461,7 +592,10 @@ function werdu_home_seo_print_css() {
     }
     echo '<style id="werdu-home-seo-css">' . werdu_home_seo_base_css() . '</style>' . "\n";
 }
-add_action( 'wp_head', 'werdu_home_seo_print_css', 20 );
+// Priority 99999: print zo laat mogelijk in <head>, na alle Elementor- en
+// theme-stylesheets, zodat de !important-regels hierboven altijd winnen
+// bij gelijke specificiteit (cascade-volgorde), zonder specificiteit-oorlog.
+add_action( 'wp_head', 'werdu_home_seo_print_css', 99999 );
 
 // ============================================
 // FORM UX FIX — inputmode="numeric" op PLZ/telefoon-achtige velden
@@ -686,10 +820,68 @@ function werdu_home_seo_print_interactions_js() {
     } );
   }
 
+  // ---- Design System 2.0: auto-tag CTA-links zonder eigen class ----
+  // Sommige CTA-links in de Elementor-database content hebben geen eigen
+  // class (bv. de kale <a href="...">Beratung anfragen</a> in de
+  // rechtvaardige-toelichting-tekst). In plaats van een ongeldige CSS
+  // ":contains()"-selector te gebruiken, herkennen we deze hier op hun
+  // zichtbare tekst en voegen we .werdu-cta-auto toe — de CSS hierboven
+  // stylet die class met dezelfde high-conversion gradient.
+  var CTA_TEXT_PATTERN = /beratung anfragen|beratung anfordern|angebot anfordern|kostenlose\s+(beratung|analyse|fachanalyse)/i;
+  function bindCtaAutoTag() {
+    var content = document.getElementById( 'content' ) || document.body;
+    content.querySelectorAll( 'a' ).forEach( function ( link ) {
+      if ( link.dataset.werduCtaChecked === '1' ) {
+        return;
+      }
+      link.dataset.werduCtaChecked = '1';
+
+      if ( link.classList.contains( 'werdu-calc-cta' )
+        || link.classList.contains( 'werdu-seo-cta' )
+        || link.classList.contains( 'btn-3d' )
+        || link.classList.contains( 'werdu-btn-primary' ) ) {
+        return;
+      }
+
+      var text = ( link.textContent || '' ).trim();
+      if ( text && CTA_TEXT_PATTERN.test( text ) ) {
+        link.classList.add( 'werdu-cta-auto' );
+      }
+    } );
+  }
+
+  // ---- Design System 2.0: subtiele "lift" op het actieve rechner-veld ----
+  function bindCalcInputMicroInteractions() {
+    if ( prefersReducedMotion ) {
+      return;
+    }
+    var container = document.querySelector( '.werdu-calc-container' );
+    if ( ! container || container.dataset.werduLiftBound === '1' ) {
+      return;
+    }
+    container.dataset.werduLiftBound = '1';
+
+    container.querySelectorAll( 'input, select' ).forEach( function ( field ) {
+      var row = field.closest( '.calc-row' ) || field.parentElement;
+      if ( ! row ) {
+        return;
+      }
+      row.style.transition = 'transform 0.2s ease';
+      field.addEventListener( 'focus', function () {
+        row.style.transform = 'scale(1.01)';
+      } );
+      field.addEventListener( 'blur', function () {
+        row.style.transform = 'scale(1)';
+      } );
+    } );
+  }
+
   function init() {
     bindFaqAccordion();
     bindCtaButtons();
     bindCalcButton();
+    bindCtaAutoTag();
+    bindCalcInputMicroInteractions();
   }
 
   if ( document.readyState === 'loading' ) {
