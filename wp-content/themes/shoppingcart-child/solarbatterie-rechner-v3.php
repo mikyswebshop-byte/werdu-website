@@ -465,20 +465,6 @@ get_header();
 
     </div>
 
-    <!-- FOOTER -->
-    <footer class="werdu-footer" itemscope itemtype="https://schema.org/WPFooter">
-        <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
-            <span itemprop="name">WERDU.de</span> &ndash; 
-            <span itemprop="url"><?php echo esc_url( home_url( '/' ) ); ?></span>
-        </div>
-        <p>&copy; 2026 WERDU.de | Solarbatterie-Rechner v3.2 | Alle Angaben ohne Gewähr. Die tatsächliche Ersparnis hängt von individuellen Faktoren ab.</p>
-        <p style="font-size:0.75em; margin-top:8px;">
-            <a href="<?php echo esc_url( home_url( '/datenschutz' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">Datenschutz</a> &bull; 
-            <a href="<?php echo esc_url( home_url( '/impressum' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">Impressum</a> &bull; 
-            <a href="<?php echo esc_url( home_url( '/agb' ) ); ?>" style="color:#94a3b8; text-decoration:underline;">AGB</a>
-        </p>
-    </footer>
-
 </div>
 </div>
 

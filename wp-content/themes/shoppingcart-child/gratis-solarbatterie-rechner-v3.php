@@ -1541,10 +1541,6 @@ if (!defined('ABSPATH')) {
   <p class="wr5-embed-note">Kontaktieren Sie uns für Details zu White-Label-Optionen und Lead-Weiterleitung.</p>
 </div>
 
-<div class="wr5-footer">
-  &copy; 2026 Werdu.de | Solarbatterie-Rechner v3 | Alle Angaben ohne Gewähr | <a href="/impressum/">Impressum</a> | <a href="/datenschutz/">Datenschutz</a>
-</div>
-
 </div>
 
 <script>

@@ -1,109 +1,122 @@
 <?php
 /**
- * The template for displaying the footer.
+ * Site footer — one layout for every page.
  *
  * @package Theme Freesia
  * @subpackage ShoppingCart
- * @since ShoppingCart 1.0
  */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $shoppingcart_settings = shoppingcart_get_theme_options();
 $wd_logo = content_url( '/uploads/2026/04/Logo-ACC-Heimspeicher_475_190.webp' );
+$wd_home = home_url( '/' );
 ?>
 </div><!-- end #content -->
 
-<style id="wd-footer-compact">
-#colophon .wd-ft-brand{display:flex;flex-wrap:wrap;gap:1rem 1.25rem;align-items:center;max-width:1200px;margin:0 auto;padding:2rem 1.25rem 1.25rem;border-bottom:1px solid #e2e8f0}
-#colophon .wd-ft-brand img{width:220px;max-width:100%;height:auto;display:block}
-#colophon .wd-ft-tagline{margin:0 0 0.4rem;font-weight:800;font-size:1.05rem;color:#0f172a;line-height:1.35}
-#colophon .wd-ft-lead{margin:0 0 0.4rem;color:#475569;font-size:0.95rem;line-height:1.4}
-#colophon .wd-ft-close{margin:0;font-weight:700;color:#0f172a;font-size:0.95rem;line-height:1.4}
-#colophon .wd-ft-trust{display:flex;flex-wrap:wrap;gap:1.25rem 2rem;max-width:1200px;margin:0 auto;padding:1.25rem;border-top:1px solid #e2e8f0}
-#colophon .wd-ft-trust > div{flex:1 1 200px}
-#colophon .wd-ft-trust h3{margin:0 0 0.75rem;font-size:0.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
-#colophon .wd-ft-trust p,#colophon .wd-ft-trust li{margin:0 0 0.4rem;line-height:1.4;color:#475569;font-size:0.92rem}
-#colophon .wd-ft-trust ul{list-style:none;margin:0;padding:0}
-#colophon .wd-ft-trust li{padding-left:1.1rem;position:relative}
-#colophon .wd-ft-trust li::before{content:"\2713";position:absolute;left:0;color:#ff6600;font-weight:800;pointer-events:none}
-@media (max-width:768px){
-  #colophon .wd-ft-brand,#colophon .widget-wrap,#colophon .wd-ft-trust{padding-top:1.5rem;padding-bottom:1.5rem}
+<style id="wd-footer-css">
+#colophon.wd-footer{background:#f8fafc;border-top:1px solid #e2e8f0;color:#0f172a;font-size:0.95rem;line-height:1.45}
+#colophon.wd-footer .wd-ft-inner{max-width:1160px;margin:0 auto;padding:0 1.25rem}
+#colophon.wd-footer .wd-ft-top{display:flex;align-items:center;justify-content:space-between;gap:1.25rem 2rem;flex-wrap:wrap;padding:2rem 0 1.5rem;border-bottom:1px solid #e2e8f0}
+#colophon.wd-footer .wd-ft-brand{display:flex;align-items:center;gap:1.1rem;min-width:0}
+#colophon.wd-footer .wd-ft-brand img{width:168px;max-width:42vw;height:auto;display:block}
+#colophon.wd-footer .wd-ft-brand p{margin:0;color:#475569;font-size:0.95rem;max-width:36rem}
+#colophon.wd-footer .wd-ft-cta{background:#ff6600;color:#fff!important;text-decoration:none!important;font-weight:700;border-radius:10px;padding:12px 22px;display:inline-flex;align-items:center;min-height:44px;white-space:nowrap}
+#colophon.wd-footer .wd-ft-cta:hover{background:#e05500;color:#fff!important}
+#colophon.wd-footer .wd-ft-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5rem 2rem;padding:1.75rem 0}
+#colophon.wd-footer .wd-ft-grid h3{margin:0 0 0.85rem;font-size:0.8rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#0f172a}
+#colophon.wd-footer .wd-ft-grid ul{list-style:none;margin:0;padding:0}
+#colophon.wd-footer .wd-ft-grid li{margin:0 0 0.55rem}
+#colophon.wd-footer .wd-ft-grid a{color:#334155;text-decoration:none;font-size:0.92rem}
+#colophon.wd-footer .wd-ft-grid a:hover{color:#ff6600;text-decoration:underline}
+#colophon.wd-footer .wd-ft-bottom{display:grid;grid-template-columns:1.2fr 1fr 1.3fr;gap:1rem 1.5rem;padding:1.25rem 0 1.5rem;border-top:1px solid #e2e8f0;color:#475569;font-size:0.85rem}
+#colophon.wd-footer .wd-ft-bottom a{color:#ff6600;text-decoration:none}
+#colophon.wd-footer .wd-ft-bottom a:hover{text-decoration:underline}
+#colophon.wd-footer .wd-ft-bottom p{margin:0 0 0.35rem}
+#colophon.wd-footer .wd-ft-bottom p:last-child{margin-bottom:0}
+.werdu-footer,.wr5-footer,body footer:not(#colophon){display:none!important}
+@media (max-width:900px){
+  #colophon.wd-footer .wd-ft-grid,#colophon.wd-footer .wd-ft-bottom{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  #colophon.wd-footer .wd-ft-top{align-items:flex-start}
+  #colophon.wd-footer .wd-ft-grid,#colophon.wd-footer .wd-ft-bottom{grid-template-columns:1fr;padding-top:1.25rem}
 }
 @media (prefers-reduced-motion:reduce){
-  #colophon a{transition:none}
+  #colophon.wd-footer a{transition:none}
 }
 </style>
 
-<footer id="colophon" class="site-footer" role="contentinfo">
-	<div class="wd-ft-brand">
-		<img src="<?php echo esc_url( $wd_logo ); ?>" alt="ACC Heimspeicher" width="475" height="190">
-		<div>
-			<p class="wd-ft-tagline">Intelligent Energie speichern. Maximal sparen.</p>
-			<p class="wd-ft-lead">Mit hochwertigen Solarbatterien direkt vom Hersteller nutzt du Solarenergie effizienter und senkst deine Stromkosten dauerhaft.</p>
-			<p class="wd-ft-close">Mehr Unabhängigkeit. Mehr Kontrolle. Mehr Ersparnis.</p>
-		</div>
-	</div>
-
-	<nav aria-label="Footer">
-	<div class="widget-wrap">
-		<div class="wrap">
-			<div class="widget-area">
-				<?php
-				for ( $i = 1; $i <= 4; $i++ ) {
-					echo '<div class="column-4">';
-					$sidebar_id = 'shoppingcart_footer_' . $i;
-					if ( is_active_sidebar( $sidebar_id ) ) {
-						dynamic_sidebar( $sidebar_id );
-					} elseif ( function_exists( 'werdu_footer_column_markup' ) ) {
-						echo '<aside class="widget"><h3 class="widget-title">' . esc_html( werdu_footer_column_title( $i ) ) . '</h3>';
-						echo werdu_footer_column_markup( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo '</aside>';
-					}
-					echo '</div>';
-				}
-				?>
+<footer id="colophon" class="site-footer wd-footer" role="contentinfo">
+	<div class="wd-ft-inner">
+		<div class="wd-ft-top">
+			<div class="wd-ft-brand">
+				<a href="<?php echo esc_url( $wd_home ); ?>">
+					<img src="<?php echo esc_url( $wd_logo ); ?>" alt="ACC Heimspeicher" width="475" height="190">
+				</a>
+				<p>LiFePO4 PV-Speicher mit transparenten Festpreisen – direkt im Shop, ohne Angebotsrunde.</p>
 			</div>
+			<a class="wd-ft-cta" href="<?php echo esc_url( home_url( '/shop/' ) ); ?>">Zum Shop</a>
 		</div>
-	</div>
-	</nav>
 
-	<div class="wd-ft-trust">
-		<div>
-			<h3>ACC Heimspeicher</h3>
-			<p>35410 Hungen, Deutschland</p>
-			<p>Telefon: <a href="tel:+4915120229842">+49 151 20229842</a></p>
-			<p>E-Mail: <a href="mailto:service@werdu.de">service@werdu.de</a></p>
-		</div>
-		<div>
-			<h3>Sicher einkaufen</h3>
-			<ul>
-				<li>Geprüfte Bestellabwicklung</li>
-				<li>Transparente Kontakt</li>
-				<li>Zuverlässige Beratung</li>
-				<li>Ihre Zufriedenheit steht bei uns im Mittelpunkt</li>
-			</ul>
-		</div>
-		<div>
-			<h3>Unsere Stärke</h3>
-			<ul>
-				<li>Moderne LiFePO4 Technologie</li>
-				<li>Hohe Qualität und Lebensdauer</li>
-				<li>Effiziente Energiespeicherung</li>
-			</ul>
-		</div>
-		<div>
-			<h3>Wir akzeptieren</h3>
-			<p>Visa, Mastercard, American Express, PayPal</p>
-		</div>
-	</div>
+		<nav class="wd-ft-grid" aria-label="Fußzeile">
+			<div>
+				<h3>PV-Speicher</h3>
+				<ul>
+					<li><a href="<?php echo esc_url( home_url( '/16-kwh-lifepo4-heimspeicher-51-2v-314ah/' ) ); ?>">16 kWh LiFePO4 PV-Speicher</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>">30–32 kWh LiFePO4 Speicher</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>">15 kWh All-in-One Solarbatterie</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/shop/' ) ); ?>">Solarbatterien im Shop</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?>">PV-Speicher Rechner</a></li>
+				</ul>
+			</div>
+			<div>
+				<h3>Service</h3>
+				<ul>
+					<li><a href="<?php echo esc_url( home_url( '/zahlung-lieferung/' ) ); ?>">Zahlung und Lieferung</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/mwst-befreiung-eigenverbrauch/' ) ); ?>">0 % MwSt. Eigenverbrauch</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/garantie/' ) ); ?>">Garantie</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/widerrufsbelehrung/' ) ); ?>">Widerrufsbelehrung</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/ruecksendung/' ) ); ?>">Rücksendung</a></li>
+				</ul>
+			</div>
+			<div>
+				<h3>Wissen</h3>
+				<ul>
+					<li><a href="<?php echo esc_url( home_url( '/ueber-uns/' ) ); ?>">Über uns</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Kontakt</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/heimspeicher-installation/' ) ); ?>">PV-Speicher Installation</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/lohnt-sich-ein-heimspeicher/' ) ); ?>">Lohnt sich ein PV-Speicher?</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/wie-viele-zyklen-schafft-eine-solarbatterie-von-werdu-de/' ) ); ?>">Zyklen einer Solarbatterie</a></li>
+				</ul>
+			</div>
+			<div>
+				<h3>Rechtliches</h3>
+				<ul>
+					<li><a href="<?php echo esc_url( home_url( '/agb-e-mail-version/' ) ); ?>">AGB</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/impressum/' ) ); ?>">Impressum</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/datenschutzerklaerung/' ) ); ?>">Datenschutzerklärung</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/cookie-richtlinie/' ) ); ?>">Cookie-Richtlinie</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/barrierefreiheitserklaerung/' ) ); ?>">Barrierefreiheit</a></li>
+				</ul>
+			</div>
+		</nav>
 
-	<div class="site-info">
-		<div class="wrap">
-			<div class="copyright">
-				<p>© 2026 ACC Heimspeicher - werdu.de</p>
-				<p>Leistung und Zuverlässigkeit für Ihre Energieversorgung.</p>
+		<div class="wd-ft-bottom">
+			<div>
+				<p><strong>ACC Heimspeicher</strong> · 35410 Hungen</p>
+				<p>Tel. <a href="tel:+4915120229842">+49 151 20229842</a></p>
+				<p><a href="mailto:service@werdu.de">service@werdu.de</a></p>
+			</div>
+			<div>
+				<p><strong>Zahlung</strong></p>
+				<p>Visa, Mastercard, American Express, PayPal</p>
+			</div>
+			<div>
+				<p>© 2026 ACC Heimspeicher · werdu.de</p>
 				<p>EU-Streitbeilegung: Wir sind nicht verpflichtet, an Streitbeilegungsverfahren teilzunehmen.</p>
 			</div>
-			<div style="clear:both;"></div>
 		</div>
 	</div>
 

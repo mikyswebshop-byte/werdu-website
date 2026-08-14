@@ -649,15 +649,9 @@ function werdu_print_a11y_css() {
         . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#ff6600!important}'
         . '.header-right .wcmenucart-contents,.header-right .wishlist-btn{color:#334155!important}'
         . '.header-right .cart-value,.wl-counter{background:#ff6600!important;color:#fff!important}'
-        . '#colophon .widget-wrap{padding:2rem 0!important}'
-        . '#colophon .widget-area{padding:0!important;margin:0!important}'
-        . '#colophon .column-4{padding:0 12px!important;margin-bottom:0!important}'
-        . '#colophon .widget{margin-bottom:0!important}'
-        . '#colophon .widget-title{margin:0 0 0.75rem!important;font-size:0.95rem!important}'
-        . '#colophon .widget ul li{margin:0 0 0.4rem!important;line-height:1.4!important;padding:0!important}'
-        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a{color:#ff6600!important;text-decoration:underline!important;display:inline!important;padding:0!important;margin:0!important;min-height:0!important;line-height:1.4!important;font-size:0.92rem!important}'
-        . '#colophon .copyright,#colophon .site-info{color:#444!important;font-size:14px!important}'
-        . '#colophon [style*="color:#999"],#colophon [style*="color: #999"]{color:#444!important}'
+        . '.werdu-footer,.wr5-footer,body footer:not(#colophon){display:none!important}'
+        . '#colophon.wd-footer .wd-ft-cta{background:#ff6600!important;color:#fff!important}'
+        . '#colophon.wd-footer .wd-ft-grid a:hover,#colophon.wd-footer .wd-ft-bottom a{color:#ff6600!important}'
         . '.whp-page a:not(.whp-btn){color:#ff6600;text-decoration:underline}'
         . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#ff6600!important;color:#fff!important;font-size:1.125rem!important;font-weight:700!important}'
         . '</style>' . "\n";
@@ -919,20 +913,61 @@ function werdu_enqueue_homepage_v2_assets() {
 add_action( 'wp_enqueue_scripts', 'werdu_enqueue_homepage_v2_assets', 30 );
 
 /**
- * Force the light-theme landing template on the WordPress front page so
- * Elementor canvas / leftover widget HTML cannot paint the old layout.
+ * Front page must use the PHP landing template, not Elementor Header-Footer.
+ * Elementor stores elementor_header_footer on the page; template_include at
+ * max priority plus an early template_redirect cover that takeover.
  */
+function werdu_front_page_v2_path() {
+    $lp = get_stylesheet_directory() . '/template-werdu-v2.php';
+    return file_exists( $lp ) ? $lp : '';
+}
+
+function werdu_is_public_front_page() {
+    if ( is_admin() || wp_doing_ajax() || is_customize_preview() ) {
+        return false;
+    }
+    if ( isset( $_GET['elementor-preview'] ) ) {
+        return false;
+    }
+    if ( is_front_page() ) {
+        return true;
+    }
+    $front = (int) get_option( 'page_on_front' );
+    return $front > 0 && (int) get_queried_object_id() === $front;
+}
+
 function werdu_force_homepage_v2_template( $template ) {
-    if ( is_admin() || ! is_front_page() ) {
+    if ( ! werdu_is_public_front_page() ) {
         return $template;
     }
-    $lp = get_stylesheet_directory() . '/template-werdu-v2.php';
-    if ( file_exists( $lp ) ) {
-        return $lp;
-    }
-    return $template;
+    $lp = werdu_front_page_v2_path();
+    return $lp ? $lp : $template;
 }
-add_filter( 'template_include', 'werdu_force_homepage_v2_template', 99999 );
+add_filter( 'template_include', 'werdu_force_homepage_v2_template', PHP_INT_MAX );
+
+function werdu_render_homepage_v2_now() {
+    if ( ! werdu_is_public_front_page() ) {
+        return;
+    }
+    $lp = werdu_front_page_v2_path();
+    if ( ! $lp ) {
+        return;
+    }
+    include $lp;
+    exit;
+}
+add_action( 'template_redirect', 'werdu_render_homepage_v2_now', 0 );
+
+function werdu_lock_front_page_v2_meta() {
+    $id = (int) get_option( 'page_on_front' );
+    if ( $id < 1 ) {
+        return;
+    }
+    if ( get_post_meta( $id, '_wp_page_template', true ) !== 'template-werdu-v2.php' ) {
+        update_post_meta( $id, '_wp_page_template', 'template-werdu-v2.php' );
+    }
+}
+add_action( 'init', 'werdu_lock_front_page_v2_meta', 40 );
 
 function werdu_dequeue_elementor_on_homepage() {
     if ( is_admin() || ! is_front_page() ) {
