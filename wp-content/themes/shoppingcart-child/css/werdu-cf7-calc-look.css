@@ -106,19 +106,15 @@
   width: 100%;
 }
 
-.wpcf7 form.wpcf7-form input[type="text"],
-.wpcf7 form.wpcf7-form input[type="email"],
-.wpcf7 form.wpcf7-form input[type="tel"],
-.wpcf7 form.wpcf7-form input[type="url"],
-.wpcf7 form.wpcf7-form input[type="number"],
-.wpcf7 form.wpcf7-form select,
-.wpcf7 form.wpcf7-form textarea,
-.wpcf7 .wcf7-form-1 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
-.wpcf7 .wcf7-form-1 textarea,
-.wpcf7 .wcf7-form-1 select,
-.wpcf7 .werdu-form-grid input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
-.wpcf7 .werdu-form-grid textarea,
-.wpcf7 .werdu-form-grid select {
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-text,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-email,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-tel,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-url,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-number,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-select,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-textarea,
+.wpcf7 .wcf7-form-1 .wpcf7-form-control:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(.wpcf7-submit),
+.wpcf7 .werdu-form-grid .wpcf7-form-control:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(.wpcf7-submit) {
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box;
@@ -142,23 +138,18 @@
   resize: vertical;
 }
 
-.wpcf7 form.wpcf7-form input::placeholder,
-.wpcf7 form.wpcf7-form textarea::placeholder,
-.wpcf7 .wcf7-form-1 input::placeholder,
-.wpcf7 .wcf7-form-1 textarea::placeholder {
+.wpcf7 form.wpcf7-form .wpcf7-form-control::placeholder {
   color: var(--werdu-cf7-muted);
   opacity: 1;
 }
 
-.wpcf7 form.wpcf7-form input:focus,
-.wpcf7 form.wpcf7-form select:focus,
-.wpcf7 form.wpcf7-form textarea:focus,
-.wpcf7 .wcf7-form-1 input:focus,
-.wpcf7 .wcf7-form-1 select:focus,
-.wpcf7 .wcf7-form-1 textarea:focus,
-.wpcf7 .werdu-form-grid input:focus,
-.wpcf7 .werdu-form-grid select:focus,
-.wpcf7 .werdu-form-grid textarea:focus {
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-text:focus,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-email:focus,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-tel:focus,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-select:focus,
+.wpcf7 form.wpcf7-form .wpcf7-form-control.wpcf7-textarea:focus,
+.wpcf7 .wcf7-form-1 .wpcf7-form-control:not([type="submit"]):not([type="checkbox"]):focus,
+.wpcf7 .werdu-form-grid .wpcf7-form-control:not([type="submit"]):not([type="checkbox"]):focus {
   outline: none !important;
   border-color: var(--werdu-cf7-orange) !important;
   box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.15) !important;
