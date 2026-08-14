@@ -55,11 +55,11 @@ get_header();
 
         <div class="werdu-grid">
             <div class="werdu-card">
-                <label class="werdu-label">
-                    Postleitzahl
-                    <span class="werdu-tooltip" data-tip="Ihre PLZ bestimmt den regionalen Solarertrag. Süddeutschland (8,9) = höherer Ertrag, Norddeutschland (2,3) = etwas niedriger.">?</span>
-                </label>
-                <input type="text" class="werdu-input" id="w-plz" placeholder="z.B. 80331" maxlength="5" pattern="[0-9]{5}">
+                <span class="werdu-tooltip" data-tip="Ihre PLZ bestimmt den regionalen Solarertrag. Süddeutschland (8,9) = höherer Ertrag, Norddeutschland (2,3) = etwas niedriger.">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-plz">Postleitzahl</label>
+                    <input type="text" class="werdu-input" id="w-plz" placeholder=" " title="z. B. 80331" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" autocomplete="postal-code">
+                </div>
                 <div class="werdu-hint">Für regionale Ertragsberechnung</div>
             </div>
 
@@ -78,20 +78,20 @@ get_header();
             </div>
 
             <div class="werdu-card">
-                <label class="werdu-label">
-                    Jährlicher Stromverbrauch
-                    <span class="werdu-tooltip" data-tip="Finden Sie auf Ihrer Stromrechnung. Durchschnitt: 1P=2.300kWh, 2P=3.500kWh, 3P=4.500kWh, 4P=5.500kWh, 5P=7.000kWh">?</span>
-                </label>
-                <input type="range" class="werdu-input" id="w-consumption" min="1000" max="15000" step="100" value="4500">
+                <span class="werdu-tooltip" data-tip="Finden Sie auf Ihrer Stromrechnung. Durchschnitt: 1P=2.300kWh, 2P=3.500kWh, 3P=4.500kWh, 4P=5.500kWh, 5P=7.000kWh">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-consumption">Jahresverbrauch (kWh)</label>
+                    <input type="number" class="werdu-input" id="w-consumption" placeholder=" " title="z. B. 4500" min="1000" max="15000" step="100" value="4500">
+                </div>
                 <div class="werdu-range-value" id="w-consumption-val">4.500 kWh/Jahr</div>
             </div>
 
             <div class="werdu-card">
-                <label class="werdu-label">
-                    Strompreis (ct/kWh)
-                    <span class="werdu-tooltip" data-tip="Aktueller Arbeitspreis aus Ihrem Stromvertrag. Deutschland Durchschnitt 2026: 35-42 ct/kWh">?</span>
-                </label>
-                <input type="range" class="werdu-input" id="w-price" min="25" max="60" step="1" value="40">
+                <span class="werdu-tooltip" data-tip="Aktueller Arbeitspreis aus Ihrem Stromvertrag. Deutschland Durchschnitt 2026: 35-42 ct/kWh">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-price">Strompreis (ct/kWh)</label>
+                    <input type="number" class="werdu-input" id="w-price" placeholder=" " title="z. B. 40" min="25" max="60" step="1" value="40">
+                </div>
                 <div class="werdu-range-value" id="w-price-val">40 ct/kWh</div>
             </div>
 
@@ -132,11 +132,11 @@ get_header();
 
         <div class="werdu-grid">
             <div class="werdu-card">
-                <label class="werdu-label">
-                    PV-Leistung (kWp)
-                    <span class="werdu-tooltip" data-tip="Leistung Ihrer Solaranlage. 1 kWp ca. 3-4 Module. Typisch: Einfamilienhaus 5-10 kWp, großes Haus 10-20 kWp">?</span>
-                </label>
-                <input type="range" class="werdu-input" id="w-pv" min="3" max="30" step="0.5" value="8">
+                <span class="werdu-tooltip" data-tip="Leistung Ihrer Solaranlage. 1 kWp ca. 3-4 Module. Typisch: Einfamilienhaus 5-10 kWp, großes Haus 10-20 kWp">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-pv">PV-Leistung (kWp)</label>
+                    <input type="number" class="werdu-input" id="w-pv" placeholder=" " title="z. B. 8" min="3" max="30" step="0.5" value="8">
+                </div>
                 <div class="werdu-range-value" id="w-pv-val">8 kWp</div>
             </div>
 
@@ -193,11 +193,11 @@ get_header();
 
         <div class="werdu-grid">
             <div class="werdu-card full">
-                <label class="werdu-label">
-                    Gewünschte Autarkie
-                    <span class="werdu-tooltip" data-tip="Wie viel Prozent Ihres Stroms möchten Sie selbst produzieren? 100% sind in Deutschland aufgrund saisonaler Schwankungen (Winter/Sommer) nicht realistisch. 70-80% ist ein gutes Ziel.">?</span>
-                </label>
-                <input type="range" class="werdu-input" id="w-autarky" min="50" max="90" step="5" value="70">
+                <span class="werdu-tooltip" data-tip="Wie viel Prozent Ihres Stroms möchten Sie selbst produzieren? 100% sind in Deutschland aufgrund saisonaler Schwankungen (Winter/Sommer) nicht realistisch. 70-80% ist ein gutes Ziel.">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-autarky">Gewünschte Autarkie (%)</label>
+                    <input type="number" class="werdu-input" id="w-autarky" placeholder=" " title="z. B. 70" min="50" max="90" step="5" value="70">
+                </div>
                 <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:0.85em; color:#64748b;">
                     <span>50% (Basis)</span>
                     <span class="werdu-range-value" id="w-autarky-val" style="margin:0; font-size:1.3em;">70%</span>
@@ -218,11 +218,11 @@ get_header();
             </div>
 
             <div class="werdu-card">
-                <label class="werdu-label">
-                    Systemverlust (%)
-                    <span class="werdu-tooltip" data-tip="Verluste durch Wechselrichter, Kabel, Temperatur. LiFePO4 Systeme: typisch 8-12%. Höher bei längeren Kabeln oder älteren Wechselrichtern.">?</span>
-                </label>
-                <input type="range" class="werdu-input" id="w-loss" min="5" max="25" step="1" value="10">
+                <span class="werdu-tooltip" data-tip="Verluste durch Wechselrichter, Kabel, Temperatur. LiFePO4 Systeme: typisch 8-12%. Höher bei längeren Kabeln oder älteren Wechselrichtern.">?</span>
+                <div class="werdu-float-field">
+                    <label class="werdu-label" for="w-loss">Systemverlust (%)</label>
+                    <input type="number" class="werdu-input" id="w-loss" placeholder=" " title="z. B. 10" min="5" max="25" step="1" value="10">
+                </div>
                 <div class="werdu-range-value" id="w-loss-val">10%</div>
             </div>
 
