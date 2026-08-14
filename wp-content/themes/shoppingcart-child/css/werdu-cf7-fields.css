@@ -1,0 +1,252 @@
+/**
+ * CF7 fillable fields on /kontakt/ and /beratung-anfragen/
+ * Visual match to homepage Autarkie-Rechner (.whp-field).
+ * Does not change CF7 mail, validation logic, or submit behaviour.
+ */
+body.page-kontakt .wpcf7,
+body.page-beratung-anfragen .wpcf7 {
+  --werdu-cf7-text: #0f172a;
+  --werdu-cf7-muted: #475569;
+  --werdu-cf7-border: #e2e8f0;
+  --werdu-cf7-bg: #f8fafc;
+  --werdu-cf7-white: #ffffff;
+  --werdu-cf7-orange: #ff6600;
+  --werdu-cf7-btn: #c2410c;
+  --werdu-cf7-btn-hover: #9a3412;
+  --werdu-cf7-error: #b91c1c;
+}
+
+body.page-kontakt .wpcf7-form,
+body.page-beratung-anfragen .werdu-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+  max-width: 850px;
+  width: 100%;
+  margin: 0;
+}
+
+body.page-beratung-anfragen .wpcf7-form {
+  max-width: 850px;
+}
+
+body.page-kontakt .wpcf7-form > p,
+body.page-beratung-anfragen .werdu-form-grid > p {
+  margin: 0;
+}
+
+body.page-kontakt .wpcf7-form > p:has(textarea),
+body.page-kontakt .wpcf7-form > p:has(.wpcf7-submit),
+body.page-kontakt .wpcf7-form > p:has([type="checkbox"]),
+body.page-kontakt .wpcf7-form .wpcf7-response-output,
+body.page-beratung-anfragen .werdu-form-grid > p:has(textarea),
+body.page-beratung-anfragen .werdu-form-grid > p:has(.wpcf7-submit),
+body.page-beratung-anfragen .werdu-form-grid > .privacy-acceptance,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-response-output {
+  grid-column: 1 / -1;
+}
+
+body.page-kontakt .wpcf7-form > .hidden-fields-container,
+body.page-beratung-anfragen .wpcf7-form > .hidden-fields-container,
+body.page-kontakt .wpcf7-form .f12t,
+body.page-beratung-anfragen .wpcf7-form .f12t {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+body.page-kontakt .wpcf7-form label,
+body.page-beratung-anfragen .wpcf7-form label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--werdu-cf7-text);
+  line-height: 1.35;
+}
+
+body.page-kontakt .wpcf7-form label br,
+body.page-beratung-anfragen .wpcf7-form label br {
+  display: none;
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-form-control-wrap,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-form-control-wrap {
+  display: block;
+  width: 100%;
+}
+
+body.page-kontakt .wpcf7-form input[type="text"],
+body.page-kontakt .wpcf7-form input[type="email"],
+body.page-kontakt .wpcf7-form input[type="tel"],
+body.page-kontakt .wpcf7-form input[type="url"],
+body.page-kontakt .wpcf7-form input[type="number"],
+body.page-kontakt .wpcf7-form select,
+body.page-kontakt .wpcf7-form textarea,
+body.page-beratung-anfragen .wpcf7-form input[type="text"],
+body.page-beratung-anfragen .wpcf7-form input[type="email"],
+body.page-beratung-anfragen .wpcf7-form input[type="tel"],
+body.page-beratung-anfragen .wpcf7-form input[type="url"],
+body.page-beratung-anfragen .wpcf7-form input[type="number"],
+body.page-beratung-anfragen .wpcf7-form select,
+body.page-beratung-anfragen .wpcf7-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid var(--werdu-cf7-border);
+  border-radius: 10px;
+  background: var(--werdu-cf7-bg);
+  color: var(--werdu-cf7-text);
+  font-size: 16px;
+  line-height: 1.4;
+  font-family: inherit;
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+body.page-kontakt .wpcf7-form textarea,
+body.page-beratung-anfragen .wpcf7-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+body.page-kontakt .wpcf7-form input::placeholder,
+body.page-kontakt .wpcf7-form textarea::placeholder,
+body.page-beratung-anfragen .wpcf7-form input::placeholder,
+body.page-beratung-anfragen .wpcf7-form textarea::placeholder {
+  color: var(--werdu-cf7-muted);
+  opacity: 1;
+}
+
+body.page-kontakt .wpcf7-form input:focus,
+body.page-kontakt .wpcf7-form select:focus,
+body.page-kontakt .wpcf7-form textarea:focus,
+body.page-beratung-anfragen .wpcf7-form input:focus,
+body.page-beratung-anfragen .wpcf7-form select:focus,
+body.page-beratung-anfragen .wpcf7-form textarea:focus {
+  outline: none;
+  border-color: var(--werdu-cf7-orange);
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.15);
+  background: var(--werdu-cf7-white);
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-not-valid,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-not-valid {
+  border-color: var(--werdu-cf7-error);
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-not-valid-tip,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-not-valid-tip {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--werdu-cf7-error);
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-submit,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 16px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--werdu-cf7-btn);
+  color: #ffffff;
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(224, 85, 0, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-submit:hover,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-submit:hover {
+  background: var(--werdu-cf7-btn-hover);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-submit:disabled,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-submit:disabled {
+  opacity: 0.65;
+  transform: none;
+  cursor: wait;
+}
+
+body.page-kontakt .wpcf7-form .privacy-acceptance,
+body.page-beratung-anfragen .wpcf7-form .privacy-acceptance,
+body.page-kontakt .wpcf7-form label:has([type="checkbox"]),
+body.page-beratung-anfragen .wpcf7-form label:has([type="checkbox"]) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--werdu-cf7-muted);
+}
+
+body.page-kontakt .wpcf7-form input[type="checkbox"],
+body.page-beratung-anfragen .wpcf7-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-top: 2px;
+  padding: 0;
+  accent-color: var(--werdu-cf7-orange);
+  background: transparent;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+body.page-kontakt .wpcf7-form .privacy-acceptance table,
+body.page-kontakt .wpcf7-form .privacy-acceptance td,
+body.page-beratung-anfragen .wpcf7-form .privacy-acceptance table,
+body.page-beratung-anfragen .wpcf7-form .privacy-acceptance td {
+  width: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  vertical-align: top;
+}
+
+body.page-kontakt .wpcf7-form .privacy-acceptance td:first-child,
+body.page-beratung-anfragen .wpcf7-form .privacy-acceptance td:first-child {
+  width: 28px;
+  padding-right: 10px;
+}
+
+body.page-kontakt .wpcf7-form .wpcf7-response-output,
+body.page-beratung-anfragen .wpcf7-form .wpcf7-response-output {
+  margin: 8px 0 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-width: 1px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+  body.page-kontakt .wpcf7-form,
+  body.page-beratung-anfragen .werdu-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.page-kontakt .wpcf7-form .wpcf7-submit,
+  body.page-beratung-anfragen .wpcf7-form .wpcf7-submit,
+  body.page-kontakt .wpcf7-form input,
+  body.page-beratung-anfragen .wpcf7-form input {
+    transition: none;
+    transform: none;
+  }
+}
