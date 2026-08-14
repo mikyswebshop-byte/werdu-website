@@ -649,11 +649,12 @@ function werdu_print_a11y_css() {
         . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#ff6600!important}'
         . '.header-right .wcmenucart-contents,.header-right .wishlist-btn{color:#334155!important}'
         . '.header-right .cart-value,.wl-counter{background:#ff6600!important;color:#fff!important}'
+        . '#primary-menu>li>a{text-transform:none!important;letter-spacing:.12em!important;font-weight:500!important;font-size:.8rem!important}'
+        . '.main-navigation li.menu-item-has-children>a:after,.main-navigation li.page_item_has_children>a:after{font-family:inherit!important;content:\'\'!important;display:inline-block!important;width:6px!important;height:6px!important;border-right:1.5px solid currentColor!important;border-bottom:1.5px solid currentColor!important;transform:rotate(45deg) translateY(-2px);padding:0!important;margin-left:8px!important;background:none!important}'
         . '.werdu-footer,.wr5-footer,body footer:not(#colophon){display:none!important}'
         . '#colophon.wd-footer .wd-ft-cta{background:#ff6600!important;color:#fff!important}'
         . '#colophon.wd-footer .wd-ft-grid a:hover,#colophon.wd-footer .wd-ft-bottom a{color:#ff6600!important}'
-        . '.whp-page a:not(.whp-btn){color:#ff6600;text-decoration:underline}'
-        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#ff6600!important;color:#fff!important;font-size:1.125rem!important;font-weight:700!important}'
+        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#ff6600!important;color:#fff!important}'
         . '</style>' . "\n";
 }
 
@@ -700,7 +701,7 @@ function werdu_homepage_preload_lcp_image() {
     if ( is_admin() || ! is_front_page() ) {
         return;
     }
-    $hero = get_stylesheet_directory_uri() . '/images/whp-hero-640.webp';
+    $hero = content_url( '/uploads/2026/06/Deutsches-Einfamilienhaus-mit-Solarmodulen-auf-dem-Dach_1046_783.webp' );
     echo '<link rel="preload" as="image" href="' . esc_url( $hero ) . '" fetchpriority="high">' . "\n";
 }
 

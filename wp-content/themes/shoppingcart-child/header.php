@@ -30,7 +30,26 @@
   }
   #sticky-header #site-branding { display: none !important; }
   #site-detail { min-height: 48px; }
-  @font-face { font-display: swap !important; }
+  #primary-menu > li > a {
+    text-transform: none;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    font-size: 0.8rem;
+  }
+  .main-navigation li.menu-item-has-children > a:after,
+  .main-navigation li.page_item_has_children > a:after {
+    font-family: inherit !important;
+    content: "" !important;
+    display: inline-block !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-right: 1.5px solid currentColor !important;
+    border-bottom: 1.5px solid currentColor !important;
+    transform: rotate(45deg) translateY(-2px);
+    padding: 0 !important;
+    margin-left: 8px !important;
+    background: none !important;
+  }
   .menu-toggle, .top-menu-toggle {
     background: transparent;
     border: 0;
