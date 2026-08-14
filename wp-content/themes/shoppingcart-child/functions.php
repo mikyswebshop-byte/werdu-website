@@ -32,11 +32,11 @@ if ( ! function_exists( 'werdu_child_styles' ) ) {
         wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css', array(), '1.2.7' );
         wp_enqueue_style( 'child-style', get_stylesheet_uri(), array( 'parent-style' ), '7.7.5' );
         if ( is_page( array( 'kontakt', 'beratung-anfragen', 'beratung' ) ) ) {
-            $cf7_fields = get_stylesheet_directory() . '/css/werdu-cf7-fields.css';
+            $cf7_fields = get_stylesheet_directory() . '/css/werdu-cf7-calc-look.css';
             if ( file_exists( $cf7_fields ) ) {
                 wp_enqueue_style(
-                    'werdu-cf7-fields',
-                    get_stylesheet_directory_uri() . '/css/werdu-cf7-fields.css',
+                    'werdu-cf7-calc-look',
+                    get_stylesheet_directory_uri() . '/css/werdu-cf7-calc-look.css',
                     array( 'child-style' ),
                     (string) filemtime( $cf7_fields )
                 );

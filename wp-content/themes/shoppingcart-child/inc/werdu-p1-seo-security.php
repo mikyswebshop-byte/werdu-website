@@ -45,6 +45,10 @@ function werdu_strip_noncore_asset_ver( $src ) {
     if ( strpos( $src, '/wp-includes/' ) !== false || strpos( $src, '/wp-admin/' ) !== false ) {
         return $src;
     }
+    // CF7 field chrome must cache-bust; query strings are otherwise stripped.
+    if ( strpos( $src, 'werdu-cf7-calc-look.css' ) !== false ) {
+        return $src;
+    }
     return remove_query_arg( 'ver', $src );
 }
 add_filter( 'style_loader_src', 'werdu_strip_noncore_asset_ver', 9999 );
