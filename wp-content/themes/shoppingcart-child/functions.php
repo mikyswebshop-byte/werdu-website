@@ -569,15 +569,6 @@ function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
     if ( ! is_string( $href ) || '' === $href ) {
         return $html;
     }
-    $keep_blocking = array(
-        'parent-style',
-        'child-style',
-        'shoppingcart-style',
-        'shoppingcart-responsive',
-    );
-    if ( in_array( $handle, $keep_blocking, true ) ) {
-        return $html;
-    }
     if ( $media && $media !== 'all' && $media !== 'screen' && $media !== 'print' ) {
         return $html;
     }
