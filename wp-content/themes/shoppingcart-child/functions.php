@@ -40,16 +40,6 @@ if ( ! function_exists( 'werdu_child_styles' ) ) {
                 (string) filemtime( $float )
             );
         }
-        $float_js = get_stylesheet_directory() . '/JS/werdu-float-labels.js';
-        if ( file_exists( $float_js ) ) {
-            wp_enqueue_script(
-                'werdu-float-labels',
-                get_stylesheet_directory_uri() . '/JS/werdu-float-labels.js',
-                array(),
-                (string) filemtime( $float_js ),
-                true
-            );
-        }
     }
     add_action( 'wp_enqueue_scripts', 'werdu_child_styles', 10 );
 }
@@ -60,24 +50,13 @@ function werdu_cf7_form_class( $class ) {
 }
 
 add_filter( 'wpcf7_form_elements', 'werdu_cf7_prepare_float_labels', 20 );
-add_filter( 'elementor/widget/render_content', 'werdu_cf7_float_from_elementor', 1000, 2 );
-function werdu_cf7_float_from_elementor( $content, $widget ) {
-    if ( is_string( $content ) && false !== strpos( $content, 'wpcf7-form-control-wrap' ) ) {
-        return werdu_cf7_prepare_float_labels( $content );
-    }
-    return $content;
-}
 function werdu_cf7_prepare_float_labels( $html ) {
     if ( ! is_string( $html ) || '' === $html ) {
         return $html;
     }
-    $html = preg_replace_callback(
+    $html = preg_replace(
         '/<label(\s[^>]*)?>\s*(?:<span class="werdu-float-label">)?([^<]+?)(?:<\/span>)?\s*(?:<br\s*\/?>)?\s*(<span[^>]*class="[^"]*wpcf7-form-control-wrap)/i',
-        static function ( $m ) {
-            $text = trim( preg_replace( '/\s*\(Pflichtfeld\)\s*/iu', '', $m[2] ) );
-            $text = trim( preg_replace( '/\s*\*\s*$/', '', $text ) );
-            return '<label' . $m[1] . '><span class="werdu-float-label">' . $text . '</span>' . $m[3];
-        },
+        '<label$1><span class="werdu-float-label">$2</span>$3',
         $html
     );
     $html = preg_replace_callback(

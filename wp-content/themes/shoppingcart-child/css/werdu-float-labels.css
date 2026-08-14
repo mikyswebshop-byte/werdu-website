@@ -308,127 +308,14 @@
   color: var(--werdu-float-error);
 }
 
-.wpcf7-form label:has(.wpcf7-form-control-wrap) > br {
-  display: none;
-}
-
-.wpcf7-form label:has(.wpcf7-form-control-wrap):not(:has(.werdu-float-label)):not(:has([type="checkbox"])):not(:has([type="radio"])):not(:has(.wpcf7-acceptance)) {
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
-}
-
-.wpcf7-form .wpcf7-form-control-wrap {
-  display: block;
-  position: relative;
-  font-size: 16px;
-  line-height: 1.4;
-  color: var(--werdu-float-text);
-}
-
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap::before {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  transform-origin: left center;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--werdu-float-muted);
-  pointer-events: none;
-  background: var(--werdu-float-bg);
-  padding: 0 4px;
-  z-index: 2;
-  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
-}
-
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="vorname"]::before { content: "Ihr Vorname"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="nachname"]::before { content: "Ihr Nachname"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-email"]::before { content: "Ihre E-Mail-Adresse"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-tel"]::before { content: "Telefonnummer"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-plz"]::before { content: "Postleitzahl"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="interesse"]::before { content: "Ihr Interesse"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="message"]::before { content: "Zusätzliche Anmerkungen (optional)"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-name"]::before { content: "Ihr Name"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-subject"]::before { content: "Betreff"; }
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap[data-name="your-message"]::before { content: "Ihre Nachricht"; }
-
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap:has(textarea)::before {
-  top: 22px;
-}
-
-.wpcf7-form label:not(:has(.werdu-float-label)):focus-within .wpcf7-form-control-wrap::before,
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap:has(input:not(:placeholder-shown))::before,
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap:has(textarea:not(:placeholder-shown))::before,
-.wpcf7-form label:not(:has(.werdu-float-label)) .wpcf7-form-control-wrap:has(select)::before {
-  top: 0;
-  transform: translateY(-50%) scale(0.85);
-  color: var(--werdu-float-accent);
-}
-
-.werdu-float-field > label {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  transform-origin: left center;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--werdu-float-muted);
-  pointer-events: none;
-  background: var(--werdu-float-bg);
-  padding: 0 4px;
-  z-index: 2;
-  margin: 0;
-  max-width: calc(100% - 28px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
-}
-
-.werdu-float-field:focus-within > label,
-.werdu-float-field:has(input:not(:placeholder-shown)) > label,
-.werdu-float-field:has(select) > label {
-  top: 0;
-  transform: translateY(-50%) scale(0.85);
-  color: var(--werdu-float-accent);
-}
-
-.werdu-float-field > input,
-.werdu-float-field > select,
-.werdu-float-field > textarea {
-  width: 100%;
-  padding: 18px 14px 8px 14px;
-  font-size: 16px;
-  border: 2px solid var(--werdu-float-border);
-  border-radius: 8px;
-  background: var(--werdu-float-bg);
-  color: var(--werdu-float-text);
-  outline: none;
-  box-sizing: border-box;
-}
-.werdu-float-field > input::placeholder,
-.werdu-float-field > textarea::placeholder {
-  color: transparent;
-}
-.werdu-float-field > input:focus,
-.werdu-float-field > select:focus,
-.werdu-float-field > textarea:focus {
-  border-color: var(--werdu-float-accent);
-  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.12);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .werdu-float-field .label,
-  .werdu-float-field > label,
   .werdu-float-field .field,
   .whp-field > label,
   .wp-field > label,
   .wr5-field > label,
   .ff-el-input--label label,
   .wpcf7-form .werdu-float-label,
-  .wpcf7-form .wpcf7-form-control-wrap::before,
   .woocommerce form .form-row > label,
   #commentform p > label,
   .whp-field input,
