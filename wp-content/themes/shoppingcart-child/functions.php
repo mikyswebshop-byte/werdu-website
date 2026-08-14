@@ -24,6 +24,11 @@ if ( file_exists( $werdu_partner ) ) {
     require_once $werdu_partner;
 }
 
+$werdu_footer_cols = get_stylesheet_directory() . '/inc/werdu-footer-columns.php';
+if ( file_exists( $werdu_footer_cols ) ) {
+    require_once $werdu_footer_cols;
+}
+
 /* ============================================================
    0. STYLES ENQUEUE (Child + Parent)
    ============================================================ */
@@ -644,7 +649,13 @@ function werdu_print_a11y_css() {
         . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#c2410c!important}'
         . '.header-right .wcmenucart-contents,.header-right .wishlist-btn{color:#334155!important}'
         . '.header-right .cart-value,.wl-counter{background:#c2410c!important;color:#fff!important}'
-        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a,#colophon .copyright a,#colophon .site-info a{color:#c2410c!important;text-decoration:underline!important;display:inline-block;padding:10px 6px;margin:2px 4px 2px 0;min-height:44px;line-height:1.35;font-size:15px;box-sizing:border-box}'
+        . '#colophon .widget-wrap{padding:2rem 0!important}'
+        . '#colophon .widget-area{padding:0!important;margin:0!important}'
+        . '#colophon .column-4{padding:0 12px!important;margin-bottom:0!important}'
+        . '#colophon .widget{margin-bottom:0!important}'
+        . '#colophon .widget-title{margin:0 0 0.75rem!important;font-size:0.95rem!important}'
+        . '#colophon .widget ul li{margin:0 0 0.4rem!important;line-height:1.4!important;padding:0!important}'
+        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a{color:#c2410c!important;text-decoration:underline!important;display:inline!important;padding:0!important;margin:0!important;min-height:0!important;line-height:1.4!important;font-size:0.92rem!important}'
         . '#colophon .copyright,#colophon .site-info{color:#444!important;font-size:14px!important}'
         . '#colophon [style*="color:#999"],#colophon [style*="color: #999"]{color:#444!important}'
         . '#colophon [style*="color:#ff6600"],#colophon [style*="color: #ff6600"],#colophon [style*="color:#FF6600"]{color:#c2410c!important;text-decoration:underline!important}'
