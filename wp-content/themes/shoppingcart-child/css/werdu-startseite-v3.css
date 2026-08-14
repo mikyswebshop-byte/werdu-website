@@ -400,30 +400,58 @@ body.home .werdu-btn-glow:hover {
 }
 
 .whp-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  position: relative;
+  display: block;
 }
 
 .whp-field--full {
   grid-column: 1 / -1;
 }
 
-.whp-field label {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--whp-text);
+.whp-field > label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--whp-muted);
+  pointer-events: none;
+  background: #ffffff;
+  padding: 0 4px;
+  z-index: 2;
+  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
+}
+
+.whp-field:has(select) > label,
+.whp-field:focus-within > label,
+.whp-field:has(input:not(:placeholder-shown)) > label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: var(--whp-link);
+}
+
+.whp-field:has(button) > label {
+  position: static;
+  transform: none;
+  background: none;
+  pointer-events: auto;
 }
 
 .whp-field input,
 .whp-field select {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--whp-border);
+  padding: 18px 14px 8px 14px;
+  border: 2px solid var(--whp-border);
   border-radius: 10px;
-  background: #f8fafc;
+  background: var(--whp-white);
   color: var(--whp-text);
-  font-size: 1rem;
+  font-size: 16px;
+}
+
+.whp-field input::placeholder {
+  color: transparent;
 }
 
 .whp-field input:focus,
@@ -772,7 +800,10 @@ body.home .werdu-btn-glow:hover {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .whp-btn,
-  .whp-btn--primary:hover {
+  .whp-btn--primary:hover,
+  .whp-field > label,
+  .whp-field input,
+  .whp-field select {
     transition: none;
     transform: none;
   }

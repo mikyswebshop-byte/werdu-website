@@ -252,23 +252,61 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px 18px;
 }
-#werdu-partner .wp-field { display: flex; flex-direction: column; gap: 6px; }
+#werdu-partner .wp-field:not(:has(.wp-partner-type)) {
+  position: relative;
+  display: block;
+}
+#werdu-partner .wp-field:not(:has(.wp-partner-type)) > label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #475569;
+  pointer-events: none;
+  background: #ffffff;
+  padding: 0 4px;
+  z-index: 2;
+  margin: 0;
+  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
+}
+#werdu-partner .wp-field:not(:has(.wp-partner-type)):focus-within > label,
+#werdu-partner .wp-field:not(:has(.wp-partner-type)):has(input:not(:placeholder-shown)) > label,
+#werdu-partner .wp-field:has(select) > label,
+#werdu-partner .wp-field:has(textarea:not(:placeholder-shown)) > label,
+#werdu-partner .wp-field:has(textarea:focus) > label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: #c2410c;
+}
+#werdu-partner .wp-field:has(textarea) > label { top: 22px; }
+#werdu-partner .wp-field:has(textarea:focus) > label,
+#werdu-partner .wp-field:has(textarea:not(:placeholder-shown)) > label {
+  top: 0;
+}
 #werdu-partner .wp-field--full { grid-column: 1 / -1; }
-#werdu-partner .wp-field label {
+#werdu-partner .wp-field:has(.wp-partner-type) > label {
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--wp-text);
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  background: none;
+  padding: 0;
 }
 #werdu-partner .wp-field label .req { color: var(--wp-orange); }
-#werdu-partner .wp-field input,
+#werdu-partner .wp-field:not(:has(.wp-partner-type)) input:not([type="radio"]):not([type="checkbox"]),
 #werdu-partner .wp-field select,
 #werdu-partner .wp-field textarea,
 #werdu-partner .wpcf7-form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
 #werdu-partner .wpcf7-form select,
 #werdu-partner .wpcf7-form textarea {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--wp-border);
+  padding: 18px 14px 8px 14px;
+  border: 2px solid var(--wp-border);
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
@@ -592,4 +630,13 @@
   #werdu-partner .partner-toc,
   #werdu-partner .wp-faq { padding: 18px 16px; }
   #werdu-partner .wp-media { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #werdu-partner .wp-field > label,
+  #werdu-partner .wp-field input,
+  #werdu-partner .wp-field select,
+  #werdu-partner .wp-field textarea {
+    transition: none;
+  }
 }

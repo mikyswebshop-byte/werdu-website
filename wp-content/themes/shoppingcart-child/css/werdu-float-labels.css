@@ -1,0 +1,326 @@
+/**
+ * Werdu floating labels — light theme, WCAG AA contrast, GPU transforms only.
+ * Label stays visible; placeholder=" " enables :placeholder-shown.
+ */
+:root {
+  --werdu-float-text: #0f172a;
+  --werdu-float-muted: #475569;
+  --werdu-float-accent: #c2410c;
+  --werdu-float-border: #e2e8f0;
+  --werdu-float-bg: #ffffff;
+  --werdu-float-error: #b91c1c;
+}
+
+.werdu-float-field,
+.whp-field:has(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"])):not(:has(button)),
+.whp-field:has(select),
+.whp-field:has(textarea),
+.wp-field:has(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])):not(:has(.wp-partner-type)),
+.wp-field:has(select),
+.wp-field:has(textarea),
+.wr5-field:has(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])),
+.wr5-field:has(select),
+.wr5-field:has(textarea),
+.ff-el-group:has(input[type="text"]),
+.ff-el-group:has(input[type="email"]),
+.ff-el-group:has(input[type="tel"]),
+.ff-el-group:has(input[type="url"]),
+.ff-el-group:has(input[type="number"]),
+.ff-el-group:has(textarea),
+.ff-el-group:has(select),
+.wpcf7-form label:has(.wpcf7-form-control-wrap):not(:has([type="checkbox"])):not(:has([type="radio"])):not(:has(.wpcf7-acceptance)),
+.woocommerce form .form-row:has(input.input-text),
+.woocommerce form .form-row:has(textarea),
+.woocommerce form .form-row:has(select),
+#commentform .comment-form-author,
+#commentform .comment-form-email,
+#commentform .comment-form-url,
+#commentform .comment-form-comment {
+  position: relative;
+}
+
+.wpcf7-form label:has(.wpcf7-form-control-wrap):not(:has([type="checkbox"])):not(:has([type="radio"])):not(:has(.wpcf7-acceptance)) {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.werdu-float-field .field,
+.whp-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]),
+.whp-field select,
+.whp-field textarea,
+.wp-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]),
+.wp-field select,
+.wp-field textarea,
+.wr5-field input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+.wr5-field select,
+.wr5-field textarea,
+.ff-el-group input[type="text"],
+.ff-el-group input[type="email"],
+.ff-el-group input[type="tel"],
+.ff-el-group input[type="url"],
+.ff-el-group input[type="number"],
+.ff-el-group textarea,
+.ff-el-group select,
+.wpcf7-form .wpcf7-form-control:not(.wpcf7-submit):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(.wpcf7-acceptance),
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce form .form-row select,
+#commentform input[type="text"],
+#commentform input[type="email"],
+#commentform input[type="url"],
+#commentform textarea {
+  width: 100%;
+  padding: 18px 14px 8px 14px;
+  font-size: 16px;
+  line-height: 1.4;
+  border: 2px solid var(--werdu-float-border);
+  border-radius: 8px;
+  background: var(--werdu-float-bg);
+  color: var(--werdu-float-text);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.werdu-float-field .field:focus,
+.whp-field input:focus,
+.whp-field select:focus,
+.whp-field textarea:focus,
+.wp-field input:focus,
+.wp-field select:focus,
+.wp-field textarea:focus,
+.wr5-field input:focus,
+.wr5-field select:focus,
+.wr5-field textarea:focus,
+.ff-el-group input:focus,
+.ff-el-group textarea:focus,
+.ff-el-group select:focus,
+.wpcf7-form .wpcf7-form-control:focus,
+.woocommerce form .form-row input.input-text:focus,
+.woocommerce form .form-row textarea:focus,
+.woocommerce form .form-row select:focus,
+#commentform input:focus,
+#commentform textarea:focus {
+  border-color: var(--werdu-float-accent);
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.12);
+}
+
+.werdu-float-field .field::placeholder,
+.whp-field input::placeholder,
+.whp-field textarea::placeholder,
+.wp-field input::placeholder,
+.wp-field textarea::placeholder,
+.wr5-field input::placeholder,
+.ff-el-group input::placeholder,
+.ff-el-group textarea::placeholder,
+.wpcf7-form .wpcf7-form-control::placeholder,
+.woocommerce form .form-row input::placeholder,
+.woocommerce form .form-row textarea::placeholder,
+#commentform input::placeholder,
+#commentform textarea::placeholder {
+  color: transparent;
+}
+
+.werdu-float-field > .label,
+.whp-field > label,
+.wp-field:not(:has(.wp-partner-type)):not(:has([type="checkbox"])):not(:has([type="radio"])) > label,
+.wr5-field > label,
+.ff-el-group:has(input[type="text"]) .ff-el-input--label label,
+.ff-el-group:has(input[type="email"]) .ff-el-input--label label,
+.ff-el-group:has(input[type="tel"]) .ff-el-input--label label,
+.ff-el-group:has(input[type="url"]) .ff-el-input--label label,
+.ff-el-group:has(input[type="number"]) .ff-el-input--label label,
+.ff-el-group:has(textarea) .ff-el-input--label label,
+.ff-el-group:has(select) .ff-el-input--label label,
+.wpcf7-form label:not(:has([type="checkbox"])):not(:has([type="radio"])):not(:has(.wpcf7-acceptance)) .werdu-float-label,
+.woocommerce form .form-row:has(input.input-text) > label,
+.woocommerce form .form-row:has(textarea) > label,
+.woocommerce form .form-row:has(select) > label,
+#commentform .comment-form-author > label,
+#commentform .comment-form-email > label,
+#commentform .comment-form-url > label,
+#commentform .comment-form-comment > label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--werdu-float-muted);
+  pointer-events: none;
+  background: var(--werdu-float-bg);
+  padding: 0 4px;
+  z-index: 2;
+  max-width: calc(100% - 28px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
+}
+
+.ff-el-group:has(input[type="text"]) .ff-el-input--label,
+.ff-el-group:has(input[type="email"]) .ff-el-input--label,
+.ff-el-group:has(input[type="tel"]) .ff-el-input--label,
+.ff-el-group:has(input[type="url"]) .ff-el-input--label,
+.ff-el-group:has(input[type="number"]) .ff-el-input--label,
+.ff-el-group:has(textarea) .ff-el-input--label,
+.ff-el-group:has(select) .ff-el-input--label {
+  position: static;
+  height: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible;
+}
+
+.woocommerce form .form-row:has(input.input-text),
+.woocommerce form .form-row:has(textarea),
+.woocommerce form .form-row:has(select) {
+  padding-top: 4px;
+}
+
+.woocommerce form .form-row > label .required,
+.wp-field > label .req,
+.ff-el-input--label label .ff-el-is-required,
+.wpcf7-form .werdu-float-label .required {
+  color: var(--werdu-float-accent);
+}
+
+.werdu-float-field:focus-within > .label,
+.werdu-float-field:has(.field:not(:placeholder-shown)) > .label,
+.werdu-float-field .field:focus ~ .label,
+.werdu-float-field .field:not(:placeholder-shown) ~ .label,
+.whp-field:focus-within > label,
+.whp-field:has(input:not(:placeholder-shown)) > label,
+.whp-field:has(select) > label,
+.wp-field:not(:has(.wp-partner-type)):focus-within > label,
+.wp-field:has(input:not([type="checkbox"]):not([type="radio"]):not(:placeholder-shown)) > label,
+.wp-field:has(textarea:not(:placeholder-shown)) > label,
+.wp-field:has(select) > label,
+.wr5-field:focus-within > label,
+.wr5-field:has(input:not(:placeholder-shown)) > label,
+.wr5-field:has(select) > label,
+.ff-el-group:has(input[type="text"]:focus) .ff-el-input--label label,
+.ff-el-group:has(input[type="email"]:focus) .ff-el-input--label label,
+.ff-el-group:has(input[type="tel"]:focus) .ff-el-input--label label,
+.ff-el-group:has(input[type="url"]:focus) .ff-el-input--label label,
+.ff-el-group:has(input[type="number"]:focus) .ff-el-input--label label,
+.ff-el-group:has(input[type="text"]:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(input[type="email"]:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(input[type="tel"]:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(input[type="url"]:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(input[type="number"]:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(textarea:focus) .ff-el-input--label label,
+.ff-el-group:has(textarea:not(:placeholder-shown)) .ff-el-input--label label,
+.ff-el-group:has(select) .ff-el-input--label label,
+.wpcf7-form label:focus-within .werdu-float-label,
+.wpcf7-form label:has(input:not(:placeholder-shown)) .werdu-float-label,
+.wpcf7-form label:has(textarea:not(:placeholder-shown)) .werdu-float-label,
+.wpcf7-form label:has(select) .werdu-float-label,
+.woocommerce form .form-row:has(input.input-text):focus-within > label,
+.woocommerce form .form-row:has(input.input-text:not(:placeholder-shown)) > label,
+.woocommerce form .form-row:has(textarea:not(:placeholder-shown)) > label,
+.woocommerce form .form-row:has(select) > label,
+#commentform .comment-form-author:focus-within > label,
+#commentform .comment-form-email:focus-within > label,
+#commentform .comment-form-url:focus-within > label,
+#commentform .comment-form-comment:focus-within > label,
+#commentform .comment-form-author:has(input:not(:placeholder-shown)) > label,
+#commentform .comment-form-email:has(input:not(:placeholder-shown)) > label,
+#commentform .comment-form-url:has(input:not(:placeholder-shown)) > label,
+#commentform .comment-form-comment:has(textarea:not(:placeholder-shown)) > label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: var(--werdu-float-accent);
+}
+
+.werdu-float-field:has(textarea) > .label,
+.whp-field:has(textarea) > label,
+.wp-field:has(textarea) > label,
+.wr5-field:has(textarea) > label,
+.ff-el-group:has(textarea) .ff-el-input--label label,
+.wpcf7-form label:has(textarea) .werdu-float-label,
+.woocommerce form .form-row:has(textarea) > label,
+#commentform .comment-form-comment > label {
+  top: 22px;
+}
+
+.werdu-float-field:has(textarea):focus-within > .label,
+.werdu-float-field:has(textarea:not(:placeholder-shown)) > .label,
+.wp-field:has(textarea:focus) > label,
+.wp-field:has(textarea:not(:placeholder-shown)) > label,
+.ff-el-group:has(textarea:focus) .ff-el-input--label label,
+.ff-el-group:has(textarea:not(:placeholder-shown)) .ff-el-input--label label,
+.wpcf7-form label:has(textarea:focus) .werdu-float-label,
+.wpcf7-form label:has(textarea:not(:placeholder-shown)) .werdu-float-label,
+.woocommerce form .form-row:has(textarea:focus) > label,
+.woocommerce form .form-row:has(textarea:not(:placeholder-shown)) > label,
+#commentform .comment-form-comment:focus-within > label,
+#commentform .comment-form-comment:has(textarea:not(:placeholder-shown)) > label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: var(--werdu-float-accent);
+}
+
+.whp-field,
+.wp-field:not(:has(.wp-partner-type)),
+.wr5-field {
+  display: block;
+}
+
+.whp-field > label,
+.wp-field:not(:has(.wp-partner-type)) > label,
+.wr5-field > label {
+  margin: 0;
+}
+
+.wp-field:has(.wp-partner-type) > label,
+.wpcf7-form label:has([type="checkbox"]) .werdu-float-label,
+.wpcf7-form label:has([type="radio"]) .werdu-float-label,
+.wpcf7-form label:has(.wpcf7-acceptance) .werdu-float-label {
+  position: static;
+  transform: none;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  pointer-events: auto;
+  background: none;
+  padding: 0;
+  max-width: none;
+  white-space: normal;
+  overflow: visible;
+}
+
+.ff-el-input--label label .ff-el-tooltip {
+  display: none;
+}
+
+.wpcf7-not-valid,
+.ff-el-group input.ff-el-is-error,
+.ff-el-is-error,
+.woocommerce form .form-row.woocommerce-invalid input.input-text {
+  border-color: var(--werdu-float-error) !important;
+}
+
+.wpcf7-form label:has(.wpcf7-not-valid) .werdu-float-label,
+.ff-el-group:has(.ff-el-is-error) .ff-el-input--label label,
+.woocommerce form .form-row.woocommerce-invalid > label {
+  color: var(--werdu-float-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .werdu-float-field .label,
+  .werdu-float-field .field,
+  .whp-field > label,
+  .wp-field > label,
+  .wr5-field > label,
+  .ff-el-input--label label,
+  .wpcf7-form .werdu-float-label,
+  .woocommerce form .form-row > label,
+  #commentform p > label,
+  .whp-field input,
+  .wp-field input,
+  .ff-el-group input {
+    transition: none;
+  }
+}

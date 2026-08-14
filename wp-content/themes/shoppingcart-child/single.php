@@ -511,19 +511,11 @@ $blog_link = $blog_page ? get_permalink($blog_page) : home_url('/');
   flex-direction: column;
   gap: 10px;
 }
-.wd-newsletter-form input[type="email"] {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  font-size: 14px;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: var(--ink);
-  outline: none;
-  transition: border-color .2s, box-shadow .2s;
+.wd-newsletter-form .werdu-float-field {
+  margin-bottom: 0;
 }
-.wd-newsletter-form input[type="email"]:focus {
-  border-color: var(--forest);
-  box-shadow: 0 0 0 3px rgba(29,77,47,.12);
+.wd-newsletter-form .werdu-float-field .field {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 .wd-newsletter-form label.dsgvo {
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -662,7 +654,9 @@ $blog_link = $blog_page ? get_permalink($blog_page) : home_url('/');
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .wd-post-nav a, .wd-rel-card, .wd-cta-calc a.btn, .wd-cta-beratung a.btn {
+  .wd-post-nav a, .wd-rel-card, .wd-cta-calc a.btn, .wd-cta-beratung a.btn,
+  .wd-newsletter-form .werdu-float-field .label,
+  .wd-newsletter-form .werdu-float-field .field {
     transition: none !important;
   }
   .wd-progress { display: none; }
@@ -855,7 +849,10 @@ $blog_link = $blog_page ? get_permalink($blog_page) : home_url('/');
         <div class="wd-widget-body wd-newsletter">
           <p>Neue Artikel zu LiFePO4, Förderungen & Preisen direkt ins Postfach.</p>
           <form class="wd-newsletter-form" onsubmit="return false;">
-            <input type="email" placeholder="ihre@email.de" aria-label="E-Mail Adresse" required>
+            <div class="werdu-float-field">
+              <label class="label" for="wd-newsletter-email">E-Mail-Adresse</label>
+              <input type="email" class="field" id="wd-newsletter-email" name="email" placeholder=" " autocomplete="email" required>
+            </div>
             <label class="dsgvo">
               <input type="checkbox" required>
               <span>Ich stimme dem Erhalt von E-Mails zu und akzeptiere die <a href="<?php echo esc_url(home_url('/datenschutzerklaerung/')); ?>" target="_blank">Datenschutzerklärung</a>.</span>

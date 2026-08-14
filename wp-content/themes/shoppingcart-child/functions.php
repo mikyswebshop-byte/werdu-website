@@ -31,8 +31,125 @@ if ( ! function_exists( 'werdu_child_styles' ) ) {
     function werdu_child_styles() {
         wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css', array(), '1.2.7' );
         wp_enqueue_style( 'child-style', get_stylesheet_uri(), array( 'parent-style' ), '7.7.5' );
+        $float = get_stylesheet_directory() . '/css/werdu-float-labels.css';
+        if ( file_exists( $float ) ) {
+            wp_enqueue_style(
+                'werdu-float-labels',
+                get_stylesheet_directory_uri() . '/css/werdu-float-labels.css',
+                array( 'child-style' ),
+                (string) filemtime( $float )
+            );
+        }
     }
     add_action( 'wp_enqueue_scripts', 'werdu_child_styles', 10 );
+}
+
+add_filter( 'wpcf7_form_class_attr', 'werdu_cf7_form_class' );
+function werdu_cf7_form_class( $class ) {
+    return trim( $class . ' werdu-cf7-form' );
+}
+
+add_filter( 'wpcf7_form_elements', 'werdu_cf7_prepare_float_labels', 20 );
+function werdu_cf7_prepare_float_labels( $html ) {
+    if ( ! is_string( $html ) || '' === $html ) {
+        return $html;
+    }
+    $html = preg_replace(
+        '/<label(\s[^>]*)?>\s*(?:<span class="werdu-float-label">)?([^<]+?)(?:<\/span>)?\s*(?:<br\s*\/?>)?\s*(<span[^>]*class="[^"]*wpcf7-form-control-wrap)/i',
+        '<label$1><span class="werdu-float-label">$2</span>$3',
+        $html
+    );
+    $html = preg_replace_callback(
+        '/<(input|textarea)(\s[^>]*?)(\s*\/?)>/i',
+        static function ( $m ) {
+            $attrs = $m[2];
+            if ( preg_match( '/type\s*=\s*["\']?(hidden|submit|checkbox|radio|file|button|image|reset)/i', $attrs ) ) {
+                return $m[0];
+            }
+            if ( preg_match( '/placeholder\s*=/', $attrs ) ) {
+                $attrs = preg_replace( '/placeholder\s*=\s*(["\'])(?:(?!\1).)*\1/', 'placeholder=" "', $attrs );
+                return '<' . $m[1] . $attrs . $m[3] . '>';
+            }
+            return '<' . $m[1] . $attrs . ' placeholder=" "' . $m[3] . '>';
+        },
+        $html
+    );
+    return $html;
+}
+
+add_filter( 'woocommerce_form_field_args', 'werdu_wc_float_placeholder', 20, 3 );
+function werdu_wc_float_placeholder( $args, $key, $value ) {
+    if ( ! is_array( $args ) ) {
+        return $args;
+    }
+    $type = isset( $args['type'] ) ? $args['type'] : 'text';
+    if ( in_array( $type, array( 'checkbox', 'radio', 'hidden', 'heading', 'select', 'country', 'state' ), true ) ) {
+        return $args;
+    }
+    $args['placeholder'] = ' ';
+    return $args;
+}
+
+add_filter( 'comment_form_default_fields', 'werdu_comment_float_placeholders' );
+function werdu_comment_float_placeholders( $fields ) {
+    if ( ! is_array( $fields ) ) {
+        return $fields;
+    }
+    foreach ( $fields as $key => $html ) {
+        if ( ! is_string( $html ) ) {
+            continue;
+        }
+        if ( preg_match( '/placeholder\s*=/', $html ) ) {
+            $fields[ $key ] = preg_replace( '/placeholder\s*=\s*(["\'])(?:(?!\1).)*\1/', 'placeholder=" "', $html );
+        } else {
+            $fields[ $key ] = preg_replace( '/<input\b/', '<input placeholder=" "', $html, 1 );
+        }
+    }
+    return $fields;
+}
+
+add_filter( 'comment_form_defaults', 'werdu_comment_float_textarea' );
+function werdu_comment_float_textarea( $defaults ) {
+    if ( empty( $defaults['comment_field'] ) || ! is_string( $defaults['comment_field'] ) ) {
+        return $defaults;
+    }
+    if ( preg_match( '/placeholder\s*=/', $defaults['comment_field'] ) ) {
+        $defaults['comment_field'] = preg_replace( '/placeholder\s*=\s*(["\'])(?:(?!\1).)*\1/', 'placeholder=" "', $defaults['comment_field'] );
+    } else {
+        $defaults['comment_field'] = str_replace( '<textarea', '<textarea placeholder=" "', $defaults['comment_field'] );
+    }
+    return $defaults;
+}
+
+add_action( 'init', 'werdu_ff_float_placeholder_filters' );
+function werdu_ff_float_placeholder_filters() {
+    $types = array(
+        'input_text',
+        'input_email',
+        'textarea',
+        'input_url',
+        'input_number',
+        'select',
+        'input_name',
+        'phone',
+        'address',
+        'input_date',
+        'email',
+        'input_textarea',
+    );
+    foreach ( $types as $type ) {
+        add_filter( 'fluentform/rendering_field_data_' . $type, 'werdu_ff_ensure_placeholder', 10, 2 );
+    }
+}
+function werdu_ff_ensure_placeholder( $data, $form ) {
+    if ( ! is_array( $data ) ) {
+        return $data;
+    }
+    if ( ! isset( $data['attributes'] ) || ! is_array( $data['attributes'] ) ) {
+        $data['attributes'] = array();
+    }
+    $data['attributes']['placeholder'] = ' ';
+    return $data;
 }
 
 /* ============================================================
@@ -574,6 +691,7 @@ function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
         'child-style',
         'shoppingcart-style',
         'shoppingcart-responsive',
+        'werdu-float-labels',
     );
     if ( in_array( $handle, $keep_blocking, true ) ) {
         return $html;

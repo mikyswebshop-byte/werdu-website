@@ -97,15 +97,15 @@ body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 				<form id="pv-calculator" class="whp-form" action="<?php echo esc_url( $whp_beratung ); ?>" method="get">
 					<div class="whp-field">
 						<label for="calc_location">Postleitzahl</label>
-						<input id="calc_location" name="plz" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="z. B. 80331" autocomplete="postal-code" />
+						<input id="calc_location" name="plz" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder=" " title="z. B. 80331" autocomplete="postal-code" />
 					</div>
 					<div class="whp-field">
 						<label for="calc_verbrauch">Jahresverbrauch (kWh)</label>
-						<input id="calc_verbrauch" name="verbrauch" type="text" inputmode="numeric" placeholder="z. B. 4500" required />
+						<input id="calc_verbrauch" name="verbrauch" type="text" inputmode="numeric" placeholder=" " title="z. B. 4500" required />
 					</div>
 					<div class="whp-field">
 						<label for="calc_pv_leistung">PV-Leistung (kWp)</label>
-						<input id="calc_pv_leistung" name="pv" type="text" inputmode="decimal" placeholder="z. B. 10" required />
+						<input id="calc_pv_leistung" name="pv" type="text" inputmode="decimal" placeholder=" " title="z. B. 10" required />
 					</div>
 					<div class="whp-field">
 						<label for="calc_plan">Bevorzugtes System</label>
@@ -134,7 +134,7 @@ body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 					</div>
 					<div class="whp-field whp-field--full">
 						<label for="calc_email">E-Mail (optional, für die Beratung)</label>
-						<input id="calc_email" name="email" type="email" autocomplete="email" placeholder="name@beispiel.de" />
+						<input id="calc_email" name="email" type="email" autocomplete="email" placeholder=" " title="name@beispiel.de" />
 					</div>
 					<div class="whp-field whp-field--full">
 						<button type="submit" id="calc-submit" class="whp-btn whp-btn--primary whp-btn--block werdu-calc-btn">Jetzt Heimspeicher berechnen</button>
