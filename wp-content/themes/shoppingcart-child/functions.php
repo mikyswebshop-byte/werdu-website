@@ -644,24 +644,22 @@ function werdu_print_a11y_css() {
         return;
     }
     echo '<style id="werdu-a11y">'
-        . ':root{--cmplz_button_accept_background_color:#c2410c;--cmplz_button_accept_text_color:#ffffff;--cmplz_button_font_size:18px;--cmplz_text_font_size:14px;--cmplz_link_font_size:14px;--cmplz_hyperlink_color:#0b57d0}'
-        . '.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-accept,.cmplz-btn.cmplz-accept{background:#c2410c!important;color:#fff!important;font-weight:700!important;font-size:18px!important;min-height:48px!important}'
-        . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#c2410c!important}'
+        . ':root{--cmplz_button_accept_background_color:#ff6600;--cmplz_button_accept_text_color:#ffffff;--cmplz_button_font_size:18px;--cmplz_text_font_size:14px;--cmplz_link_font_size:14px;--cmplz_hyperlink_color:#0b57d0}'
+        . '.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-accept,.cmplz-btn.cmplz-accept{background:#ff6600!important;color:#fff!important;font-weight:700!important;font-size:18px!important;min-height:48px!important}'
+        . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#ff6600!important}'
         . '.header-right .wcmenucart-contents,.header-right .wishlist-btn{color:#334155!important}'
-        . '.header-right .cart-value,.wl-counter{background:#c2410c!important;color:#fff!important}'
+        . '.header-right .cart-value,.wl-counter{background:#ff6600!important;color:#fff!important}'
         . '#colophon .widget-wrap{padding:2rem 0!important}'
         . '#colophon .widget-area{padding:0!important;margin:0!important}'
         . '#colophon .column-4{padding:0 12px!important;margin-bottom:0!important}'
         . '#colophon .widget{margin-bottom:0!important}'
         . '#colophon .widget-title{margin:0 0 0.75rem!important;font-size:0.95rem!important}'
         . '#colophon .widget ul li{margin:0 0 0.4rem!important;line-height:1.4!important;padding:0!important}'
-        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a{color:#c2410c!important;text-decoration:underline!important;display:inline!important;padding:0!important;margin:0!important;min-height:0!important;line-height:1.4!important;font-size:0.92rem!important}'
+        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a{color:#ff6600!important;text-decoration:underline!important;display:inline!important;padding:0!important;margin:0!important;min-height:0!important;line-height:1.4!important;font-size:0.92rem!important}'
         . '#colophon .copyright,#colophon .site-info{color:#444!important;font-size:14px!important}'
         . '#colophon [style*="color:#999"],#colophon [style*="color: #999"]{color:#444!important}'
-        . '#colophon [style*="color:#ff6600"],#colophon [style*="color: #ff6600"],#colophon [style*="color:#FF6600"]{color:#c2410c!important;text-decoration:underline!important}'
-        . '#colophon [style*="153, 255"],#colophon [style*="#0099FF"],#colophon [style*="#0099ff"]{color:#0b57d0!important;text-decoration:underline!important}'
-        . '.whp-page a:not(.whp-btn){color:#c2410c;text-decoration:underline}'
-        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#c2410c!important;color:#fff!important;font-size:1.125rem!important;font-weight:700!important}'
+        . '.whp-page a:not(.whp-btn){color:#ff6600;text-decoration:underline}'
+        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#ff6600!important;color:#fff!important;font-size:1.125rem!important;font-weight:700!important}'
         . '</style>' . "\n";
 }
 
@@ -685,7 +683,6 @@ function werdu_a11y_fix_widget_html( $html ) {
             $html
         );
     }
-    $html = str_ireplace( array( 'color:#ff6600', 'color: #ff6600' ), 'color:#c2410c', $html );
     $html = str_ireplace( 'text-decoration:none', 'text-decoration:underline', $html );
     $html = str_ireplace( array( 'color:#999', 'color: #999' ), 'color:#444', $html );
     $html = str_ireplace( 'font-size:10px', 'font-size:14px', $html );

@@ -24,7 +24,7 @@ $wd_logo = content_url( '/uploads/2026/04/Logo-ACC-Heimspeicher_475_190.webp' );
 #colophon .wd-ft-trust p,#colophon .wd-ft-trust li{margin:0 0 0.4rem;line-height:1.4;color:#475569;font-size:0.92rem}
 #colophon .wd-ft-trust ul{list-style:none;margin:0;padding:0}
 #colophon .wd-ft-trust li{padding-left:1.1rem;position:relative}
-#colophon .wd-ft-trust li::before{content:"\2713";position:absolute;left:0;color:#c2410c;font-weight:800;pointer-events:none}
+#colophon .wd-ft-trust li::before{content:"\2713";position:absolute;left:0;color:#ff6600;font-weight:800;pointer-events:none}
 @media (max-width:768px){
   #colophon .wd-ft-brand,#colophon .widget-wrap,#colophon .wd-ft-trust{padding-top:1.5rem;padding-bottom:1.5rem}
 }

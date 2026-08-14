@@ -1462,43 +1462,43 @@ function werdu_home_seo_faq_data() {
     return array(
         array(
             'q' => 'Kann ich einen Speicher nachträglich an meine PV-Anlage anbauen?',
-            'a' => 'Ja. Ein Heimspeicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Für die Nachrüstung sind AC-gekoppelte Systeme oft die praktischste Lösung, weil sie den vorhandenen Wechselrichter unangetastet lassen. Alternativ kann ein Hybrid-Wechselrichter die PV-Seite und die Batterie auf der DC-Seite zusammenführen. Welche Variante zu Ihrem Zählerplatz, Ihrer Netzform und Ihrem Verbrauch passt, klären Sie am schnellsten mit dem <a href="' . $rechner . '">Autarkie-Rechner</a> und einer <a href="' . $beratung . '">kostenlosen Fachberatung</a>. Ablauf und Hinweise stehen unter <a href="' . $installation . '">Heimspeicher-Installation</a>.',
+            'a' => '<p>Ja. Ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten.</p><ul><li>AC-gekoppelt: vorhandener Wechselrichter bleibt</li><li>Hybrid: PV und Batterie auf der DC-Seite</li><li>All-in-One: Solarbatterie plus Hybrid-WR in einem Gehäuse</li></ul><p><a href="' . $rechner . '">Autarkie-Rechner</a> oder <a href="' . $installation . '">Installation</a>.</p>',
         ),
         array(
             'q' => 'Wie lange hält eine moderne LiFePO4-Solarbatterie?',
-            'a' => 'Hochwertige Lithium-Eisenphosphat-Speicher (LiFePO4) sind für den stationären Einsatz im Eigenheim ausgelegt. Typisch sind 6.000 bis 8.000 Vollzyklen und eine kalendarische Nutzungsdauer von 15 bis 20 Jahren. Nach dieser Zykluszahl liegt die Restkapazität häufig noch über 80 Prozent. Einzelne Systeme im Shop sind mit höheren Zyklenangaben spezifiziert – maßgeblich sind immer die Angaben auf der jeweiligen Produktseite. Zur Einordnung der Lebensdauer siehe die <a href="' . $garantie . '">Garantie-Informationen</a>.',
+            'a' => '<p>Typisch sind 6.000–8.000 Vollzyklen und 15–20 Jahre kalendarische Nutzung. Nach dieser Zykluszahl liegt die Restkapazität häufig noch über 80&nbsp;%. Maßgeblich sind die Angaben auf der Produktseite. Siehe <a href="' . $garantie . '">Garantie</a>.</p>',
         ),
         array(
             'q' => 'Funktioniert der Speicher auch bei einem Stromausfall?',
-            'a' => 'Nicht automatisch. Netzgekoppelte Wechselrichter müssen bei einem Ausfall des öffentlichen Netzes aus Sicherheitsgründen abschalten (Inselnetzverhinderung). Erst wenn Ihr System eine ausgewiesene Notstrom- oder Ersatzstromfunktion besitzt und der Wechselrichter dafür geeignet ist, versorgt die Batterie definierte Stromkreise weiter. Ersatzstrom ist nicht dasselbe wie eine vollständige Off-Grid-Versorgung. Lesen Sie dazu den Ratgeber <a href="' . $notstrom . '">Notstrom und Ersatzstrom</a>.',
+            'a' => '<p>Nicht automatisch. Netzgekoppelte Wechselrichter schalten bei Ausfall ab. Notstrom oder Ersatzstrom braucht eine ausgewiesene Funktion und einen geeigneten Wechselrichter – das ist nicht Off-Grid. Ratgeber: <a href="' . $notstrom . '">Notstrom und Ersatzstrom</a>.</p>',
         ),
         array(
             'q' => 'Lohnt sich ein PV-Speicher auch im Winter?',
-            'a' => 'Ja, aber mit realistischer Erwartung. Im Winter erzeugt die Photovoltaikanlage weniger Energie, und der Speicher kann nicht an jedem Tag voll werden. Dennoch speichert er sonnige Phasen und verschiebt den Strom in die Abendstunden. Die Wirtschaftlichkeit bewertet man über das volle Jahr: Im Sommer deckt der Speicher einen großen Teil des Haushaltsstroms, im Winter reduziert er Netzbezug an ertragsstarken Tagen. Die Jahresautarkie – nicht ein einzelner Januar-Tag – ist die richtige Kennzahl. Dimensionieren Sie daher anhand des Jahresverbrauchs, nicht anhand eines Winter-Worst-Case.',
+            'a' => '<p>Ja, mit realistischer Erwartung: Im Winter erzeugt die PV weniger, der Speicher füllt sich nicht an jedem Tag. Die Wirtschaftlichkeit zählt über das volle Jahr – im Sommer hoher Eigenverbrauch, im Winter weniger Netzbezug an sonnigen Tagen.</p>',
         ),
         array(
             'q' => 'Gilt wirklich 0 % MwSt. nach § 12 Abs. 3 UStG?',
-            'a' => 'Für begünstigte Photovoltaikanlagen und die dazugehörigen Stromspeicher gilt in Deutschland seit 2023 der Steuersatz von 0&nbsp;% nach § 12 Abs. 3 UStG, wenn die Anlage auf oder in der Nähe von Wohnungen bzw. bestimmten öffentlichen oder gemeinnützig genutzten Gebäuden installiert wird. Der Vorteil gilt für den Kauf und die Installation, nicht pauschal für jedes beliebige Zubehör. Eine verständliche Einordnung finden Sie auf der Seite zur <a href="' . $mwst . '">MwSt-Befreiung für den Eigenverbrauch</a>. Dies ist keine Steuerberatung; im Zweifel entscheidet Ihr Steuerberater oder das zuständige Finanzamt.',
+            'a' => '<p>Für begünstigte PV-Anlagen und dazugehörige Speicher an Wohngebäuden gilt seit 2023 0&nbsp;% – Kauf und Installation, nicht pauschal jedes Zubehör. Einordnung: <a href="' . $mwst . '">MwSt-Befreiung für den Eigenverbrauch</a>. Keine Steuerberatung.</p>',
         ),
         array(
             'q' => 'Welche Speicherkapazität brauche ich für mein Einfamilienhaus?',
-            'a' => 'Als Praxisregel für Einfamilienhäuser gilt: Pro 1.000 kWh Jahresstromverbrauch etwa 1,0 bis 1,5 kWh nutzbare Speicherkapazität, abgestimmt auf die kWp-Leistung Ihrer PV-Anlage. Ein Haushalt mit 4.000 kWh liegt damit häufig im Bereich 5–8 kWh, ein Haushalt mit E-Auto oder Wärmepumpe eher bei 12–16 kWh oder mehr. Der kostenlose <a href="' . $rechner . '">Autarkie-Rechner</a> ermittelt die Größenordnung aus Verbrauch und PV-Leistung. Anschließend wählen Sie das passende System im <a href="' . $shop . '">Shop</a>.',
+            'a' => '<p>Praxisregel: 1,0–1,5 kWh nutzbarer Speicher je 1.000 kWh Jahresverbrauch, passend zur kWp-Leistung.</p><ul><li>4.000 kWh: oft 5–8 kWh</li><li>E-Auto oder Wärmepumpe: eher 12–16 kWh oder mehr</li></ul><p><a href="' . $rechner . '">Autarkie-Rechner</a> · <a href="' . $shop . '">Shop</a></p>',
         ),
         array(
             'q' => 'Warum LiFePO4 statt NMC oder Blei-Säure?',
-            'a' => 'LiFePO4 ist für Heimspeicher die etablierte Standardchemie: hohe thermische Stabilität, kein Kobalt in der Kathode und eine Zyklenfestigkeit, die zur Nutzungsdauer einer PV-Anlage passt. NMC-Zellen sind energiedichter, aber thermisch empfindlicher. Blei-Säure erreicht nur wenige hundert bis rund 1.500 Zyklen. Natrium-Ionen-Systeme sind kobalt- und lithiumfrei mit guter Kälteleistung; die Zyklenzahlen liegen typischerweise unter LiFePO4. Einen Überblick der Bauformen finden Sie unter <a href="' . $systeme . '">Heimspeicher-Systeme</a>.',
+            'a' => '<p>LiFePO4 ist der Standard für den PV-Speicher im Eigenheim: hohe thermische Stabilität, kein Kobalt in der Kathode, Zyklenfestigkeit zur PV-Nutzungsdauer. NMC ist energiedichter, aber thermisch empfindlicher. Blei-Säure erreicht nur wenige hundert bis rund 1.500 Zyklen. Überblick: <a href="' . $systeme . '">PV-Speicher Systeme</a>.</p>',
         ),
         array(
             'q' => 'Muss ich den Speicher selbst installieren oder gibt es einen Fachbetrieb?',
-            'a' => 'Sie können das Gerät als Endkunde kaufen und durch einen qualifizierten Elektriker anschließen lassen. Optional bieten wir den Versand an einen zertifizierten lokalen Installateur: Der Speicher wird direkt zum Fachbetrieb geliefert, der die Montage bei Ihnen vor Ort übernimmt. Die Stundensätze setzt jeder Betrieb selbst – es gibt keinen einheitlichen Pauschalpreis. Ablauf und Hinweise stehen auf der <a href="' . $installation . '">Installationsseite</a>. Die optionale Auswahl erscheint auch in der <a href="' . $beratung . '">Beratung</a>.',
+            'a' => '<p>Anschluss durch eine Elektrofachkraft. Optional versenden wir an einen zertifizierten lokalen Installateur; Stundensätze setzt der Betrieb selbst – kein Pauschalpreis. Ablauf: <a href="' . $installation . '">Installation</a>.</p>',
         ),
         array(
             'q' => 'Wie hoch ist der typische Autarkiegrad mit Speicher?',
-            'a' => 'Ohne Speicher nutzen Eigenheime mit Photovoltaik häufig nur etwa 20 bis 30 Prozent des selbst erzeugten Stroms direkt. Mit einem passend dimensionierten LiFePO4-Heimspeicher sind 70 bis 85 Prozent Autarkie realistisch, abhängig von Lastprofil, PV-Größe, Wärmepumpe und E-Auto. 100 Prozent Netzunabhängigkeit ist im mitteleuropäischen Winter ohne sehr große PV- und Speicherreserven oder ein Notstromaggregat in der Regel nicht das Ziel. Entscheidend ist, den Speicher an Verbrauch und Erzeugung zu koppeln statt ihn maximal zu überdimensionieren. Fraunhofer ISE hat den Eigenverbrauchs-Effekt von Speichern in Wohngebäuden mehrfach quantifiziert.',
+            'a' => '<p>Ohne Speicher oft 20–30&nbsp;% Eigenverbrauch. Mit passend dimensionierter Solarbatterie sind 70–85&nbsp;% realistisch – abhängig von Lastprofil, PV-Größe, Wärmepumpe und E-Auto. 100&nbsp;% Netzunabhängigkeit ist im mitteleuropäischen Winter in der Regel nicht das Ziel.</p>',
         ),
         array(
-            'q' => 'Was kostet ein Heimspeicher – und wo sehe ich den aktuellen Preis?',
-            'a' => 'Die Kosten hängen von nutzbarer Kapazität, BMS, Gehäuse und davon ab, ob ein Hybrid-Wechselrichter bereits integriert ist. Transparente Festpreise stehen im <a href="' . $shop . '">Shop</a> und auf den Produktseiten; sie werden hier nicht festgeschrieben, weil sich Listenpreise ändern. Zusätzlich gilt für begünstigte Anlagen 0&nbsp;% MwSt. Eine Einordnung finden Sie unter <a href="' . $kosten . '">Heimspeicher-Kosten pro kWh</a>. Der Rechner liefert die Größenordnung, die Beratung klärt Anschluss und optionale Montage – es wird kein automatisches PDF-Angebot erzeugt.',
+            'q' => 'Was kostet ein PV-Speicher – und wo sehe ich den aktuellen Preis?',
+            'a' => '<p>Die Kosten hängen von Kapazität, BMS und davon ab, ob ein Hybrid-Wechselrichter integriert ist. Transparente Festpreise stehen im <a href="' . $shop . '">Shop</a>. Zusätzlich gilt für begünstigte Anlagen 0&nbsp;% MwSt. Einordnung: <a href="' . $kosten . '">Kosten pro kWh</a>.</p>',
         ),
     );
 }
@@ -1512,13 +1512,16 @@ function werdu_home_seo_faq_html() {
         'strong' => array(),
         'em'     => array(),
         'br'     => array(),
+        'p'      => array(),
+        'ul'     => array(),
+        'li'     => array(),
     );
     $html = '';
     foreach ( werdu_home_seo_faq_data() as $i => $item ) {
         $open = ( 0 === $i ) ? ' open' : '';
         $html .= '<details class="werdu-faq-item"' . $open . '>'
             . '<summary class="werdu-faq-header"><span>' . esc_html( $item['q'] ) . '</span><span class="werdu-faq-icon" aria-hidden="true">+</span></summary>'
-            . '<div class="werdu-faq-answer-inner"><p>' . wp_kses( $item['a'], $allowed ) . '</p></div>'
+            . '<div class="werdu-faq-answer-inner">' . wp_kses( $item['a'], $allowed ) . '</div>'
             . '</details>';
     }
     return $html;
@@ -1563,7 +1566,7 @@ function werdu_home_seo_software_json_ld() {
         'operatingSystem'     => 'Web',
         'inLanguage'          => 'de-DE',
         'url'                 => werdu_home_seo_rechner_url(),
-        'description'         => 'Kostenloser Online-Rechner zur Dimensionierung von LiFePO4-Heimspeichern anhand von Jahresverbrauch und PV-Leistung. Ergebnisse führen zur Beratung, nicht zu einem automatischen Preisangebot.',
+        'description'         => 'Kostenloser Online-Rechner zur Dimensionierung von LiFePO4-PV-Speichern anhand von Jahresverbrauch und PV-Leistung. Ergebnisse führen zur Beratung, nicht zu einem automatischen Preisangebot.',
         'offers'              => array(
             '@type'         => 'Offer',
             'price'         => '0',
