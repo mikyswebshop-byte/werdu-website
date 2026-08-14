@@ -12,6 +12,7 @@ $whp_beratung = function_exists( 'werdu_home_seo_beratung_url' ) ? werdu_home_se
 $whp_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo_rechner_url() : home_url( '/solarbatterie-rechner/' );
 $whp_shop     = home_url( '/shop/' );
 $whp_hero     = home_url( '/wp-content/uploads/2026/08/pv-speicher-kaufen-modernes-deutsches-wohnhaus-alpen_1024_572.webp' );
+$whp_prod_16  = home_url( '/wp-content/uploads/2026/07/16kwh-lifepo4-heimspeicher-hero_1024_1024-420x420.webp' );
 
 $whp_price = static function ( $id ) {
 	$html = do_shortcode( '[werdu_preis id="' . sanitize_key( $id ) . '"]' );
@@ -23,7 +24,6 @@ $whp_price = static function ( $id ) {
 ?>
 <style id="whp-critical">
 @font-face{font-display:swap!important}
-a.skip-link,.skip-link,.skip,.screen-reader-text:focus{display:none!important}
 body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 .whp-hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
 .whp-hero h1{font-size:clamp(1.9rem,4vw,2.75rem);font-weight:800;line-height:1.15;margin:0 0 16px;color:#0f172a}
@@ -58,6 +58,7 @@ body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 					alt="Modernes Wohnhaus mit Photovoltaik und LiFePO4-Heimspeicher in Deutschland"
 					width="1024"
 					height="572"
+					sizes="(max-width: 900px) 100vw, 540px"
 					fetchpriority="high"
 					decoding="async"
 				/>
@@ -164,7 +165,7 @@ body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 				<article class="whp-card whp-card--hit">
 					<span class="whp-badge">Bestseller</span>
 					<div class="whp-card-img">
-						<img src="<?php echo esc_url( home_url( '/wp-content/uploads/2026/07/16kwh-lifepo4-heimspeicher-hero_1024_1024.webp' ) ); ?>" alt="16 kWh Basen Green LiFePO4 Heimspeicher" width="400" height="400" loading="lazy" decoding="async" />
+						<img src="<?php echo esc_url( $whp_prod_16 ); ?>" alt="16 kWh Basen Green LiFePO4 Heimspeicher" width="420" height="420" sizes="(max-width: 700px) 90vw, 315px" loading="lazy" decoding="async" />
 					</div>
 					<h3>16 kWh LiFePO4 Heimspeicher</h3>
 					<p class="whp-sub">51,2&nbsp;V / 314&nbsp;Ah · Basen Green</p>

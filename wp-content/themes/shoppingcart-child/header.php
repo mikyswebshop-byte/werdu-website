@@ -22,7 +22,70 @@
   .site-content-contain { min-height: 100vh; }
   .custom-logo, .custom-logo-link img { aspect-ratio: 143 / 140; height: auto; max-height: 60px; width: auto; }
   @font-face { font-display: swap !important; }
-  a.skip-link, .skip-link, .screen-reader-text:focus { display: none !important; }
+  .menu-toggle, .top-menu-toggle {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    padding: 0;
+  }
+  .menu-toggle .line-bar,
+  .top-menu-toggle .line-bar,
+  .menu-toggle .line-bar:before,
+  .menu-toggle .line-bar:after,
+  .top-menu-toggle .line-bar:before,
+  .top-menu-toggle .line-bar:after {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #0f172a;
+    border-radius: 2px;
+    position: absolute;
+    left: 9px;
+    content: "";
+  }
+  .menu-toggle .line-bar,
+  .top-menu-toggle .line-bar { top: 19px; }
+  .menu-toggle .line-bar:before,
+  .top-menu-toggle .line-bar:before { top: -7px; }
+  .menu-toggle .line-bar:after,
+  .top-menu-toggle .line-bar:after { top: 7px; }
+  a.skip-link, .skip-link {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  a.skip-link:focus, .skip-link:focus, .screen-reader-text:focus {
+    display: inline-block !important;
+    position: absolute !important;
+    left: 8px !important;
+    top: 8px !important;
+    z-index: 100001 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    overflow: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+    white-space: normal !important;
+    background: #0f172a !important;
+    color: #ffffff !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    text-decoration: underline !important;
+    border-radius: 6px !important;
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
@@ -42,7 +105,7 @@ if ( function_exists( 'wp_body_open' ) ) {
 
 <div id="page" class="site">
 <a class="skip-link screen-reader-text" href="#site-content-contain">
-<?php esc_html_e('Skip to content','shoppingcart'); ?>
+<?php echo esc_html( 'Zum Inhalt springen' ); ?>
 </a>
 
 <header id="masthead" class="site-header" role="banner">
@@ -72,9 +135,9 @@ if ($shoppingcart_settings['shoppingcart_disable_top_bar'] == 0 ){
 
                     <?php if(has_nav_menu('top-menu')){ ?>
                         <nav class="top-bar-menu">
-                            <button class="top-menu-toggle" type="button">
-                                <span class="screen-reader-text">Menu</span>
-                                <i class="fa-solid fa-bars"></i>
+                            <button class="top-menu-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false">
+                                <span class="screen-reader-text">Menü öffnen</span>
+                                <span class="line-bar" aria-hidden="true"></span>
                             </button>
 
                             <?php
@@ -143,8 +206,8 @@ if (!class_exists('woocommerce')) {
 <?php if($shoppingcart_settings['shoppingcart_disable_main_menu']==0){ ?>
 <nav id="site-navigation" class="main-navigation">
 
-<button class="menu-toggle">
-<span class="line-bar"></span>
+<button class="menu-toggle" type="button" aria-label="Hauptmenü öffnen" aria-expanded="false" aria-controls="primary-menu">
+<span class="line-bar" aria-hidden="true"></span>
 </button>
 
 <?php

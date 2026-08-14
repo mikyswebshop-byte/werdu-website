@@ -81,6 +81,34 @@ add_filter( 'rank_math/frontend/canonical', function( $canonical ) {
 }, 20 );
 
 /* ============================================================
+   3b. HOMEPAGE SEO — never emit noindex on the front page
+   ============================================================ */
+add_filter( 'wp_robots', 'werdu_homepage_allow_indexing', 999 );
+function werdu_homepage_allow_indexing( $robots ) {
+    if ( is_admin() || ! is_front_page() ) {
+        return $robots;
+    }
+    $robots['index']  = true;
+    $robots['follow'] = true;
+    unset( $robots['noindex'], $robots['nofollow'] );
+    return $robots;
+}
+
+add_filter( 'rank_math/frontend/robots', 'werdu_homepage_rankmath_robots', 999 );
+function werdu_homepage_rankmath_robots( $robots ) {
+    if ( ! is_front_page() ) {
+        return $robots;
+    }
+    if ( ! is_array( $robots ) ) {
+        $robots = array();
+    }
+    $robots['index']  = 'index';
+    $robots['follow'] = 'follow';
+    unset( $robots['nofollow'], $robots['noindex'] );
+    return $robots;
+}
+
+/* ============================================================
    4. 301 REDIRECT: Oude /shop/ product URLs
    ============================================================ */
 add_action( 'template_redirect', function() {
@@ -440,33 +468,99 @@ add_action( 'wp_enqueue_scripts', function() {
 }, 999 );
 
 /* ============================================================
-   13b. HOMEPAGE LIGHTHOUSE — defer render-blocking CSS/JS
+   13b. HOMEPAGE LIGHTHOUSE — dequeue unused, defer the rest
    ============================================================ */
+add_action( 'wp_enqueue_scripts', 'werdu_homepage_speed_dequeue', 1001 );
+function werdu_homepage_speed_dequeue() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+
+    $style_handles = array(
+        'font-icons',
+        'shoppingcart-google-fonts',
+        'elementor-frontend',
+        'elementor-icons',
+        'elementor-animations',
+        'elementor-gf-local-roboto',
+        'elementor-global',
+        'fluent-forms-elementor-widget',
+        'fluentform-elementor-widget',
+        'wc-blocks-style',
+        'wc-blocks-vendors-style',
+        'wp-block-library',
+        'wp-block-library-theme',
+        'global-styles',
+        'classic-theme-styles',
+        'werdu-compact',
+        'woocommerce-general',
+        'woocommerce-layout',
+        'woocommerce-smallscreen',
+    );
+    foreach ( $style_handles as $handle ) {
+        wp_dequeue_style( $handle );
+        wp_deregister_style( $handle );
+    }
+
+    if ( function_exists( 'wp_styles' ) && wp_styles() ) {
+        foreach ( wp_styles()->registered as $handle => $obj ) {
+            if ( 0 === strpos( $handle, 'elementor' ) || false !== strpos( $handle, 'fluent-forms-elementor' ) ) {
+                wp_dequeue_style( $handle );
+                wp_deregister_style( $handle );
+            }
+        }
+    }
+
+    $script_handles = array(
+        'jquery-flexslider',
+        'shoppingcart-slider',
+        'shoppingcart-skip-link-focus-fix',
+        'html5',
+        'elementor-frontend',
+        'elementor-webpack-runtime',
+        'elementor-frontend-modules',
+        'elementor-pro-frontend',
+        'fluent-forms-elementor-widget',
+        'wp-embed',
+        'comment-reply',
+        'jquery-migrate',
+    );
+    foreach ( $script_handles as $handle ) {
+        wp_dequeue_script( $handle );
+        wp_deregister_script( $handle );
+    }
+
+    if ( function_exists( 'wp_scripts' ) && wp_scripts() ) {
+        foreach ( wp_scripts()->registered as $handle => $obj ) {
+            if ( 0 === strpos( $handle, 'caos' ) || 'google_gtagjs' === $handle ) {
+                wp_dequeue_script( $handle );
+                wp_deregister_script( $handle );
+                continue;
+            }
+            if ( in_array( $handle, array( 'jquery', 'jquery-core', 'jquery-migrate' ), true ) ) {
+                wp_scripts()->add_data( $handle, 'group', 1 );
+            }
+        }
+    }
+}
+
+add_filter( 'caos_exclude_from_tracking', 'werdu_homepage_exclude_caos' );
+function werdu_homepage_exclude_caos( $exclude ) {
+    if ( is_front_page() ) {
+        return true;
+    }
+    return $exclude;
+}
+
 add_filter( 'style_loader_tag', 'werdu_homepage_defer_noncritical_css', 20, 4 );
 function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
     if ( is_admin() || ! is_front_page() ) {
         return $html;
     }
-    $defer_needles = array(
-        'font-awesome',
-        'elementor-icons',
-        'elementor-animations',
-        'eael-',
-        'swiper',
-        'megamenu',
-        'dashicons',
-    );
-    $should_defer = false;
-    foreach ( $defer_needles as $needle ) {
-        if ( false !== strpos( $handle, $needle ) ) {
-            $should_defer = true;
-            break;
-        }
-    }
-    if ( ! $should_defer ) {
+    if ( ! is_string( $href ) || '' === $href ) {
         return $html;
     }
-    if ( $media && $media !== 'all' && $media !== 'screen' ) {
+    if ( $media && $media !== 'all' && $media !== 'screen' && $media !== 'print' ) {
         return $html;
     }
     $href_esc = esc_url( $href );
@@ -482,18 +576,52 @@ function werdu_homepage_defer_noncritical_js( $tag, $handle ) {
     if ( false !== strpos( $tag, ' defer' ) || false !== strpos( $tag, ' async' ) ) {
         return $tag;
     }
+    if ( 0 === strpos( $handle, 'caos' ) ) {
+        return str_replace( ' src', ' async src', $tag );
+    }
     $defer_handles = array(
+        'jquery-core',
+        'jquery',
+        'jquery-migrate',
         'elementor-frontend',
         'elementor-webpack-runtime',
         'elementor-frontend-modules',
         'elementor-pro-frontend',
         'wp-embed',
         'comment-reply',
+        'complianz',
+        'complianz-gdpr',
+        'cmplz-cookiebanner',
     );
-    if ( in_array( $handle, $defer_handles, true ) ) {
+    if ( in_array( $handle, $defer_handles, true ) || 0 === strpos( $handle, 'cmplz' ) ) {
         return str_replace( ' src', ' defer src', $tag );
     }
     return $tag;
+}
+
+add_action( 'wp_head', 'werdu_homepage_inline_lp_css', 2 );
+function werdu_homepage_inline_lp_css() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    $css_path = get_stylesheet_directory() . '/css/werdu-startseite-v3.css';
+    if ( ! file_exists( $css_path ) ) {
+        return;
+    }
+    $css = file_get_contents( $css_path );
+    if ( ! is_string( $css ) || '' === $css ) {
+        return;
+    }
+    echo '<style id="whp-css">' . $css . '</style>' . "\n";
+}
+
+add_action( 'wp_head', 'werdu_homepage_preload_lcp_image', 1 );
+function werdu_homepage_preload_lcp_image() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    $hero = home_url( '/wp-content/uploads/2026/08/pv-speicher-kaufen-modernes-deutsches-wohnhaus-alpen_1024_572.webp' );
+    echo '<link rel="preload" as="image" href="' . esc_url( $hero ) . '" fetchpriority="high">' . "\n";
 }
 
 /* ============================================================
@@ -668,14 +796,16 @@ function werdu_enqueue_homepage_v2_assets() {
         return;
     }
 
-    $css_path = get_stylesheet_directory() . '/css/werdu-startseite-v3.css';
-    if ( file_exists( $css_path ) ) {
-        wp_enqueue_style(
-            'werdu-startseite-v3',
-            get_stylesheet_directory_uri() . '/css/werdu-startseite-v3.css',
-            array(),
-            filemtime( $css_path )
-        );
+    if ( ! is_front_page() ) {
+        $css_path = get_stylesheet_directory() . '/css/werdu-startseite-v3.css';
+        if ( file_exists( $css_path ) ) {
+            wp_enqueue_style(
+                'werdu-startseite-v3',
+                get_stylesheet_directory_uri() . '/css/werdu-startseite-v3.css',
+                array(),
+                filemtime( $css_path )
+            );
+        }
     }
 
     $handoff_deps = array();

@@ -105,9 +105,27 @@ body.home .site-content {
 }
 
 body.home a.skip-link,
-body.home .skip-link,
+body.home .skip-link {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+body.home a.skip-link:focus,
+body.home .skip-link:focus,
 body.home .screen-reader-text:focus {
-  display: none !important;
+  display: inline-block !important;
+  position: absolute !important;
+  left: 8px !important;
+  top: 8px !important;
+  z-index: 100001 !important;
+  width: auto !important;
+  height: auto !important;
+  clip: auto !important;
+  background: #0f172a !important;
+  color: #ffffff !important;
+  padding: 8px 14px !important;
 }
 
 :root {
@@ -1251,7 +1269,7 @@ function werdu_home_seo_critical_css() {
     echo '<style id="werdu-home-critical-css">'
         . '@font-face{font-display:swap!important}'
         . 'body.home,body.home #page,body.home #content,.whp-page{background:#f8fafc!important;color:#0f172a}'
-        . 'a.skip-link,.skip-link,.screen-reader-text:focus{display:none!important}'
+        . 'a.skip-link,.skip-link{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}'
         . '.whp-hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}'
         . '.whp-hero h1{font-size:clamp(1.9rem,4vw,2.75rem);font-weight:800;line-height:1.15;margin:0 0 16px;color:#0f172a}'
         . '.whp-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:1024/572;object-fit:cover}'
