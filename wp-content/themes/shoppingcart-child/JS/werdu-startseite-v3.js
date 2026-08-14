@@ -1,158 +1,113 @@
 /**
- * WERDU Homepage V2 — interactions (Stage 2)
- * Loaded ONLY on the "Werdu Homepage V2" page template. Does not touch any
- * other page. Depends on werdu-calc-handoff.js (window.werduCalcHandoff) for
- * the capacity-slider CTA, which is enqueued as a script dependency by
- * page-templates/page-werdu-v2.php.
+ * WERDU Homepage LP — calculator + handoff
+ * Field IDs stay compatible with werdu-homepage-calc-bridge.js
  */
 (function () {
   'use strict';
 
-  var reduceMotion = false;
-  try {
-    reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  } catch (e) {}
+  function beratungBase() {
+    try {
+      if (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) {
+        return window.werduCalcConfig.beratungUrl;
+      }
+    } catch (e) {}
+    return '/beratung-anfragen/';
+  }
+
+  function recommendKwh(verbrauch, planVal) {
+    var kwh = verbrauch <= 4500 ? 16 : (verbrauch <= 7000 ? 16 : 32);
+    var label = String(planVal || '');
+    if (/30|32/.test(label)) kwh = 32;
+    else if (/\b15\b/.test(label) || /aio/i.test(label)) kwh = 15;
+    else if (/\b16\b/.test(label)) kwh = 16;
+    else if (/\b10\b/.test(label)) kwh = 10;
+    return kwh;
+  }
+
+  window.werduCalc = function werduCalc() {
+    var plzEl = document.getElementById('calc_location');
+    var pvEl = document.getElementById('calc_pv_leistung');
+    var verbrauchEl = document.getElementById('calc_verbrauch');
+    var emailEl = document.getElementById('calc_email');
+    var planEl = document.getElementById('calc_plan');
+    var result = document.getElementById('calc-result');
+
+    if (!plzEl || !pvEl || !verbrauchEl) return;
+
+    var plz = String(plzEl.value || '').replace(/\D/g, '').substring(0, 5);
+    var pv = parseFloat(pvEl.value) || 0;
+    var verbrauch = parseFloat(verbrauchEl.value) || 0;
+    if (!pv || !verbrauch) {
+      if (plzEl.reportValidity) {
+        pvEl.required = true;
+        verbrauchEl.required = true;
+        pvEl.reportValidity();
+      }
+      return;
+    }
+
+    var dachEl = document.getElementById('calc_dachneigung');
+    var ausrEl = document.getElementById('calc_ausrichtung');
+    var dach = parseFloat(dachEl ? dachEl.value : 1) || 1;
+    var ausrichtung = parseFloat(ausrEl ? ausrEl.value : 1) || 1;
+    var ertrag = Math.round(pv * 950 * dach * ausrichtung);
+    var ersparnis = Math.round(ertrag * 0.35 * 0.35);
+    var autarkie = Math.min(Math.round((ertrag / verbrauch) * 100), 95);
+    var kwh = recommendKwh(verbrauch, planEl ? planEl.value : '');
+    var email = emailEl ? String(emailEl.value || '').trim() : '';
+    var plan = planEl ? String(planEl.value || '') : '';
+
+    var data = {
+      kwh: String(kwh),
+      peak: String(pv),
+      pv: String(pv),
+      savings: String(ersparnis),
+      ersparnis: String(ersparnis),
+      plz: plz,
+      usage: String(Math.round(verbrauch)),
+      verbrauch: String(Math.round(verbrauch)),
+      autarky: String(autarkie),
+      autarkie: String(autarkie),
+      email: email,
+      plan: plan,
+      source: 'homepage-lp',
+      version: 2
+    };
+
+    var url = beratungBase();
+    if (window.werduCalcHandoff) {
+      url = window.werduCalcHandoff.persistAndLink(data, {}).url || url;
+    }
+
+    if (result) {
+      var kwhEl = document.getElementById('whp-res-kwh');
+      var autEl = document.getElementById('whp-res-autarkie');
+      var savEl = document.getElementById('whp-res-spar');
+      var cta = result.querySelector('.whp-calc-cta, .werdu-calc-cta');
+      if (kwhEl) kwhEl.textContent = kwh + ' kWh';
+      if (autEl) autEl.textContent = autarkie + ' %';
+      if (savEl) savEl.textContent = 'ca. ' + ersparnis.toLocaleString('de-DE') + ' €';
+      if (cta) cta.setAttribute('href', url);
+      result.classList.add('is-open');
+      result.hidden = false;
+      result.style.display = 'block';
+    }
+  };
 
   document.addEventListener('DOMContentLoaded', function () {
-    bindProgressiveImages();
-    bindCapacitySlider();
-    bindAddToCartFly();
-  });
-
-  /* -----------------------------------------------------------
-     Progressive image loading: reveal the full-res <img> once it
-     has actually finished loading, over a tiny blurred placeholder.
-     ----------------------------------------------------------- */
-  function bindProgressiveImages() {
-    var imgs = document.querySelectorAll('.img-blur-wrapper .full-img');
-    Array.prototype.forEach.call(imgs, function (img) {
-      function reveal() {
-        img.classList.add('loaded');
-      }
-      if (img.complete && img.naturalWidth > 0) {
-        reveal();
-      } else {
-        img.addEventListener('load', reveal, { once: true });
-        img.addEventListener('error', reveal, { once: true });
-      }
-    });
-  }
-
-  /* -----------------------------------------------------------
-     Section 2 — capacity slider. Single value (kWh), driven by one
-     --p custom property that the CSS uses for fill/thumb/tooltip.
-     On submit: hand off to the existing werduCalcHandoff utility so
-     the CTA still lands on /beratung-anfragen/ with parameters,
-     exactly like the other 3 calculators.
-     ----------------------------------------------------------- */
-  function bindCapacitySlider() {
-    var slider = document.getElementById('wv2-capacity-range');
-    var track = document.getElementById('wv2-slider-track');
-    var tooltip = document.getElementById('wv2-slider-tooltip');
-    var submitBtn = document.getElementById('wv2-slider-submit');
-    var plzInput = document.getElementById('wv2-plz-input');
-
-    if (!slider || !track) {
-      return;
-    }
-
-    function currentUrl() {
-      try {
-        if (window.werduCalcConfig && window.werduCalcConfig.beratungUrl) {
-          return window.werduCalcConfig.beratungUrl;
-        }
-      } catch (e) {}
-      return '/beratung-anfragen/';
-    }
-
-    function updateVisuals() {
-      var min = parseFloat(slider.min) || 0;
-      var max = parseFloat(slider.max) || 100;
-      var val = parseFloat(slider.value) || 0;
-      var pct = ((val - min) / (max - min)) * 100;
-      pct = Math.max(0, Math.min(100, pct));
-      track.style.setProperty('--p', pct + '%');
-      if (tooltip) {
-        tooltip.textContent = val + ' kWh';
-      }
-    }
-
-    slider.addEventListener('input', updateVisuals);
-    updateVisuals();
-
-    if (submitBtn && !submitBtn.getAttribute('href')) {
-      submitBtn.setAttribute('href', currentUrl());
-    }
-
-    if (submitBtn) {
-      submitBtn.addEventListener('click', function (evt) {
-        if (!window.werduCalcHandoff) {
-          return; // graceful fallback: default href navigation still works
-        }
-        evt.preventDefault();
-        var payload = {
-          kwh: slider.value,
-          plz: plzInput ? plzInput.value : '',
-          source: 'homepage-v2-slider'
-        };
-        var result = window.werduCalcHandoff.persistAndLink(payload, {});
-        window.location.href = result.url || currentUrl();
+    var form = document.getElementById('pv-calculator');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        window.werduCalc();
       });
     }
-  }
-
-  /* -----------------------------------------------------------
-     Section 7 — fly-to-cart animation on successful WooCommerce
-     AJAX add-to-cart from the Section 3 variant cards. Uses
-     WooCommerce's own "added_to_cart" event, so it works with the
-     site's existing ajax_add_to_cart buttons without reinventing
-     cart logic.
-     ----------------------------------------------------------- */
-  function bindAddToCartFly() {
-    if (typeof window.jQuery === 'undefined') {
-      return;
+    var btn = document.getElementById('calc-submit');
+    if (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.werduCalc();
+      });
     }
-    window.jQuery(document.body).on('added_to_cart', function (event, fragments, cartHash, $button) {
-      if (reduceMotion || !$button || !$button.length) {
-        return;
-      }
-      try {
-        flyToCart($button[0]);
-      } catch (e) {}
-    });
-  }
-
-  function flyToCart(buttonEl) {
-    var card = buttonEl.closest('.variant-card');
-    var sourceImg = card ? card.querySelector('img') : null;
-    var cartBadge = document.querySelector('.wcmenucart-contents .cart-value');
-    if (!sourceImg || !cartBadge) {
-      return;
-    }
-
-    var srcRect = sourceImg.getBoundingClientRect();
-    var dstRect = cartBadge.getBoundingClientRect();
-
-    var clone = sourceImg.cloneNode(true);
-    clone.className = 'wv2-fly-clone';
-    clone.style.width = srcRect.width + 'px';
-    clone.style.height = srcRect.height + 'px';
-    clone.style.left = srcRect.left + 'px';
-    clone.style.top = srcRect.top + 'px';
-
-    var dx = (dstRect.left + dstRect.width / 2) - (srcRect.left + srcRect.width / 2);
-    var dy = (dstRect.top + dstRect.height / 2) - (srcRect.top + srcRect.height / 2);
-    clone.style.setProperty('--dx', dx + 'px');
-    clone.style.setProperty('--dy', dy + 'px');
-
-    document.body.appendChild(clone);
-
-    clone.addEventListener('animationend', function () {
-      clone.remove();
-      cartBadge.classList.add('bump');
-      setTimeout(function () {
-        cartBadge.classList.remove('bump');
-      }, 400);
-    }, { once: true });
-  }
+  });
 })();

@@ -664,7 +664,7 @@ add_action( 'wp_enqueue_scripts', 'werdu_enqueue_calc_handoff_assets', 30 );
  * in de Sjabloon-dropdown toont, ongeacht hook-timing.
  */
 function werdu_enqueue_homepage_v2_assets() {
-    if ( ! is_page_template( 'template-werdu-v2.php' ) ) {
+    if ( ! is_front_page() && ! is_page_template( 'template-werdu-v2.php' ) ) {
         return;
     }
 
@@ -701,6 +701,36 @@ function werdu_enqueue_homepage_v2_assets() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'werdu_enqueue_homepage_v2_assets', 30 );
+
+/**
+ * Force the light-theme landing template on the WordPress front page so
+ * Elementor canvas / leftover widget HTML cannot paint the old layout.
+ */
+function werdu_force_homepage_v2_template( $template ) {
+    if ( is_admin() || ! is_front_page() ) {
+        return $template;
+    }
+    $lp = get_stylesheet_directory() . '/template-werdu-v2.php';
+    if ( file_exists( $lp ) ) {
+        return $lp;
+    }
+    return $template;
+}
+add_filter( 'template_include', 'werdu_force_homepage_v2_template', 99999 );
+
+function werdu_dequeue_elementor_on_homepage() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    wp_dequeue_style( 'elementor-frontend' );
+    wp_dequeue_style( 'elementor-icons' );
+    wp_dequeue_style( 'elementor-animations' );
+    wp_dequeue_style( 'elementor-gf-local-roboto' );
+    wp_dequeue_script( 'elementor-frontend' );
+    wp_dequeue_script( 'elementor-webpack-runtime' );
+    wp_dequeue_script( 'elementor-frontend-modules' );
+}
+add_action( 'wp_enqueue_scripts', 'werdu_dequeue_elementor_on_homepage', 1000 );
 
 /**
  * Eenmalige page-template cache flush: WordPress cachet de lijst met

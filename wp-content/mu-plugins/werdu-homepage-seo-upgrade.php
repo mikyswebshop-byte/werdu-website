@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
  * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
- * Version: 3.4
+ * Version: 4.0
  * Author: Michael van der Veen
  * Network: false
  */
@@ -93,6 +93,7 @@ function werdu_home_seo_rechner_url() {
  * nieuwe/eigen selectors.
  */
 function werdu_home_seo_base_css() {
+    return 'body.home .werdu-btn-glow,body.home .btn-3d,body.home .btn-werdu-primary,body.home .werdu-btn-primary{box-shadow:0 4px 14px rgba(224,85,0,.25)!important;text-shadow:none!important;filter:none!important}';
     return <<<'CSS'
 body.home,
 body.home #page,
@@ -1249,13 +1250,13 @@ function werdu_home_seo_critical_css() {
     }
     echo '<style id="werdu-home-critical-css">'
         . '@font-face{font-display:swap!important}'
-        . 'body.home,body.home #page,body.home .site-content-contain,body.home #content{background-color:#f8fafc!important;color:#0f172a}'
+        . 'body.home,body.home #page,body.home #content,.whp-page{background:#f8fafc!important;color:#0f172a}'
         . 'a.skip-link,.skip-link,.screen-reader-text:focus{display:none!important}'
-        . '.werdu-hero-container{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center;background:linear-gradient(180deg,#EDF5FF 0%,#FFFFFF 100%);border:1px solid #DBEAFE;border-radius:20px;padding:45px 35px;margin:20px 0 35px}'
-        . '.werdu-hero-container h1{color:#0f172a;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin:0 0 15px}'
-        . '.werdu-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:1024/572;object-fit:cover;border-radius:16px}'
-        . '.btn-werdu-primary,.werdu-btn-primary{background:#ff6600;color:#fff;font-weight:700;padding:16px 36px;border-radius:10px;display:inline-block;text-decoration:none}'
-        . '@media(max-width:782px){.werdu-hero-container{grid-template-columns:1fr;padding:30px 22px}}'
+        . '.whp-hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}'
+        . '.whp-hero h1{font-size:clamp(1.9rem,4vw,2.75rem);font-weight:800;line-height:1.15;margin:0 0 16px;color:#0f172a}'
+        . '.whp-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:1024/572;object-fit:cover}'
+        . '.whp-btn--primary{background:#ff6600;color:#fff;box-shadow:0 4px 14px rgba(224,85,0,.25)}'
+        . '@media(max-width:900px){.whp-hero-grid{grid-template-columns:1fr}}'
         . '</style>' . "\n";
 }
 add_action( 'wp_head', 'werdu_home_seo_critical_css', 1 );
@@ -1264,11 +1265,13 @@ function werdu_home_seo_print_css() {
     if ( is_admin() || ! is_front_page() ) {
         return;
     }
-    echo '<style id="werdu-home-seo-css">' . werdu_home_seo_base_css() . '</style>' . "\n";
+    echo '<style id="werdu-home-seo-css">'
+        . 'body.home .werdu-calc-cta,body.home .werdu-seo-cta,body.home .btn-3d,body.home .werdu-cta-auto,body.home .btn-werdu-primary,body.home .werdu-btn-primary,body.home .werdu-btn-glow,body.home .btn-primary-orange{'
+        . 'background:#ff6600!important;border:none!important;box-shadow:0 4px 14px rgba(224,85,0,.25)!important;text-shadow:none!important;filter:none!important}'
+        . 'body.home .werdu-calc-cta:hover,body.home .btn-werdu-primary:hover,body.home .werdu-btn-primary:hover{'
+        . 'background:#e05500!important;transform:translateY(-2px)!important;box-shadow:0 4px 14px rgba(224,85,0,.25)!important}'
+        . '</style>' . "\n";
 }
-// Priority 99999: print zo laat mogelijk in <head>, na alle Elementor- en
-// theme-stylesheets, zodat de !important-regels hierboven altijd winnen
-// bij gelijke specificiteit (cascade-volgorde), zonder specificiteit-oorlog.
 add_action( 'wp_head', 'werdu_home_seo_print_css', 99999 );
 
 // ============================================
@@ -1356,235 +1359,7 @@ function werdu_home_seo_print_interactions_js() {
     if ( is_admin() || ! is_front_page() ) {
         return;
     }
-    ?>
-<script id="werdu-home-seo-interactions">
-(function () {
-  'use strict';
-
-  var prefersReducedMotion = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
-
-  var CHECK_SVG = '<svg class="werdu-btn-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var SPINNER_HTML = '<span class="werdu-btn-spinner" aria-hidden="true"></span>';
-
-  // ---- Reel 3: FAQ-accordion (CSS Grid transition, geen JS hoogteberekening) ----
-  function bindFaqAccordion() {
-    document.querySelectorAll( '.werdu-faq-item' ).forEach( function ( item ) {
-      if ( item.tagName === 'DETAILS' ) {
-        return;
-      }
-      var header = item.querySelector( '.werdu-faq-header' );
-      if ( ! header || header.dataset.werduBound === '1' ) {
-        return;
-      }
-      header.dataset.werduBound = '1';
-      header.setAttribute( 'role', 'button' );
-      header.setAttribute( 'tabindex', '0' );
-      header.setAttribute( 'aria-expanded', item.classList.contains( 'is-open' ) ? 'true' : 'false' );
-
-      function toggle() {
-        var open = item.classList.toggle( 'is-open' );
-        header.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
-      }
-
-      header.addEventListener( 'click', toggle );
-      header.addEventListener( 'keydown', function ( e ) {
-        if ( e.key === 'Enter' || e.key === ' ' ) {
-          e.preventDefault();
-          toggle();
-        }
-      } );
-    } );
-  }
-
-  // ---- Reel 21: 3-staps knop-feedback (Default -> Loading -> Success) ----
-
-  // CTA-links (.werdu-btn-primary): korte, niet-blokkerende loading/success
-  // animatie vóór de navigatie, puur voor visuele feedback op de klik.
-  function bindCtaButtons() {
-    document.querySelectorAll( 'a.werdu-btn-primary' ).forEach( function ( btn ) {
-      if ( btn.dataset.werduFeedbackBound === '1' ) {
-        return;
-      }
-      btn.dataset.werduFeedbackBound = '1';
-
-      var href = btn.getAttribute( 'href' );
-      if ( ! href || btn.target === '_blank' ) {
-        return;
-      }
-
-      btn.addEventListener( 'click', function ( e ) {
-        if ( btn.classList.contains( 'is-loading' ) || btn.classList.contains( 'is-success' ) ) {
-          return;
-        }
-        e.preventDefault();
-
-        if ( prefersReducedMotion ) {
-          window.location.href = href;
-          return;
-        }
-
-        var originalHTML = btn.innerHTML;
-        btn.classList.add( 'is-loading' );
-        btn.innerHTML = SPINNER_HTML + '<span>Einen Moment...</span>';
-
-        setTimeout( function () {
-          btn.classList.remove( 'is-loading' );
-          btn.classList.add( 'is-success' );
-          btn.innerHTML = CHECK_SVG + '<span>Weiter...</span>';
-
-          setTimeout( function () {
-            window.location.href = href;
-          }, 450 );
-        }, 500 );
-      } );
-    } );
-  }
-
-  // Calculator-submitknop (.werdu-calc-btn): loading zodra geklikt, success
-  // zodra het resultaat-element daadwerkelijk verandert (geen vaste timer).
-  function bindCalcButton() {
-    var btn = document.querySelector( '.werdu-calc-btn' );
-    if ( ! btn || btn.dataset.werduFeedbackBound === '1' ) {
-      return;
-    }
-    var resultEl = document.getElementById( 'calc-result' ) || document.querySelector( '.werdu-calc-result' );
-    if ( ! resultEl ) {
-      return;
-    }
-    btn.dataset.werduFeedbackBound = '1';
-
-    var originalHTML = btn.innerHTML;
-    var revertTimer = null;
-    var safetyTimer = null;
-
-    function showSuccess() {
-      clearTimeout( safetyTimer );
-      btn.classList.remove( 'is-loading' );
-      btn.classList.add( 'is-success' );
-      btn.innerHTML = CHECK_SVG + '<span>Berechnet!</span>';
-      revertTimer = setTimeout( function () {
-        btn.classList.remove( 'is-success' );
-        btn.innerHTML = originalHTML;
-      }, 1500 );
-    }
-
-    var observer = new MutationObserver( function () {
-      if ( btn.classList.contains( 'is-loading' ) ) {
-        showSuccess();
-      }
-    } );
-    observer.observe( resultEl, { childList: true, subtree: true, characterData: true } );
-
-    btn.addEventListener( 'click', function () {
-      clearTimeout( revertTimer );
-      btn.classList.remove( 'is-success' );
-
-      if ( prefersReducedMotion ) {
-        return;
-      }
-
-      btn.classList.add( 'is-loading' );
-      btn.innerHTML = SPINNER_HTML + '<span>Berechne...</span>';
-
-      // Vangnet: als er onverhoopt geen resultaat-mutatie volgt, niet
-      // eindeloos in de loading-state blijven hangen.
-      safetyTimer = setTimeout( function () {
-        if ( btn.classList.contains( 'is-loading' ) ) {
-          btn.classList.remove( 'is-loading' );
-          btn.innerHTML = originalHTML;
-        }
-      }, 6000 );
-    } );
-  }
-
-  // ---- Design System 2.0: auto-tag CTA-links zonder eigen class ----
-  // Sommige CTA-links in de Elementor-database content hebben geen eigen
-  // class (bv. de kale <a href="...">Beratung anfragen</a> in de
-  // rechtvaardige-toelichting-tekst). In plaats van een ongeldige CSS
-  // ":contains()"-selector te gebruiken, herkennen we deze hier op hun
-  // zichtbare tekst en voegen we .werdu-cta-auto toe — de CSS hierboven
-  // stylet die class met dezelfde high-conversion gradient.
-  var CTA_TEXT_PATTERN = /beratung anfragen|beratung anfordern|angebot anfordern|kostenlose\s+(beratung|analyse|fachanalyse)/i;
-  function bindCtaAutoTag() {
-    var content = document.getElementById( 'content' ) || document.body;
-    content.querySelectorAll( 'a' ).forEach( function ( link ) {
-      if ( link.dataset.werduCtaChecked === '1' ) {
-        return;
-      }
-      link.dataset.werduCtaChecked = '1';
-
-      if ( link.classList.contains( 'werdu-calc-cta' )
-        || link.classList.contains( 'werdu-seo-cta' )
-        || link.classList.contains( 'btn-3d' )
-        || link.classList.contains( 'werdu-btn-primary' ) ) {
-        return;
-      }
-
-      var text = ( link.textContent || '' ).trim();
-      if ( text && CTA_TEXT_PATTERN.test( text ) ) {
-        link.classList.add( 'werdu-cta-auto' );
-      }
-    } );
-  }
-
-  // ---- Design System 2.0: subtiele "lift" op het actieve rechner-veld ----
-  function bindCalcInputMicroInteractions() {
-    if ( prefersReducedMotion ) {
-      return;
-    }
-    var container = document.querySelector( '.werdu-calc-container' );
-    if ( ! container || container.dataset.werduLiftBound === '1' ) {
-      return;
-    }
-    container.dataset.werduLiftBound = '1';
-
-    container.querySelectorAll( 'input, select' ).forEach( function ( field ) {
-      var row = field.closest( '.calc-row' ) || field.parentElement;
-      if ( ! row ) {
-        return;
-      }
-      row.style.transition = 'transform 0.2s ease';
-      field.addEventListener( 'focus', function () {
-        row.style.transform = 'scale(1.01)';
-      } );
-      field.addEventListener( 'blur', function () {
-        row.style.transform = 'scale(1)';
-      } );
-    } );
-  }
-
-  // Scroll & Reveal (opacity/translateY-onthulling bij scroll) is bewust
-  // verwijderd in Design System 3.1: content moet direct zichtbaar/leesbaar
-  // zijn (performance + geen "flash of invisible content" voor SEO/AIO),
-  // in plaats van pas na een IntersectionObserver-trigger te verschijnen.
-
-  function init() {
-    bindFaqAccordion();
-    bindCtaButtons();
-    bindCalcButton();
-    bindCtaAutoTag();
-    bindCalcInputMicroInteractions();
-  }
-
-  if ( document.readyState === 'loading' ) {
-    document.addEventListener( 'DOMContentLoaded', init );
-  } else {
-    init();
-  }
-
-  // De calculator- en FAQ-markup kunnen iets vertraagd renderen (Elementor);
-  // kort blijven proberen zodat nieuw gerenderde elementen ook gebonden worden.
-  var attempts = 0;
-  var timer = setInterval( function () {
-    attempts++;
-    init();
-    if ( attempts > 20 ) {
-      clearInterval( timer );
-    }
-  }, 300 );
-})();
-</script>
-    <?php
+    return;
 }
 add_action( 'wp_footer', 'werdu_home_seo_print_interactions_js', 21 );
 
@@ -2121,38 +1896,7 @@ function werdu_home_seo_inject( $content ) {
     if ( is_admin() || is_feed() || ! is_front_page() ) {
         return $content;
     }
-    if ( ! in_the_loop() || ! is_main_query() ) {
-        return $content;
-    }
-
-    // Idempotentie: nooit tweemaal injecteren binnen dezelfde request.
-    if ( false !== strpos( $content, 'werdu-hero-container' ) ) {
-        return $content;
-    }
-
-    $hero = werdu_home_seo_hero_html();
-    $body = werdu_home_seo_body_html();
-
-    // Bestaande Hero-sectie, productkaarten en calculator blijven volledig
-    // ongewijzigd — het Hero-blok wordt er alleen vóór geplaatst.
-    $content = $hero . $content;
-
-    // Direct onder de calculator-sectie plaatsen: vlak vóór de eerstvolgende
-    // <section class="werdu-seo-section"> die daar al op volgt.
-    if ( false !== strpos( $content, WERDU_HOME_CALC_SECTION_MARKER )
-        && false !== strpos( $content, WERDU_HOME_AFTER_CALC_MARKER ) ) {
-        $content = str_replace(
-            WERDU_HOME_AFTER_CALC_MARKER,
-            $body . WERDU_HOME_AFTER_CALC_MARKER,
-            $content
-        );
-    } else {
-        // Vangnet: als de calculator-markers onverhoopt niet worden gevonden
-        // (bv. na een toekomstige Elementor-wijziging), toch niets verliezen
-        // en het blok gewoon aan het einde van de content toevoegen.
-        $content .= $body;
-    }
-
+    // The front page is fully rendered by template-werdu-v2.php.
     return $content;
 }
 add_filter( 'the_content', 'werdu_home_seo_inject', 15 );
