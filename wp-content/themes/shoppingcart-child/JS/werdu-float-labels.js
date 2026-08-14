@@ -19,7 +19,9 @@
     if (!field) {
       return;
     }
-    if (field.tagName !== 'SELECT') {
+    if (!field.getAttribute('placeholder')) {
+      field.setAttribute('placeholder', ' ');
+    } else if (!field.getAttribute('placeholder').trim()) {
       field.setAttribute('placeholder', ' ');
     }
 
