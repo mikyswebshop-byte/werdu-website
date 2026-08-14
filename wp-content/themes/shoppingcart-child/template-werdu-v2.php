@@ -11,7 +11,7 @@ get_header();
 $whp_beratung = function_exists( 'werdu_home_seo_beratung_url' ) ? werdu_home_seo_beratung_url() : home_url( '/beratung-anfragen/' );
 $whp_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo_rechner_url() : home_url( '/solarbatterie-rechner/' );
 $whp_shop     = home_url( '/shop/' );
-$whp_hero     = home_url( '/wp-content/uploads/2026/08/pv-speicher-kaufen-modernes-deutsches-wohnhaus-alpen_1024_572.webp' );
+$whp_hero     = get_stylesheet_directory_uri() . '/images/whp-hero-640.webp';
 $whp_prod_16  = home_url( '/wp-content/uploads/2026/07/16kwh-lifepo4-heimspeicher-hero_1024_1024-420x420.webp' );
 
 $whp_price = static function ( $id ) {
@@ -27,7 +27,7 @@ $whp_price = static function ( $id ) {
 body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 .whp-hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
 .whp-hero h1{font-size:clamp(1.9rem,4vw,2.75rem);font-weight:800;line-height:1.15;margin:0 0 16px;color:#0f172a}
-.whp-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:1024/572;object-fit:cover}
+.whp-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:640/358;object-fit:cover}
 .whp-btn--primary{background:#ff6600;color:#fff;box-shadow:0 4px 14px rgba(224,85,0,.25);border:0;border-radius:10px;padding:15px 28px;font-weight:700;text-decoration:none;display:inline-flex}
 @media(max-width:900px){.whp-hero-grid{grid-template-columns:1fr}}
 </style>
@@ -56,9 +56,8 @@ body.home,#content,.whp-page{background:#f8fafc;color:#0f172a}
 					class="whp-hero-lcp"
 					src="<?php echo esc_url( $whp_hero ); ?>"
 					alt="Modernes Wohnhaus mit Photovoltaik und LiFePO4-Heimspeicher in Deutschland"
-					width="1024"
-					height="572"
-					sizes="(max-width: 900px) 100vw, 540px"
+					width="640"
+					height="358"
 					fetchpriority="high"
 					decoding="async"
 				/>

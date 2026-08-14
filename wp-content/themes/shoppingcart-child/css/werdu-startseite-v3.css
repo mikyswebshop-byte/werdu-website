@@ -306,7 +306,7 @@ body.home .werdu-btn-glow:hover {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1024 / 572;
+  aspect-ratio: 640 / 358;
   object-fit: cover;
 }
 

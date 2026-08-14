@@ -496,6 +496,10 @@ function werdu_homepage_speed_dequeue() {
         'woocommerce-general',
         'woocommerce-layout',
         'woocommerce-smallscreen',
+        'parent-style',
+        'child-style',
+        'shoppingcart-style',
+        'shoppingcart-responsive',
     );
     foreach ( $style_handles as $handle ) {
         wp_dequeue_style( $handle );
@@ -573,7 +577,7 @@ function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
         return $html;
     }
     $href_esc = esc_url( $href );
-    return '<link rel="preload" href="' . $href_esc . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">'
+    return '<link rel="stylesheet" href="' . $href_esc . '" media="print" onload="this.media=\'all\'">'
         . '<noscript><link rel="stylesheet" href="' . $href_esc . '"></noscript>';
 }
 
@@ -689,7 +693,7 @@ function werdu_homepage_preload_lcp_image() {
     if ( is_admin() || ! is_front_page() ) {
         return;
     }
-    $hero = home_url( '/wp-content/uploads/2026/08/pv-speicher-kaufen-modernes-deutsches-wohnhaus-alpen_1024_572.webp' );
+    $hero = get_stylesheet_directory_uri() . '/images/whp-hero-640.webp';
     echo '<link rel="preload" as="image" href="' . esc_url( $hero ) . '" fetchpriority="high">' . "\n";
 }
 
