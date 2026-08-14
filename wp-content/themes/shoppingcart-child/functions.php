@@ -524,6 +524,10 @@ function werdu_homepage_speed_dequeue() {
         'wp-embed',
         'comment-reply',
         'jquery-migrate',
+        'jquery-sticky',
+        'shoppingcart-sticky-settings',
+        'fluent-forms-elementor-widget',
+        'fluentform-elementor-widget',
     );
     foreach ( $script_handles as $handle ) {
         wp_dequeue_script( $handle );
@@ -533,6 +537,11 @@ function werdu_homepage_speed_dequeue() {
     if ( function_exists( 'wp_scripts' ) && wp_scripts() ) {
         foreach ( wp_scripts()->registered as $handle => $obj ) {
             if ( 0 === strpos( $handle, 'caos' ) || 'google_gtagjs' === $handle ) {
+                wp_dequeue_script( $handle );
+                wp_deregister_script( $handle );
+                continue;
+            }
+            if ( false !== strpos( $handle, 'fluent-forms-elementor' ) || false !== strpos( $handle, 'sticky' ) ) {
                 wp_dequeue_script( $handle );
                 wp_deregister_script( $handle );
                 continue;
@@ -558,6 +567,15 @@ function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
         return $html;
     }
     if ( ! is_string( $href ) || '' === $href ) {
+        return $html;
+    }
+    $keep_blocking = array(
+        'parent-style',
+        'child-style',
+        'shoppingcart-style',
+        'shoppingcart-responsive',
+    );
+    if ( in_array( $handle, $keep_blocking, true ) ) {
         return $html;
     }
     if ( $media && $media !== 'all' && $media !== 'screen' && $media !== 'print' ) {
@@ -632,7 +650,7 @@ function werdu_print_a11y_css() {
         . '#colophon [style*="color:#ff6600"],#colophon [style*="color: #ff6600"],#colophon [style*="color:#FF6600"]{color:#c2410c!important;text-decoration:underline!important}'
         . '#colophon [style*="153, 255"],#colophon [style*="#0099FF"],#colophon [style*="#0099ff"]{color:#0b57d0!important;text-decoration:underline!important}'
         . '.whp-page a:not(.whp-btn){color:#c2410c;text-decoration:underline}'
-        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary{font-size:1.25rem!important;font-weight:800!important;line-height:1.2!important}'
+        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary,.whp-btn--primary{background:#c2410c!important;color:#fff!important;font-size:1.125rem!important;font-weight:700!important}'
         . '</style>' . "\n";
 }
 
@@ -1031,49 +1049,29 @@ add_action( 'wp_head', function() {
    ============================================================ */
 add_action( 'wp_head', function() {
     if ( is_admin() ) return;
-    echo '<style>' . "
-";
-    echo '#site-content-contain { position: relative; }' . "
-";
-    echo '.announcement-bar, .top-bar, .elementor-popup, [class*="banner"], [class*="notice"] { min-height: 40px; }' . "
-";
-    echo 'img[width][height] { height: auto; }' . "
-";
-    echo '</style>' . "
-";
-}, 3 );
-
-/* ============================================================
-   21. CLS FIX — Header stabiliseren
-   ============================================================ */
-add_action( 'wp_head', function() {
-    if ( is_admin() ) return;
-    echo '<style>' . "
-";
-    echo '.site-header { min-height: 80px; }' . "
-";
-    echo '.header-right .fa-solid, .header-right .fa, .header-right .fas, .header-right .fab { min-width: 20px; min-height: 20px; display: inline-block; }' . "
-";
-    echo '.custom-logo, .custom-logo-link img { width: 140px; height: 139px; }' . "
-";
-    echo '.elementor-section:first-child { min-height: 100px; }' . "
-";
-    echo '.custom-logo { transition: none !important; }' . "
-";
-    echo '</style>' . "
-";
+    echo '<style id="werdu-cls-lock">'
+        . '#site-content-contain{position:relative}'
+        . '.custom-logo-link{display:inline-block;width:61px;height:60px;overflow:hidden}'
+        . '.custom-logo,.custom-logo-link img{width:61px!important;height:60px!important;max-width:61px!important;max-height:60px!important;aspect-ratio:143/140}'
+        . '#sticky-header #site-branding{display:none!important}'
+        . '#sticky-header{min-height:56px;box-sizing:border-box}'
+        . '#site-detail{min-height:48px}'
+        . '.custom-logo{transition:none!important}'
+        . 'img[width][height]:not(.custom-logo):not(.whp-hero-lcp){height:auto}'
+        . '</style>' . "\n";
 }, 3 );
 
 /* ============================================================
    22. LOGO DIMENSIONS FIX
    ============================================================ */
 add_filter( 'get_custom_logo', function( $html ) {
-    if ( strpos( $html, 'width="140"' ) !== false && strpos( $html, 'height="139"' ) !== false ) {
-        $html = str_replace( 'width="140"', 'width="143"', $html );
-        $html = str_replace( 'height="139"', 'height="140"', $html );
+    if ( ! is_string( $html ) || '' === $html ) {
+        return $html;
     }
-    if ( strpos( $html, 'width=' ) === false || strpos( $html, 'height=' ) === false ) {
-        $html = str_replace( '<img', '<img width="143" height="140"', $html );
+    $html = preg_replace( '/\swidth="\d+"/', ' width="61"', $html );
+    $html = preg_replace( '/\sheight="\d+"/', ' height="60"', $html );
+    if ( false === strpos( $html, 'width=' ) ) {
+        $html = str_replace( '<img', '<img width="61" height="60"', $html );
     }
     return $html;
 }, 30 );
@@ -1109,7 +1107,8 @@ add_filter( 'wp_resource_hints', function( $hints, $relation_type ) {
             if ( is_string( $url ) && (
                 strpos( $url, 'fonts.gstatic.com' ) !== false ||
                 strpos( $url, 'google-analytics.com' ) !== false ||
-                strpos( $url, 'fonts.googleapis.com' ) !== false
+                strpos( $url, 'fonts.googleapis.com' ) !== false ||
+                strpos( $url, '://werdu.de' ) !== false
             ) ) {
                 continue;
             }

@@ -20,7 +20,16 @@
   #masthead { min-height: 120px; }
   #sticky-header { min-height: 70px; box-sizing: border-box; }
   .site-content-contain { min-height: 100vh; }
-  .custom-logo, .custom-logo-link img { aspect-ratio: 143 / 140; height: auto; max-height: 60px; width: auto; }
+  .custom-logo-link { display: inline-block; width: 61px; height: 60px; overflow: hidden; }
+  .custom-logo, .custom-logo-link img {
+    width: 61px !important;
+    height: 60px !important;
+    max-height: 60px !important;
+    max-width: 61px !important;
+    aspect-ratio: 143 / 140;
+  }
+  #sticky-header #site-branding { display: none !important; }
+  #site-detail { min-height: 48px; }
   @font-face { font-display: swap !important; }
   .menu-toggle, .top-menu-toggle {
     background: transparent;

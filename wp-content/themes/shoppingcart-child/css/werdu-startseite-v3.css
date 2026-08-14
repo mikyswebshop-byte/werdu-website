@@ -173,14 +173,14 @@ body.home .container {
 
 .whp-btn--primary,
 a.whp-btn--primary {
-  background: var(--whp-orange);
+  background: var(--whp-link);
   color: #ffffff !important;
   box-shadow: var(--whp-btn-shadow);
 }
 
 .whp-btn--primary:hover,
 a.whp-btn--primary:hover {
-  background: var(--whp-orange-hover);
+  background: #9a3412;
   transform: translateY(-2px);
   color: #ffffff !important;
 }
