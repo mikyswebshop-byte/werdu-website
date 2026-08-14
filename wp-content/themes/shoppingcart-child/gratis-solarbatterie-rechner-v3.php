@@ -226,44 +226,27 @@ if (!defined('ABSPATH')) {
 @media (max-width: 640px) { .wr5-form { grid-template-columns: 1fr; } }
 
 .wr5-field { position: relative; width: 100%; }
-.wr5-field > label {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  transform-origin: left center;
-  font-size: 16px;
-  font-weight: 600;
-  color: #475569;
-  pointer-events: none;
-  background: #fff;
-  padding: 0 4px;
-  z-index: 2;
-  margin: 0;
-  text-transform: none;
-  letter-spacing: 0;
-  transition: transform 0.2s ease, color 0.2s ease, top 0.2s ease;
-}
-.wr5-field:focus-within > label,
-.wr5-field:has(input:not(:placeholder-shown)) > label,
-.wr5-field:has(select) > label {
-  top: 0;
-  transform: translateY(-50%) scale(0.85);
-  color: #c2410c;
+.wr5-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4a4a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
 }
 .wr5-field input,
 .wr5-field select {
   width: 100%;
-  padding: 18px 14px 8px 14px;
+  padding: 16px;
   border: 2px solid #e0e0f0;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
   color: #1a1a2e;
   background: #fff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
   font-family: inherit;
 }
-.wr5-field input::placeholder { color: transparent; }
 .wr5-field input:hover, .wr5-field select:hover { border-color: #c0c0d0; }
 .wr5-field input:focus, .wr5-field select:focus { outline: none; }
 .wr5-field small {
@@ -923,8 +906,7 @@ if (!defined('ABSPATH')) {
 /* --- REDUCED MOTION --- */
 @media (prefers-reduced-motion: reduce) {
   .wr5-hero-title, .wr5-btn-prim, .wr5-res-card, .wr5-prod-badge,
-  .wr5-panel, .wr5-result, .wr5-animate,
-  .wr5-field > label, .wr5-field input, .wr5-field select {
+  .wr5-panel, .wr5-result, .wr5-animate {
     animation: none !important;
     transition: none !important;
   }
@@ -1196,7 +1178,7 @@ if (!defined('ABSPATH')) {
   <div class="wr5-form">
     <div class="wr5-field">
       <label for="wr5-plz">Postleitzahl</label>
-      <input type="text" id="wr5-plz" placeholder=" " title="z. B. 10115" maxlength="5" autocomplete="postal-code">
+      <input type="text" id="wr5-plz" placeholder="z.B. 10115" maxlength="5" autocomplete="postal-code">
       <small>Die ersten 2 Ziffern bestimmen Ihre DWD-Region</small>
     </div>
     <div class="wr5-field">
@@ -1212,12 +1194,12 @@ if (!defined('ABSPATH')) {
     </div>
     <div class="wr5-field">
       <label for="wr5-verbrauch">Jährlicher Verbrauch (kWh)</label>
-      <input type="number" id="wr5-verbrauch" placeholder=" " title="z. B. 4500">
+      <input type="number" id="wr5-verbrauch" placeholder="z.B. 4500">
       <small>Typisch: 2.500–3.500 (1–2 Pers.) / 4.000–6.000 (3–4 Pers.)</small>
     </div>
     <div class="wr5-field">
       <label for="wr5-strompreis">Strompreis (ct/kWh)</label>
-      <input type="number" id="wr5-strompreis" placeholder=" " title="z. B. 38" step="0.1" value="38">
+      <input type="number" id="wr5-strompreis" placeholder="z.B. 38" step="0.1" value="38">
       <small>Aktueller Bundesdurchschnitt: ca. 37,2 ct/kWh (BDEW 2026)</small>
     </div>
   </div>
@@ -1277,7 +1259,7 @@ if (!defined('ABSPATH')) {
   <div class="wr5-form">
     <div class="wr5-field">
       <label for="wr5-pv">PV-Leistung (kWp)</label>
-      <input type="number" id="wr5-pv" placeholder=" " title="z. B. 8" step="0.1" value="6">
+      <input type="number" id="wr5-pv" placeholder="z.B. 8" step="0.1" value="6">
       <small>Typisch Einfamilienhaus: 6–10 kWp</small>
     </div>
     <div class="wr5-field">
@@ -1303,7 +1285,7 @@ if (!defined('ABSPATH')) {
     </div>
     <div class="wr5-field">
       <label for="wr5-verschattung">Verschattung (%)</label>
-      <input type="number" id="wr5-verschattung" placeholder=" " title="z. B. 0" min="0" max="100" value="0">
+      <input type="number" id="wr5-verschattung" placeholder="z.B. 0" min="0" max="100" value="0">
       <small>0% = keine, 30% = moderat, 60% = stark</small>
     </div>
   </div>
@@ -1344,12 +1326,12 @@ if (!defined('ABSPATH')) {
   <div class="wr5-form">
     <div class="wr5-field">
       <label for="wr5-einspeise">Einspeisevergütung (ct/kWh)</label>
-      <input type="number" id="wr5-einspeise" placeholder=" " title="z. B. 8,2" step="0.1" value="8.2">
+      <input type="number" id="wr5-einspeise" placeholder="z.B. 8,2" step="0.1" value="8.2">
       <small>EEG 2024: ca. 8,2 ct/kWh</small>
     </div>
     <div class="wr5-field">
       <label for="wr5-wirkungsgrad">Systemwirkungsgrad (%)</label>
-      <input type="number" id="wr5-wirkungsgrad" placeholder=" " title="z. B. 84" value="84">
+      <input type="number" id="wr5-wirkungsgrad" placeholder="z.B. 84" value="84">
       <small>LiFePO4: 84%, Blei: 75%</small>
     </div>
   </div>

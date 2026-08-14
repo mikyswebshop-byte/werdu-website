@@ -501,7 +501,7 @@ function werdu_partner_assets() {
 	wp_enqueue_style(
 		'werdu-partner',
 		$dir . '/css/werdu-partner.css',
-		array( 'werdu-float-labels' ),
+		array(),
 		$ver
 	);
 	wp_enqueue_script(
@@ -762,23 +762,23 @@ function werdu_partner_render_form() {
 	<form id="werdu-partner-form" class="wp-form-grid" method="post" novalidate>
 		<div class="wp-field">
 			<label for="partner-firma">Firmenname <span class="req">*</span></label>
-			<input type="text" id="partner-firma" name="partner-firma" required autocomplete="organization" placeholder=" " />
+			<input type="text" id="partner-firma" name="partner-firma" required autocomplete="organization" />
 		</div>
 		<div class="wp-field">
 			<label for="partner-name">Ansprechpartner <span class="req">*</span></label>
-			<input type="text" id="partner-name" name="partner-name" required autocomplete="name" placeholder=" " />
+			<input type="text" id="partner-name" name="partner-name" required autocomplete="name" />
 		</div>
 		<div class="wp-field">
 			<label for="partner-email">E-Mail <span class="req">*</span></label>
-			<input type="email" id="partner-email" name="partner-email" required autocomplete="email" placeholder=" " />
+			<input type="email" id="partner-email" name="partner-email" required autocomplete="email" />
 		</div>
 		<div class="wp-field">
 			<label for="partner-telefon">Telefon</label>
-			<input type="tel" id="partner-telefon" name="partner-telefon" autocomplete="tel" placeholder=" " />
+			<input type="tel" id="partner-telefon" name="partner-telefon" autocomplete="tel" />
 		</div>
 		<div class="wp-field">
 			<label for="partner-plz">PLZ <span class="req">*</span></label>
-			<input type="text" id="partner-plz" name="partner-plz" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required autocomplete="postal-code" placeholder=" " />
+			<input type="text" id="partner-plz" name="partner-plz" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required autocomplete="postal-code" />
 		</div>
 		<div class="wp-field">
 			<label for="partner-radius">Radius <span class="req">*</span></label>
@@ -806,7 +806,7 @@ function werdu_partner_render_form() {
 		</div>
 		<div class="wp-field wp-field--full">
 			<label for="partner-nachricht">Kurzbeschreibung / Kapazität</label>
-			<textarea id="partner-nachricht" name="partner-nachricht" rows="4" placeholder=" " title="z. B. Meisterbetrieb, Einsatzgebiet, bisherige Speicher-Erfahrung"></textarea>
+			<textarea id="partner-nachricht" name="partner-nachricht" rows="4" placeholder="z. B. Meisterbetrieb, Einsatzgebiet, bisherige Speicher-Erfahrung…"></textarea>
 		</div>
 		<div class="wp-submit-wrap">
 			<button type="submit" class="wp-btn wp-btn-primary">Partnerschaft anfragen</button>
