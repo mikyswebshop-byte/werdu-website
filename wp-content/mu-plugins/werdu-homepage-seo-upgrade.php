@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WERDU Homepage SEO & AIO Upgrade
  * Description: Injecteert de Hero H1/intro en het uitgebreide SEO/AIO-contentblok (ToC, vergelijkingstabel, FAQ, JSON-LD) op de homepage — direct onder de Heimspeicher-rechner sectie — met een clean, high-end designsysteem (CSS-variabelen, borderless tabel, subtiele focus-states) zonder de bestaande Elementor-content, calculator-logica of styling te veranderen.
- * Version: 3.3
+ * Version: 3.4
  * Author: Michael van der Veen
  * Network: false
  */
@@ -94,6 +94,21 @@ function werdu_home_seo_rechner_url() {
  */
 function werdu_home_seo_base_css() {
     return <<<'CSS'
+body.home,
+body.home #page,
+body.home .site-content-contain,
+body.home #content,
+body.home .site-content {
+  background-color: #f8fafc !important;
+  color: #0f172a;
+}
+
+body.home a.skip-link,
+body.home .skip-link,
+body.home .screen-reader-text:focus {
+  display: none !important;
+}
+
 :root {
   --werdu-bg: #FFFFFF;
   --werdu-bg-subtle: #F8FAFC;
@@ -393,6 +408,14 @@ function werdu_home_seo_base_css() {
   overflow: hidden;
 }
 
+.werdu-faq-item > summary.werdu-faq-header {
+  list-style: none;
+}
+
+.werdu-faq-item > summary.werdu-faq-header::-webkit-details-marker {
+  display: none;
+}
+
 .werdu-faq-header {
   padding: 20px;
   font-weight: 700;
@@ -413,8 +436,9 @@ function werdu_home_seo_base_css() {
   flex-shrink: 0;
 }
 
-.werdu-faq-item.is-open .werdu-faq-icon {
-  transform: rotate(45deg); /* Turns + into x */
+.werdu-faq-item.is-open .werdu-faq-icon,
+.werdu-faq-item[open] .werdu-faq-icon {
+  transform: rotate(45deg);
 }
 
 .werdu-faq-answer-wrapper {
@@ -776,6 +800,28 @@ function werdu_home_seo_base_css() {
   transform: translateY(-2px);
 }
 
+.werdu-hero-media {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.werdu-hero-lcp-wrap {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #e2e8f0;
+  border: 1px solid var(--werdu-card-border);
+}
+
+.werdu-hero-lcp {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1024 / 572;
+  object-fit: cover;
+}
+
 .werdu-hero-fact-card {
   background: #FFFFFF;
   border: 1px solid var(--werdu-card-border);
@@ -943,6 +989,62 @@ function werdu_home_seo_base_css() {
   border-radius: 16px;
   padding: 30px;
   margin-bottom: 40px;
+}
+
+.werdu-faq-item .werdu-faq-answer-inner {
+  padding: 0 20px 20px 20px;
+}
+
+.werdu-product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 25px !important;
+  align-items: stretch !important;
+  margin: 32px 0 40px;
+}
+
+.werdu-product-card-item {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.werdu-product-card-item.is-bestseller {
+  border: 2px solid #ff6600 !important;
+  box-shadow: 0 10px 25px rgba(255, 102, 0, 0.15) !important;
+}
+
+.werdu-product-card-item h3 {
+  min-height: 56px !important;
+  margin-bottom: 10px !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+.werdu-product-card-item p {
+  flex-grow: 1 !important;
+  margin-bottom: 15px !important;
+  font-size: 0.9rem !important;
+  color: #4a5568 !important;
+}
+
+.werdu-product-card-cta {
+  margin-top: auto !important;
+  padding-top: 15px !important;
+  border-top: 1px solid #edf2f7 !important;
+}
+
+.werdu-product-card-cta strong {
+  display: block;
+  color: var(--werdu-orange);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
 }
 
 @media (max-width: 782px) {
@@ -1141,6 +1243,23 @@ function werdu_home_seo_base_css() {
 CSS;
 }
 
+function werdu_home_seo_critical_css() {
+    if ( is_admin() || ! is_front_page() ) {
+        return;
+    }
+    echo '<style id="werdu-home-critical-css">'
+        . '@font-face{font-display:swap!important}'
+        . 'body.home,body.home #page,body.home .site-content-contain,body.home #content{background-color:#f8fafc!important;color:#0f172a}'
+        . 'a.skip-link,.skip-link,.screen-reader-text:focus{display:none!important}'
+        . '.werdu-hero-container{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center;background:linear-gradient(180deg,#EDF5FF 0%,#FFFFFF 100%);border:1px solid #DBEAFE;border-radius:20px;padding:45px 35px;margin:20px 0 35px}'
+        . '.werdu-hero-container h1{color:#0f172a;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin:0 0 15px}'
+        . '.werdu-hero-lcp{display:block;width:100%;height:auto;aspect-ratio:1024/572;object-fit:cover;border-radius:16px}'
+        . '.btn-werdu-primary,.werdu-btn-primary{background:#ff6600;color:#fff;font-weight:700;padding:16px 36px;border-radius:10px;display:inline-block;text-decoration:none}'
+        . '@media(max-width:782px){.werdu-hero-container{grid-template-columns:1fr;padding:30px 22px}}'
+        . '</style>' . "\n";
+}
+add_action( 'wp_head', 'werdu_home_seo_critical_css', 1 );
+
 function werdu_home_seo_print_css() {
     if ( is_admin() || ! is_front_page() ) {
         return;
@@ -1250,6 +1369,9 @@ function werdu_home_seo_print_interactions_js() {
   // ---- Reel 3: FAQ-accordion (CSS Grid transition, geen JS hoogteberekening) ----
   function bindFaqAccordion() {
     document.querySelectorAll( '.werdu-faq-item' ).forEach( function ( item ) {
+      if ( item.tagName === 'DETAILS' ) {
+        return;
+      }
       var header = item.querySelector( '.werdu-faq-header' );
       if ( ! header || header.dataset.werduBound === '1' ) {
         return;
@@ -1476,35 +1598,55 @@ add_action( 'wp_footer', 'werdu_home_seo_print_interactions_js', 21 );
  * volledig ongewijzigd; dit is een extra, op zichzelf staand blok.
  */
 function werdu_home_seo_hero_html() {
-    $rechner = werdu_home_seo_rechner_url();
+    $rechner  = werdu_home_seo_rechner_url();
+    $beratung = werdu_home_seo_beratung_url();
+    $hero_src = home_url( '/wp-content/uploads/2026/08/pv-speicher-kaufen-modernes-deutsches-wohnhaus-alpen_1024_572.webp' );
 
     $template = <<<'HTML'
 <div class="werdu-seo-container" style="padding-bottom:0;">
     <div class="werdu-hero-container">
         <div>
-            <span class="werdu-badge-de">Für den deutschen Markt · 0&nbsp;% MwSt.</span>
-            <h1>PV-Speicher für Ihr Zuhause: Autarkie-Rechner &amp; Testsieger 2026</h1>
-            <p class="werdu-hero-p">Sie möchten Ihre Stromkosten spürbar senken und sich unabhängiger von steigenden Netzpreisen machen? Ein moderner PV-Speicher speichert Ihren selbst erzeugten Solarstrom und stellt ihn genau dann bereit, wenn Sie ihn wirklich brauchen – auch abends, nachts und bei einem Stromausfall.</p>
+            <span class="werdu-badge-de">Für den deutschen Markt · 0&nbsp;% MwSt. nach § 12 Abs. 3 UStG</span>
+            <h1>PV-Speicher kaufen: LiFePO4-Heimspeicher mit transparenten Preisen</h1>
+            <p class="werdu-hero-p">Ein richtig dimensionierter PV-Speicher hebt Ihren Solar-Eigenverbrauch typischerweise von rund 20–30&nbsp;% auf 70–85&nbsp;%. Berechnen Sie in wenigen Minuten Ihre Kapazität – und kaufen Sie anschließend zum transparenten Festpreis im Shop, ohne individuelles Angebot.</p>
             <div class="werdu-usps-grid">
                 <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> 0&nbsp;% MwSt. auf PV-Speicher</div>
-                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> LiFePO4-Technologie</div>
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> LiFePO4 mit 6.000–8.000 Zyklen</div>
                 <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> Optionale Notstromfunktion</div>
-                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> Bis zu 85&nbsp;% Autarkiegrad</div>
+                <div class="werdu-usp-tag"><span class="werdu-usp-check">✓</span> Optionaler Fachbetrieb vor Ort</div>
             </div>
             <a href="___RECHNER_URL___" class="btn-werdu-primary">Jetzt Autarkie-Rechner starten</a>
+            <a href="___BERATUNG_URL___" class="werdu-btn-primary" style="margin-left:12px;">Kostenlose Beratung</a>
         </div>
-        <div class="werdu-hero-fact-card">
-            <h3>Ihr PV-Speicher auf einen Blick</h3>
-            <div class="werdu-hero-fact-row"><span>Steuervorteil</span><strong>0&nbsp;% MwSt.</strong></div>
-            <div class="werdu-hero-fact-row"><span>Zellchemie</span><strong>LiFePO4</strong></div>
-            <div class="werdu-hero-fact-row"><span>Max. Autarkiegrad</span><strong>bis 85&nbsp;%</strong></div>
-            <div class="werdu-hero-fact-row"><span>Notstrom-Option</span><strong>Verfügbar</strong></div>
+        <div class="werdu-hero-media">
+            <div class="werdu-hero-lcp-wrap">
+                <img
+                    class="werdu-hero-lcp"
+                    src="___HERO_SRC___"
+                    alt="Modernes Wohnhaus mit Photovoltaik und LiFePO4-Heimspeicher in Deutschland"
+                    width="1024"
+                    height="572"
+                    fetchpriority="high"
+                    decoding="async"
+                />
+            </div>
+            <div class="werdu-hero-fact-card">
+                <h3>Ihr PV-Speicher auf einen Blick</h3>
+                <div class="werdu-hero-fact-row"><span>Steuervorteil</span><strong>0&nbsp;% MwSt.</strong></div>
+                <div class="werdu-hero-fact-row"><span>Zellchemie</span><strong>LiFePO4</strong></div>
+                <div class="werdu-hero-fact-row"><span>Max. Autarkiegrad</span><strong>bis 85&nbsp;%</strong></div>
+                <div class="werdu-hero-fact-row"><span>Notstrom-Option</span><strong>Verfügbar</strong></div>
+            </div>
         </div>
     </div>
 </div>
 HTML;
 
-    return str_replace( '___RECHNER_URL___', esc_url( $rechner ), $template );
+    return str_replace(
+        array( '___RECHNER_URL___', '___BERATUNG_URL___', '___HERO_SRC___' ),
+        array( esc_url( $rechner ), esc_url( $beratung ), esc_url( $hero_src ) ),
+        $template
+    );
 }
 
 /**
@@ -1514,61 +1656,93 @@ HTML;
  * (Google AIO, Perplexity, ChatGPT Search) als structured data binnenkrijgen.
  */
 function werdu_home_seo_faq_data() {
+    $rechner     = esc_url( werdu_home_seo_rechner_url() );
+    $beratung    = esc_url( werdu_home_seo_beratung_url() );
+    $shop        = esc_url( home_url( '/shop/' ) );
+    $mwst        = esc_url( home_url( '/mwst-befreiung-eigenverbrauch/' ) );
+    $installation = esc_url( home_url( '/heimspeicher-installation/' ) );
+    $notstrom    = esc_url( home_url( '/notstrom-heimspeicher-ersatzstrom-blackout/' ) );
+    $kosten      = esc_url( home_url( '/heimspeicher-kosten-pro-kwh/' ) );
+    $garantie    = esc_url( home_url( '/garantie/' ) );
+    $systeme     = esc_url( home_url( '/heimspeicher-systeme/' ) );
+
     return array(
         array(
-            'q' => 'Kann ich einen Speicher nachträglich einbauen?',
-            'a' => 'Ja, ein PV-Speicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Je nach vorhandener Technik kommen AC-gekoppelte Systeme (ideal für die Nachrüstung) oder ein hybrider DC-Wechselrichter zum Einsatz.',
+            'q' => 'Kann ich einen Speicher nachträglich an meine PV-Anlage anbauen?',
+            'a' => 'Ja. Ein Heimspeicher lässt sich an nahezu jede bestehende Photovoltaikanlage nachrüsten. Für die Nachrüstung sind AC-gekoppelte Systeme oft die praktischste Lösung, weil sie den vorhandenen Wechselrichter unangetastet lassen. Alternativ kann ein Hybrid-Wechselrichter die PV-Seite und die Batterie auf der DC-Seite zusammenführen. Welche Variante zu Ihrem Zählerplatz, Ihrer Netzform und Ihrem Verbrauch passt, klären Sie am schnellsten mit dem <a href="' . $rechner . '">Autarkie-Rechner</a> und einer <a href="' . $beratung . '">kostenlosen Fachberatung</a>. Ablauf und Hinweise stehen unter <a href="' . $installation . '">Heimspeicher-Installation</a>.',
         ),
         array(
-            'q' => 'Wie lange hält eine moderne Solarbatterie?',
-            'a' => 'Hochwertige LiFePO4-Speicher erreichen eine Lebensdauer von 15 bis 20 Jahren und bewältigen mühelos 6.000 bis 8.000 Ladezyklen. Selbst danach verfügen sie meist noch über eine Restkapazität von mehr als 80 %.',
+            'q' => 'Wie lange hält eine moderne LiFePO4-Solarbatterie?',
+            'a' => 'Hochwertige Lithium-Eisenphosphat-Speicher (LiFePO4) sind für den stationären Einsatz im Eigenheim ausgelegt. Typisch sind 6.000 bis 8.000 Vollzyklen und eine kalendarische Nutzungsdauer von 15 bis 20 Jahren. Nach dieser Zykluszahl liegt die Restkapazität häufig noch über 80 Prozent. Einzelne Systeme im Shop sind mit höheren Zyklenangaben spezifiziert – maßgeblich sind immer die Angaben auf der jeweiligen Produktseite. Zur Einordnung der Lebensdauer siehe die <a href="' . $garantie . '">Garantie-Informationen</a>.',
         ),
         array(
             'q' => 'Funktioniert der Speicher auch bei einem Stromausfall?',
-            'a' => 'Standard-Netzeinspeisesysteme schalten bei einem Stromausfall aus Sicherheitsgründen ab. Verfügt Ihr System über eine Notstrom- oder Ersatzstromfunktion, versorgt die Batterie Ihr Zuhause im Ernstfall automatisch weiter.',
+            'a' => 'Nicht automatisch. Netzgekoppelte Wechselrichter müssen bei einem Ausfall des öffentlichen Netzes aus Sicherheitsgründen abschalten (Inselnetzverhinderung). Erst wenn Ihr System eine ausgewiesene Notstrom- oder Ersatzstromfunktion besitzt und der Wechselrichter dafür geeignet ist, versorgt die Batterie definierte Stromkreise weiter. Ersatzstrom ist nicht dasselbe wie eine vollständige Off-Grid-Versorgung. Lesen Sie dazu den Ratgeber <a href="' . $notstrom . '">Notstrom und Ersatzstrom</a>.',
         ),
         array(
-            'q' => 'Lohnt sich ein Speicher auch im Winter?',
-            'a' => 'Ja. Auch im ertragsärmeren Winter fängt der Speicher kurzzeitige Sonnenphasen ab. Über das gesamte Jahr betrachtet sorgt das Zusammenspiel aus PV-Anlage und Speicher für die höchstmögliche Gesamtrendite Ihrer Investition.',
+            'q' => 'Lohnt sich ein PV-Speicher auch im Winter?',
+            'a' => 'Ja, aber mit realistischer Erwartung. Im Winter erzeugt die Photovoltaikanlage weniger Energie, und der Speicher kann nicht an jedem Tag voll werden. Dennoch speichert er sonnige Phasen und verschiebt den Strom in die Abendstunden. Die Wirtschaftlichkeit bewertet man über das volle Jahr: Im Sommer deckt der Speicher einen großen Teil des Haushaltsstroms, im Winter reduziert er Netzbezug an ertragsstarken Tagen. Die Jahresautarkie – nicht ein einzelner Januar-Tag – ist die richtige Kennzahl. Dimensionieren Sie daher anhand des Jahresverbrauchs, nicht anhand eines Winter-Worst-Case.',
+        ),
+        array(
+            'q' => 'Gilt wirklich 0 % MwSt. nach § 12 Abs. 3 UStG?',
+            'a' => 'Für begünstigte Photovoltaikanlagen und die dazugehörigen Stromspeicher gilt in Deutschland seit 2023 der Steuersatz von 0&nbsp;% nach § 12 Abs. 3 UStG, wenn die Anlage auf oder in der Nähe von Wohnungen bzw. bestimmten öffentlichen oder gemeinnützig genutzten Gebäuden installiert wird. Der Vorteil gilt für den Kauf und die Installation, nicht pauschal für jedes beliebige Zubehör. Eine verständliche Einordnung finden Sie auf der Seite zur <a href="' . $mwst . '">MwSt-Befreiung für den Eigenverbrauch</a>. Dies ist keine Steuerberatung; im Zweifel entscheidet Ihr Steuerberater oder das zuständige Finanzamt.',
+        ),
+        array(
+            'q' => 'Welche Speicherkapazität brauche ich für mein Einfamilienhaus?',
+            'a' => 'Als Praxisregel für Einfamilienhäuser gilt: Pro 1.000 kWh Jahresstromverbrauch etwa 1,0 bis 1,5 kWh nutzbare Speicherkapazität, abgestimmt auf die kWp-Leistung Ihrer PV-Anlage. Ein Haushalt mit 4.000 kWh liegt damit häufig im Bereich 5–8 kWh, ein Haushalt mit E-Auto oder Wärmepumpe eher bei 12–16 kWh oder mehr. Der kostenlose <a href="' . $rechner . '">Autarkie-Rechner</a> ermittelt die Größenordnung aus Verbrauch und PV-Leistung. Anschließend wählen Sie das passende System im <a href="' . $shop . '">Shop</a>.',
+        ),
+        array(
+            'q' => 'Warum LiFePO4 statt NMC oder Blei-Säure?',
+            'a' => 'LiFePO4 ist für Heimspeicher die etablierte Standardchemie: hohe thermische Stabilität, kein Kobalt in der Kathode und eine Zyklenfestigkeit, die zur Nutzungsdauer einer PV-Anlage passt. NMC-Zellen sind energiedichter, aber thermisch empfindlicher. Blei-Säure erreicht nur wenige hundert bis rund 1.500 Zyklen. Natrium-Ionen-Systeme sind kobalt- und lithiumfrei mit guter Kälteleistung; die Zyklenzahlen liegen typischerweise unter LiFePO4. Einen Überblick der Bauformen finden Sie unter <a href="' . $systeme . '">Heimspeicher-Systeme</a>.',
+        ),
+        array(
+            'q' => 'Muss ich den Speicher selbst installieren oder gibt es einen Fachbetrieb?',
+            'a' => 'Sie können das Gerät als Endkunde kaufen und durch einen qualifizierten Elektriker anschließen lassen. Optional bieten wir den Versand an einen zertifizierten lokalen Installateur: Der Speicher wird direkt zum Fachbetrieb geliefert, der die Montage bei Ihnen vor Ort übernimmt. Die Stundensätze setzt jeder Betrieb selbst – es gibt keinen einheitlichen Pauschalpreis. Ablauf und Hinweise stehen auf der <a href="' . $installation . '">Installationsseite</a>. Die optionale Auswahl erscheint auch in der <a href="' . $beratung . '">Beratung</a>.',
+        ),
+        array(
+            'q' => 'Wie hoch ist der typische Autarkiegrad mit Speicher?',
+            'a' => 'Ohne Speicher nutzen Eigenheime mit Photovoltaik häufig nur etwa 20 bis 30 Prozent des selbst erzeugten Stroms direkt. Mit einem passend dimensionierten LiFePO4-Heimspeicher sind 70 bis 85 Prozent Autarkie realistisch, abhängig von Lastprofil, PV-Größe, Wärmepumpe und E-Auto. 100 Prozent Netzunabhängigkeit ist im mitteleuropäischen Winter ohne sehr große PV- und Speicherreserven oder ein Notstromaggregat in der Regel nicht das Ziel. Entscheidend ist, den Speicher an Verbrauch und Erzeugung zu koppeln statt ihn maximal zu überdimensionieren. Fraunhofer ISE hat den Eigenverbrauchs-Effekt von Speichern in Wohngebäuden mehrfach quantifiziert.',
+        ),
+        array(
+            'q' => 'Was kostet ein Heimspeicher – und wo sehe ich den aktuellen Preis?',
+            'a' => 'Die Kosten hängen von nutzbarer Kapazität, BMS, Gehäuse und davon ab, ob ein Hybrid-Wechselrichter bereits integriert ist. Transparente Festpreise stehen im <a href="' . $shop . '">Shop</a> und auf den Produktseiten; sie werden hier nicht festgeschrieben, weil sich Listenpreise ändern. Zusätzlich gilt für begünstigte Anlagen 0&nbsp;% MwSt. Eine Einordnung finden Sie unter <a href="' . $kosten . '">Heimspeicher-Kosten pro kWh</a>. Der Rechner liefert die Größenordnung, die Beratung klärt Anschluss und optionale Montage – es wird kein automatisches PDF-Angebot erzeugt.',
         ),
     );
 }
 
 /**
- * Rendert de zichtbare FAQ-accordion (.werdu-faq-item) vanuit
- * werdu_home_seo_faq_data(). esc_html() op elk veld — de brontekst bevat
- * bewust geen HTML, dus dit is puur een veiligheidsnet.
+ * Rendert de zichtbare FAQ-accordion als native <details>/<summary>.
  */
 function werdu_home_seo_faq_html() {
+    $allowed = array(
+        'a'      => array( 'href' => array(), 'target' => array(), 'rel' => array() ),
+        'strong' => array(),
+        'em'     => array(),
+        'br'     => array(),
+    );
     $html = '';
     foreach ( werdu_home_seo_faq_data() as $i => $item ) {
-        $open_class = ( 0 === $i ) ? ' is-open' : '';
-        $html .= '<div class="werdu-faq-item' . $open_class . '">'
-            . '<div class="werdu-faq-header"><span>' . esc_html( $item['q'] ) . '</span><span class="werdu-faq-icon">+</span></div>'
-            . '<div class="werdu-faq-answer-wrapper"><div class="werdu-faq-answer-inner"><p>' . esc_html( $item['a'] ) . '</p></div></div>'
-            . '</div>';
+        $open = ( 0 === $i ) ? ' open' : '';
+        $html .= '<details class="werdu-faq-item"' . $open . '>'
+            . '<summary class="werdu-faq-header"><span>' . esc_html( $item['q'] ) . '</span><span class="werdu-faq-icon" aria-hidden="true">+</span></summary>'
+            . '<div class="werdu-faq-answer-inner"><p>' . wp_kses( $item['a'], $allowed ) . '</p></div>'
+            . '</details>';
     }
     return $html;
 }
 
 /**
- * Rendert het FAQPage JSON-LD-schema vanuit werdu_home_seo_faq_data() via
- * wp_json_encode() (i.p.v. een handgeschreven heredoc-string). Dit voorkomt
- * de klasse van bugs waarbij een aanhalingsteken/umlaut in toekomstige copy
- * de <script type="application/ld+json">-tag corrumpeert en een
- * "SyntaxError: Unexpected token" in de browserconsole veroorzaakt — de
- * PHP JSON-encoder escapet dat altijd correct, een hand-geschreven string
- * niet per definitie.
+ * FAQPage JSON-LD vanuit werdu_home_seo_faq_data().
  */
 function werdu_home_seo_faq_json_ld() {
     $questions = array();
     foreach ( werdu_home_seo_faq_data() as $item ) {
         $questions[] = array(
             '@type'          => 'Question',
-            'name'           => $item['q'],
+            'name'           => wp_strip_all_tags( $item['q'] ),
             'acceptedAnswer' => array(
                 '@type' => 'Answer',
-                'text'  => $item['a'],
+                'text'  => wp_strip_all_tags( $item['a'] ),
             ),
         );
     }
@@ -1577,6 +1751,36 @@ function werdu_home_seo_faq_json_ld() {
         '@context'   => 'https://schema.org',
         '@type'      => 'FAQPage',
         'mainEntity' => $questions,
+    );
+
+    return '<script type="application/ld+json">'
+        . wp_json_encode( $schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
+        . '</script>';
+}
+
+/**
+ * SoftwareApplication JSON-LD für den Autarkie-Rechner.
+ */
+function werdu_home_seo_software_json_ld() {
+    $schema = array(
+        '@context'            => 'https://schema.org',
+        '@type'               => 'SoftwareApplication',
+        'name'                => 'WERDU Autarkie-Rechner',
+        'applicationCategory' => 'BusinessApplication',
+        'operatingSystem'     => 'Web',
+        'inLanguage'          => 'de-DE',
+        'url'                 => werdu_home_seo_rechner_url(),
+        'description'         => 'Kostenloser Online-Rechner zur Dimensionierung von LiFePO4-Heimspeichern anhand von Jahresverbrauch und PV-Leistung. Ergebnisse führen zur Beratung, nicht zu einem automatischen Preisangebot.',
+        'offers'              => array(
+            '@type'         => 'Offer',
+            'price'         => '0',
+            'priceCurrency' => 'EUR',
+        ),
+        'publisher'           => array(
+            '@type' => 'Organization',
+            'name'  => 'WERDU',
+            'url'   => home_url( '/' ),
+        ),
     );
 
     return '<script type="application/ld+json">'
@@ -1595,27 +1799,41 @@ function werdu_home_seo_faq_json_ld() {
 function werdu_home_seo_body_html() {
     $beratung = werdu_home_seo_beratung_url();
     $rechner  = werdu_home_seo_rechner_url();
+    $shop     = home_url( '/shop/' );
+    $preis_basen = function_exists( 'do_shortcode' ) ? do_shortcode( '[werdu_preis id="basen16kwh"]' ) : '';
+    $preis_16    = function_exists( 'do_shortcode' ) ? do_shortcode( '[werdu_preis id="16kwh"]' ) : '';
+    $preis_30    = function_exists( 'do_shortcode' ) ? do_shortcode( '[werdu_preis id="30kwh"]' ) : '';
+    $shop_link   = '<a href="' . esc_url( $shop ) . '">Preis im Shop anzeigen</a>';
+    if ( $preis_basen === '' || $preis_basen === '—' ) {
+        $preis_basen = $shop_link;
+    }
+    if ( $preis_16 === '' || $preis_16 === '—' ) {
+        $preis_16 = $shop_link;
+    }
+    if ( $preis_30 === '' || $preis_30 === '—' ) {
+        $preis_30 = $shop_link;
+    }
 
     $template = <<<'HTML'
 <div class="werdu-seo-container">
 
-    <!-- Table of Contents -->
     <div class="werdu-toc-box">
         <h2>Inhaltsverzeichnis: Ihr Ratgeber rund um den PV-Speicher</h2>
         <ul>
             <li><a href="#warum-pv-speicher-kaufen">1. Warum sich ein PV-Speicher 2026 lohnt</a></li>
             <li><a href="#autarkie-vorteile">2. Mehr Autarkie, weniger Stromkosten</a></li>
             <li><a href="#dimensionierung-kapazitaet">3. Die richtige Kapazität für Ihren Speicher</a></li>
-            <li><a href="#technologie-vergleich">4. LiFePO4 vs. NMC: Technologien im Vergleich</a></li>
-            <li><a href="#kosten-wirtschaftlichkeit">5. Kosten, Förderung &amp; Amortisation im Überblick</a></li>
-            <li><a href="#faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</a></li>
+            <li><a href="#technologie-vergleich">4. LiFePO4, Natrium-Ionen und NMC im Vergleich</a></li>
+            <li><a href="#kosten-wirtschaftlichkeit">5. Kosten, 0&nbsp;% MwSt. &amp; Amortisation</a></li>
+            <li><a href="#installation-fachbetrieb">6. Installation und optionaler Fachbetrieb</a></li>
+            <li><a href="#sicherheit-recht">7. Sicherheit, Apps und rechtliche Pflichten</a></li>
+            <li><a href="#faq-bereich">8. Häufig gestellte Fragen zum PV-Speicher</a></li>
         </ul>
     </div>
 
-    <!-- Schnellauswahl: 3 Szenario-Karten (Welcher Speicher passt zu mir?) -->
     <div class="werdu-section-head" id="schnellauswahl">
         <h2>Welcher PV-Speicher passt zu Ihnen?</h2>
-        <p>Drei typische Haushaltsprofile – finden Sie in Sekunden Ihre passende Kategorie und bestätigen Sie die genaue Größe anschließend mit dem kostenlosen Autarkie-Rechner.</p>
+        <p>Drei typische Haushaltsprofile – finden Sie in Sekunden Ihre Kategorie und bestätigen Sie die Größe anschließend mit dem kostenlosen Autarkie-Rechner. Es entsteht kein automatisches Preisangebot; die Festpreise stehen im Shop.</p>
     </div>
     <div class="werdu-card-container">
         <div class="werdu-scenario-card">
@@ -1625,7 +1843,7 @@ function werdu_home_seo_body_html() {
             <ul>
                 <li>Empfohlene Größe: 5–8&nbsp;kWh</li>
                 <li>Autarkiegrad: ca. 70–78&nbsp;%</li>
-                <li>0&nbsp;% MwSt. inklusive</li>
+                <li>0&nbsp;% MwSt. bei begünstigter Anlage</li>
             </ul>
             <a href="___RECHNER_URL___" class="btn-werdu-primary">Größe berechnen</a>
         </div>
@@ -1643,58 +1861,64 @@ function werdu_home_seo_body_html() {
         <div class="werdu-scenario-card">
             <span class="werdu-scenario-badge">Volle Unabhängigkeit</span>
             <h3>Maximale Autarkie &amp; Notstrom</h3>
-            <p>Sie möchten größtmögliche Unabhängigkeit und bei einem Stromausfall abgesichert sein.</p>
+            <p>Sie möchten größtmögliche Unabhängigkeit und bei einem Stromausfall abgesichert sein – mit passendem Hybrid-Wechselrichter.</p>
             <ul>
                 <li>Empfohlene Größe: 16–32&nbsp;kWh</li>
                 <li>Optionale Notstromfunktion</li>
-                <li>All-in-One Off-Grid-fähig</li>
+                <li>All-in-One möglich</li>
             </ul>
             <a href="___BERATUNG_URL___" class="btn-werdu-primary">Beratung anfragen</a>
         </div>
     </div>
 
-    <!-- Main Article Body -->
     <section class="werdu-seo-body">
 
         <h2 id="warum-pv-speicher-kaufen">1. Warum sich ein PV-Speicher 2026 lohnt</h2>
         <p>
-            Die Einspeisevergütung für Solarstrom liegt auf einem historischen Tiefstand, während die Strompreise für deutsche Haushalte weiterhin hoch bleiben. Wer eine Photovoltaikanlage ohne leistungsstarken Speicher betreibt, verschenkt Tag für Tag bares Geld: Ohne eigene Speichermöglichkeit nutzen Eigenheimbesitzer im Durchschnitt lediglich 20&nbsp;% bis 30&nbsp;% ihres selbst erzeugten Solarstroms. Der große Rest fließt für wenige Cent ins öffentliche Netz – nur um abends teuren Netzstrom zurückzukaufen.
+            Ohne Speicher nutzen Eigenheimbesitzer typischerweise nur 20&nbsp;% bis 30&nbsp;% ihres Solarstroms selbst; der Rest geht zu einer deutlich niedrigeren Einspeisevergütung ins Netz, während abends teurer Haushaltsstrom zurückgekauft wird.
         </p>
         <p>
-            Ein modernes Speichersystem hebt Ihren Eigenverbrauch sofort auf 70&nbsp;% bis über 85&nbsp;%. Es speichert die ungenutzte Sonnenenergie der Mittagsstunden und stellt sie genau dann zur Verfügung, wenn der Verbrauch im Haushalt am höchsten ist: morgens und abends. So werden Sie spürbar unabhängiger von fossilen Energieträgern und den Preissteigerungen der Stromkonzerne. Auch bei einer bestehenden Solaranlage lohnt sich die Nachrüstung eines Batteriespeichers – sie sichert den langfristigen Wert Ihrer Immobilie und bringt Sie Ihrer persönlichen Energiewende einen großen Schritt näher.
+            Die Einspeisevergütung für neuen Solarstrom liegt weit unter dem Haushaltsstrompreis. Wer eine Photovoltaikanlage ohne leistungsstarken Speicher betreibt, verschenkt deshalb Tag für Tag nutzbare Kilowattstunden. Ein modernes LiFePO4-Speichersystem hebt den Eigenverbrauch auf 70&nbsp;% bis über 85&nbsp;%, indem es Mittagsüberschüsse in die Morgen- und Abendspitze verschiebt. Das senkt den Netzbezug, entlastet das lokale Netz in der Mittagsspitze und macht Haushalte unabhängiger von Preisbewegungen der Versorger.
+        </p>
+        <p>
+            Auch die Nachrüstung an eine bestehende Anlage ist üblich: AC-gekoppelte Speicher arbeiten mit dem vorhandenen Wechselrichter, Hybrid-Systeme bündeln PV und Batterie auf der DC-Seite. Ob Nachrüstung oder Neubau – die transparente Preisliste im <a href="___SHOP_URL___">Shop</a> ersetzt individuelle PDF-Angebote. Wer unsicher bei Zählerplatz, Phasenlage oder Notstrom ist, nutzt die <a href="___BERATUNG_URL___">kostenlose Fachberatung</a>. Vertiefende Einordnung liefern die Ratgeber <a href="___KAUFEN_URL___">Solarbatterie kaufen</a> und <a href="___PREISE_URL___">transparente Solarbatterie-Preise</a>.
         </p>
 
         <div class="werdu-highlight-card">
             <h3>Welche Speichergröße passt zu Ihnen?</h3>
-            <p>Ermitteln Sie mit unserem präzisen Online-Rechner in unter 2 Minuten die optimale Kapazität und Ihre jährliche Ersparnis.</p>
+            <p>Ermitteln Sie mit dem Online-Rechner in wenigen Minuten die passende Kapazität. Das Ergebnis führt zur Beratung – nicht zu einem automatischen Preisangebot.</p>
             <a href="___RECHNER_URL___" class="werdu-btn-primary">Jetzt Autarkie &amp; Speichergröße berechnen</a>
         </div>
 
         <h2 id="autarkie-vorteile">2. Mehr Autarkie, weniger Stromkosten</h2>
         <p>
-            Die Entscheidung für eine hochwertige Solarbatterie bringt weit mehr als nur finanzielle Ersparnisse. Es geht um Autonomie, Versorgungssicherheit und maximale Unabhängigkeit im eigenen Zuhause.
+            Ein passend dimensionierter Heimspeicher erhöht den Eigenverbrauch, senkt den Netzbezug und kann – mit geeigneter Wechselrichtertechnik – ausgewählte Stromkreise bei Netzausfall weiterversorgen.
         </p>
         <ul>
-            <li><strong>Spürbar niedrigere Abschlagszahlungen:</strong> Jede Kilowattstunde aus Ihrem eigenen Speicher müssen Sie nicht mehr teuer vom Netzbetreiber beziehen.</li>
-            <li><strong>Schutz vor Strompreissteigerungen:</strong> Steigen die Netzstrompreise, bleiben Ihre Erzeugungskosten konstant bei nahezu 0&nbsp;Cent pro Kilowattstunde.</li>
-            <li><strong>Optionale Notstromversorgung:</strong> Moderne Heimspeicher sichern Ihr Zuhause bei Netzausfällen ab und halten Kühlschrank, Heizung und Licht unterbrechungsfrei am Laufen.</li>
-            <li><strong>Optimal für E-Auto und Wärmepumpe:</strong> Nutzen Sie gespeicherten Solarstrom, um Ihr Elektrofahrzeug abends kostengünstig zu laden oder Ihre Wärmepumpe zu betreiben.</li>
+            <li><strong>Niedrigere Abschläge:</strong> Jede Kilowattstunde aus dem eigenen Speicher muss nicht vom Versorger bezogen werden.</li>
+            <li><strong>Stabilere Energiekosten:</strong> Steigen die Netzpreise, bleiben die Erzeugungskosten Ihrer PV-Kilowattstunde nahezu konstant.</li>
+            <li><strong>Optionale Notstromversorgung:</strong> Nur Systeme mit ausgewiesener Notstrom- oder Ersatzstromfunktion überbrücken einen Ausfall; Standard-Netzwechselrichter schalten ab. Details im Ratgeber <a href="___NOTSTROM_URL___">Notstrom und Ersatzstrom</a>.</li>
+            <li><strong>E-Auto und Wärmepumpe:</strong> Gespeicherter Solarstrom kann abends die Wallbox oder die Wärmepumpe speisen, statt teuren Nachtstrom zu kaufen.</li>
         </ul>
+        <p>
+            Autarkie bedeutet nicht zwangsläufig 100&nbsp;% Inselbetrieb. In Mitteleuropa bleibt ein Netzanschluss für Winterlücken und Leistungsspitzen sinnvoll. Ziel ist ein hoher Jahresanteil selbst genutzten Solarstroms – das ist der Hebel, den Fraunhofer ISE für Wohngebäude quantifiziert hat. Weiterführend: <a href="___AUTARKIE_URL___">Energieautarkie erreichen</a> und <a href="___UNAB_URL___">Energieunabhängigkeit</a>.
+        </p>
 
         <blockquote>
-            "Eine wissenschaftliche Analyse des <a href="https://www.ise.fraunhofer.de" target="_blank" rel="noopener dofollow">Fraunhofer-Instituts für Solare Energiesysteme (ISE)</a> bestätigt: Durch den gezielten Einsatz eines optimal dimensionierten Batteriespeichers lässt sich der Eigenverbrauchsanteil einer Wohngebäude-Photovoltaikanlage von rund 30&nbsp;% auf bis zu 80&nbsp;% steigern."
+            Eine Analyse des <a href="https://www.ise.fraunhofer.de" target="_blank" rel="noopener">Fraunhofer-Instituts für Solare Energiesysteme (ISE)</a> zeigt: Mit einem passend dimensionierten Batteriespeicher lässt sich der Eigenverbrauchsanteil einer Wohngebäude-Photovoltaikanlage von rund 30&nbsp;% auf bis zu 80&nbsp;% steigern.
         </blockquote>
 
         <h2 id="dimensionierung-kapazitaet">3. Die richtige Kapazität für Ihren Speicher</h2>
         <p>
-            Eine der wichtigsten Entscheidungen rund um Ihren PV-Speicher ist die passende Dimensionierung. Ist der Speicher zu klein, kaufen Sie abends weiterhin teuren Netzstrom zu. Ist er stark überdimensioniert, steigen die Anschaffungskosten unnötig, ohne dass die Batterie in den ertragsarmen Wintermonaten voll geladen werden kann.
+            Pro 1.000&nbsp;kWh Jahresverbrauch sind etwa 1,0 bis 1,5&nbsp;kWh nutzbare Speicherkapazität eine bewährte Ausgangsgröße – immer abgestimmt auf die kWp-Leistung der Photovoltaikanlage.
         </p>
         <p>
-            Als bewährte Praxisregel für Einfamilienhäuser gilt: Pro 1.000&nbsp;kWh jährlichem Stromverbrauch sollte die Nutzkapazität etwa 1 bis 1,5&nbsp;kWh betragen – abgestimmt auf die Spitzenleistung (kWp) Ihrer Photovoltaikanlage.
+            Ist der Speicher zu klein, kaufen Sie abends weiterhin Netzstrom. Ist er stark überdimensioniert, steigen Anschaffungskosten, ohne dass die Batterie in ertragsarmen Winterwochen zuverlässig voll wird. Deshalb dimensioniert der <a href="___RECHNER_URL___">Autarkie-Rechner</a> nach Verbrauch und PV-Größe, nicht nach einem Marketing-Maximum. Eine zweite Meinung liefert die <a href="___GRATIS_URL___">Gratis-Online-Variante</a> desselben Rechenwegs.
         </p>
 
         <div class="werdu-table-wrapper werdu-matrix-wrapper">
             <table class="werdu-table werdu-matrix-table">
+                <caption class="screen-reader-text">Richtwerte für PV-Leistung, Speicherkapazität und Autarkiegrad nach Jahresverbrauch</caption>
                 <thead>
                     <tr>
                         <th>Jährlicher Verbrauch</th>
@@ -1727,85 +1951,164 @@ function werdu_home_seo_body_html() {
         </div>
 
         <p>
-            Zur Orientierung: So schneiden unsere drei meistgewählten Speichergrößen im direkten Vergleich ab. Wählen Sie eine Karte aus, um die Kennzahlen hervorzuheben, und bestätigen Sie die für Sie passende Größe anschließend mit dem Autarkie-Rechner.
+            Die folgenden Systeme sind reale Shop-Produkte. Die Preise kommen dynamisch aus dem Preis-Manager, nicht aus diesem Text. Produktseiten: <a href="___P_BASEN_URL___">16 kWh Basen Green</a>, <a href="___P_16_URL___">16 kWh LiFePO4</a>, <a href="___P_30_URL___">30–32 kWh LiFePO4</a>.
         </p>
 
-        <div class="werdu-variant-group" role="radiogroup" aria-label="Speichergröße vergleichen">
-            <label class="werdu-variant-label">
-                <input type="radio" name="werdu-variant-picker" value="16-basen-green" checked>
-                <div class="werdu-variant-card">
-                    <h3>16 kWh Basen Green</h3>
-                    <p>LiFePO4 • 51,2V, 314Ah • 200A Dauerstrom • 10.000 Zyklen</p>
-                    <strong>ab 1.990,- €</strong>
+        <div class="werdu-product-grid" role="list">
+            <article class="werdu-product-card-item is-bestseller" role="listitem">
+                <h3>16 kWh Basen Green LiFePO4</h3>
+                <p>51,2&nbsp;V / 314&nbsp;Ah, 200&nbsp;A Dauerstrom, 10.000 Zyklen gemäß Produktdatenblatt, Touchscreen und aktivem Balancer.</p>
+                <div class="werdu-product-card-cta">
+                    <strong>___PREIS_BASEN___</strong>
+                    <a href="___P_BASEN_URL___" class="werdu-btn-primary">Zum Produkt</a>
                 </div>
-            </label>
-            <label class="werdu-variant-label">
-                <input type="radio" name="werdu-variant-picker" value="16-tewaycell">
-                <div class="werdu-variant-card">
-                    <h3>16 kWh TewayCell</h3>
-                    <p>LiFePO4 • 48-51,2V, 300Ah • 8.000 Zyklen • Grade-A Zellen</p>
-                    <strong>ab 2.345,- €</strong>
+            </article>
+            <article class="werdu-product-card-item" role="listitem">
+                <h3>16 kWh LiFePO4 Heimspeicher</h3>
+                <p>Klassische 16-kWh-Klasse für Eigenverbrauch. Aktuelle Spezifikation und Lieferumfang stehen auf der Produktseite.</p>
+                <div class="werdu-product-card-cta">
+                    <strong>___PREIS_16___</strong>
+                    <a href="___P_16_URL___" class="werdu-btn-primary">Zum Produkt</a>
                 </div>
-            </label>
-            <label class="werdu-variant-label">
-                <input type="radio" name="werdu-variant-picker" value="30-32-tewaycell">
-                <div class="werdu-variant-card">
-                    <h3>30-32 kWh TewayCell</h3>
-                    <p>LiFePO4 • Maximale Autarkie • Modulare Erweiterung</p>
-                    <strong>ab 3.899,- €</strong>
+            </article>
+            <article class="werdu-product-card-item" role="listitem">
+                <h3>30–32 kWh LiFePO4 Heimspeicher</h3>
+                <p>Für hohe Lasten, E-Mobilität und den Wunsch nach maximaler Autarkie. Modular erweiterbare Bauform je nach Modell.</p>
+                <div class="werdu-product-card-cta">
+                    <strong>___PREIS_30___</strong>
+                    <a href="___P_30_URL___" class="werdu-btn-primary">Zum Produkt</a>
                 </div>
-            </label>
+            </article>
         </div>
 
         <div style="text-align:center;">
             <a href="___RECHNER_URL___" class="werdu-btn-primary">Passende Größe mit dem Rechner bestätigen</a>
         </div>
 
-        <h2 id="technologie-vergleich">4. LiFePO4 vs. NMC: Technologien im Vergleich</h2>
+        <h2 id="technologie-vergleich">4. LiFePO4, Natrium-Ionen und NMC im Vergleich</h2>
         <p>
-            Moderne Speicherlösungen unterscheiden sich vor allem in der Zellchemie. Die sicherste und langlebigste Technologie für den stationären Einsatz im Eigenheim ist die Lithium-Eisenphosphat-Zelle (LiFePO4).
+            Für den stationären Heimspeicher ist LiFePO4 (Lithium-Eisenphosphat) die Standardchemie: hohe thermische Stabilität, 6.000–8.000 typische Vollzyklen und 15–20 Jahre kalendarische Nutzungsdauer.
         </p>
         <p>
-            Im Vergleich zu älteren NMC-Akkus (Lithium-Nickel-Mangan-Kobaltoxid) überzeugt LiFePO4 durch eine unübertroffene thermische und chemische Stabilität – ein thermisches Durchgehen ist bauartbedingt nahezu ausgeschlossen. Hochwertige LiFePO4-Systeme erreichen zudem 6.000 bis 8.000 vollständige Ladezyklen, was einer realistischen Lebensdauer von 15 bis 20 Jahren entspricht. Und: Diese Technologie verzichtet vollständig auf das umstrittene Schwermetall Kobalt.
+            NMC-Zellen (Nickel-Mangan-Kobalt) sind energiedichter und in der Elektromobilität verbreitet, für Keller und Technikraum aber thermisch empfindlicher. Blei-Säure bleibt eine Referenz der Vergangenheit: wenige hundert bis rund 1.500 Zyklen und geringe nutzbare Entladetiefe. Natrium-Ionen-Speicher verzichten auf Lithium und Kobalt und zeigen oft gutes Kälteverhalten; ihre Zyklenfestigkeit liegt typischerweise unter LiFePO4. Im Sortiment finden Sie neben LiFePO4 auch ein <a href="___SODIUM_URL___">Natrium-Ionen-System mit 10 kWh und 5 kW Wechselrichter</a> sowie All-in-One-Geräte mit integriertem Hybrid-Wechselrichter (<a href="___AIO15_URL___">15 kWh / 5 kW</a>, <a href="___AIO30_URL___">30 kWh / 12 kW dreiphasig</a>).
+        </p>
+        <p>
+            Sicherheit entsteht nicht nur durch die Zellchemie, sondern durch BMS, Gehäuse, Installation und korrekte Lagerung. Vertiefung: <a href="___SICHER_URL___">LiFePO4-Sicherheit</a>, <a href="___ZYKLEN_URL___">Zyklenfestigkeit</a>, <a href="___DOD_URL___">Entladetiefe</a> und <a href="___LAGER_URL___">richtige Lagerung</a>. Einen Systemüberblick gibt <a href="___SYSTEME_URL___">Heimspeicher-Systeme</a> sowie <a href="___AIO_URL___">All-in-One und Off-Grid</a>.
         </p>
 
-        <h2 id="kosten-wirtschaftlichkeit">5. Kosten, Förderung &amp; Amortisation im Überblick</h2>
+        <h2 id="kosten-wirtschaftlichkeit">5. Kosten, 0&nbsp;% MwSt. &amp; Amortisation</h2>
         <p>
-            Dank technologischem Fortschritt und skalierender Produktion sind die Preise für Batteriespeicher in den vergangenen Jahren spürbar gesunken. Zusätzlich profitieren Sie in Deutschland von staatlichen Vergünstigungen: Seit 2023 gilt gemäß § 12 Abs. 3 UStG ein Steuersatz von <strong>0&nbsp;% Umsatzsteuer</strong> auf Kauf und Installation von PV-Anlagen und deren Stromspeichern auf Wohngebäuden – Sie sparen also direkt 19&nbsp;% bei der Anschaffung.
+            Seit 2023 gilt nach § 12 Abs. 3 UStG 0&nbsp;% Umsatzsteuer auf begünstigte PV-Anlagen und die dazugehörigen Stromspeicher an Wohngebäuden – Kauf und Installation. Das ist keine pauschale Steuerfreiheit für jedes Zubehör.
         </p>
         <p>
-            Unter Berücksichtigung der eingesparten Netzstromkosten amortisiert sich ein hochwertiger Speicher heute in der Regel bereits nach 7 bis 9 Jahren. Da moderne LiFePO4-Systeme 15 bis 20 Jahre halten, erwirtschaftet Ihr Speicher über seine restliche Lebensdauer einen erheblichen finanziellen Nettogewinn.
+            Die Listenpreise stehen tagesaktuell im Shop; dieser Text enthält bewusst keine festgeschriebenen Euro-Beträge. Eine Einordnung der Wirtschaftlichkeit finden Sie unter <a href="___KOSTEN_URL___">Heimspeicher-Kosten pro kWh</a> und <a href="___WAS_KOSTET_URL___">Was ein LiFePO4-Heimspeicher wirklich kostet</a>. Ob sich ein Speicher rechnet, hängt von Verbrauch, PV-Ertrag, Strompreis und Nutzungsdauer ab. Bei 15–20 Jahren Lebensdauer und 6.000–8.000 Zyklen bleibt nach der Amortisation in vielen Haushalten ein langer Nutzungszeitraum. Förderprogramme ändern sich; aktuelle Hinweise stehen im Beitrag zur <a href="___KFW_URL___">KfW-Förderung für Heimspeicher</a>. Verbindlich sind immer die Regeln des jeweiligen Programms, nicht eine Zusammenfassung auf dieser Seite. Steuerliche Einordnung: <a href="___MWST_URL___">MwSt-Befreiung Eigenverbrauch</a>.
+        </p>
+        <p>
+            Die <a href="https://www.bundesnetzagentur.de" target="_blank" rel="noopener">Bundesnetzagentur</a> veröffentlicht Marktdaten zu Photovoltaik und Speichern. Verbraucherschutz-Hinweise zur Photovoltaik bietet die <a href="https://www.verbraucherzentrale.de" target="_blank" rel="noopener">Verbraucherzentrale</a>. WERDU verkauft zu transparenten Festpreisen – ohne versteckte Angebotsrunden.
         </p>
 
         <div class="werdu-card-soft">
-            <h3>Lassen Sie sich individuell beraten</h3>
-            <p>Jedes Gebäude und jedes Verbrauchsprofil ist anders. Wir helfen Ihnen, die passende Lösung für Ihr Zuhause zu finden.</p>
+            <h3>Lassen Sie sich fachlich beraten</h3>
+            <p>Jedes Gebäude und jedes Lastprofil ist anders. Die Beratung ist kostenlos und unverbindlich; Preise sehen Sie vorher im Shop.</p>
             <a href="___BERATUNG_URL___" class="werdu-btn-primary">Kostenlose Beratung anfragen</a>
         </div>
 
-        <h2 id="faq-bereich">6. Häufig gestellte Fragen zum PV-Speicher</h2>
+        <h2 id="installation-fachbetrieb">6. Installation und optionaler Fachbetrieb</h2>
+        <p>
+            Der elektrische Anschluss eines Heimspeichers ist Arbeit für eine qualifizierte Elektrofachkraft. Optional kann der Speicher direkt an einen zertifizierten lokalen Installateur geliefert werden, der die Montage bei Ihnen vor Ort übernimmt.
+        </p>
+        <p>
+            WERDU erstellt keine komplexen Individualangebote für die Montage. Jeder Fachbetrieb kalkuliert nach Aufwand, Zählerschrank, Leitungswegen und Stundensatz – es gibt keinen einheitlichen Installationsfestpreis. Die optionale Installateur-Auswahl ist in der Beratung, auf Produktseiten und an der <a href="___KASSE_URL___">Kasse</a> vorgesehen. Technischer Ablauf: <a href="___INSTALL_URL___">Heimspeicher-Installation</a> und die <a href="___PLUG_URL___">Plug-&amp;-Play-Anleitung</a>. Versandbedingungen: <a href="___VERSAND_URL___">Zahlung und Lieferung</a> sowie <a href="___LIEFER_URL___">Versand und Lieferbedingungen</a>.
+        </p>
+        <p>
+            Netzbetreiber-Anmeldung, Zählerkonzept und Absicherung bleiben Aufgabe der Elektrofachkraft. All-in-One-Systeme reduzieren den Verkabelungsaufwand zwischen Batterie und Hybrid-Wechselrichter, ersetzen aber nicht die fachgerechte Netzbindung.
+        </p>
+
+        <h2 id="sicherheit-recht">7. Sicherheit, Apps und rechtliche Pflichten</h2>
+        <p>
+            LiFePO4 gilt als thermisch stabile Zellchemie für Heimspeicher. Rechtlich relevant bleiben Batteriegesetz, ElektroG und die fachgerechte Entsorgung am Lebensende – unabhängig von der Marke.
+        </p>
+        <p>
+            Das Batterie-Management-System (BMS) überwacht Spannung, Strom, Temperatur und Zellausgleich. Viele Systeme lassen sich per App auslesen; kostenlose Anwendungen sind auf der Seite <a href="___APPS_URL___">kostenlose Apps für Ihre Solarbatterie</a> beschrieben, Energiemanagement unter <a href="___EMS_URL___">intelligente Energieoptimierung (EMS)</a> und <a href="___BMS_URL___">BMS- und App-Technologie</a>. Rechtliche Pflichtseiten: <a href="___BATTG_URL___">Batteriegesetz</a>, <a href="___ELEKTROG_URL___">ElektroG</a>, <a href="___ENTSORG_URL___">Entsorgung</a>. Brandschutz rund um PV: <a href="___DACH_URL___">Dachbrand und PV-Anlage</a>.
+        </p>
+        <p>
+            Weitere Orientierung: <a href="___FAQ_URL___">FAQ Heimspeicher</a>, <a href="___SOLAR_URL___">Solarbatterien</a>, <a href="___KOMPLETT_URL___">Solaranlage mit Speicher 2026</a>, <a href="___NETZ_URL___">Netzengpässe überbrücken</a>. Unternehmen: <a href="___UEBER_URL___">Über uns</a>. Rechtliches: <a href="___IMP_URL___">Impressum</a>, <a href="___AGB_URL___">AGB</a>, <a href="___DS_URL___">Datenschutzerklärung</a>.
+        </p>
+
+        <h2 id="faq-bereich">8. Häufig gestellte Fragen zum PV-Speicher</h2>
+        <p>Die folgenden Antworten sind bewusst ausführlich formuliert, damit Suchmaschinen und KI-Assistenten sie direkt zitieren können. Ergänzend steht die thematische <a href="___FAQ_URL___">FAQ-Übersicht</a> bereit.</p>
         <div class="werdu-faq-box">
         <div class="werdu-faq-container">___FAQ_ACCORDION___</div>
         </div>
 
         <div class="werdu-highlight-card" style="margin-top:56px;">
-            <h3 style="font-size:1.7rem;">Starten Sie jetzt in Ihre energetische Unabhängigkeit</h3>
-            <p style="max-width:650px;margin-left:auto;margin-right:auto;">Sichern Sie sich die besten Konditionen für Ihren neuen PV-Speicher. Unsere Fachberater analysieren Ihren Bedarf und erstellen ein unverbindliches, maßgeschneidertes Angebot.</p>
-            <a href="___BERATUNG_URL___" class="werdu-btn-primary">Jetzt unverbindliches Angebot anfordern</a>
+            <h3 style="font-size:1.7rem;">Starten Sie in Ihre energetische Unabhängigkeit</h3>
+            <p style="max-width:650px;margin-left:auto;margin-right:auto;">Berechnen Sie Ihre Kapazität und lassen Sie sich kostenlos beraten. Die Festpreise sehen Sie jederzeit im Shop – ohne automatisches PDF-Angebot.</p>
+            <a href="___BERATUNG_URL___" class="werdu-btn-primary">Jetzt kostenlose Beratung anfragen</a>
         </div>
 
     </section>
 </div>
 
-<!-- JSON-LD FAQ Schema for Google AIO Search Features -->
 ___FAQ_JSONLD___
+___SOFTWARE_JSONLD___
 HTML;
 
-    return str_replace(
-        array( '___BERATUNG_URL___', '___RECHNER_URL___', '___FAQ_ACCORDION___', '___FAQ_JSONLD___' ),
-        array( esc_url( $beratung ), esc_url( $rechner ), werdu_home_seo_faq_html(), werdu_home_seo_faq_json_ld() ),
-        $template
+    $replacements = array(
+        '___BERATUNG_URL___'   => esc_url( $beratung ),
+        '___RECHNER_URL___'    => esc_url( $rechner ),
+        '___SHOP_URL___'       => esc_url( $shop ),
+        '___FAQ_ACCORDION___'  => werdu_home_seo_faq_html(),
+        '___FAQ_JSONLD___'     => werdu_home_seo_faq_json_ld(),
+        '___SOFTWARE_JSONLD___'=> werdu_home_seo_software_json_ld(),
+        '___PREIS_BASEN___'    => wp_kses_post( $preis_basen ),
+        '___PREIS_16___'       => wp_kses_post( $preis_16 ),
+        '___PREIS_30___'       => wp_kses_post( $preis_30 ),
+        '___P_BASEN_URL___'    => esc_url( home_url( '/16-kwh-lifepo4-heimspeicher-51-2v-314ah/' ) ),
+        '___P_16_URL___'       => esc_url( home_url( '/16-kwh-heimspeicher-lifepo4-solarbatterie/' ) ),
+        '___P_30_URL___'       => esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ),
+        '___SODIUM_URL___'     => esc_url( home_url( '/sodium-ion-solarspeicher-10-kwh-mit-5-kw-wechselrichter/' ) ),
+        '___AIO15_URL___'      => esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ),
+        '___AIO30_URL___'      => esc_url( home_url( '/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/' ) ),
+        '___KAUFEN_URL___'     => esc_url( home_url( '/solarbatterie-kaufen/' ) ),
+        '___PREISE_URL___'     => esc_url( home_url( '/solarbatterie-preise-transparente-kosten/' ) ),
+        '___NOTSTROM_URL___'   => esc_url( home_url( '/notstrom-heimspeicher-ersatzstrom-blackout/' ) ),
+        '___AUTARKIE_URL___'   => esc_url( home_url( '/energieautarkie-erreichen-unabhaengig-vom-stromnetz-2026-werdu-de/' ) ),
+        '___UNAB_URL___'       => esc_url( home_url( '/energieunabhaengigkeit/' ) ),
+        '___GRATIS_URL___'     => esc_url( home_url( '/gratis-heimspeicher-rechner-online/' ) ),
+        '___SICHER_URL___'     => esc_url( home_url( '/lifepo4-sicherheit-die-sicherste-solarbatterie-technologie-2026/' ) ),
+        '___ZYKLEN_URL___'     => esc_url( home_url( '/wie-viele-zyklen-schafft-eine-solarbatterie-von-werdu-de/' ) ),
+        '___DOD_URL___'        => esc_url( home_url( '/entladetiefe-tabelle/' ) ),
+        '___LAGER_URL___'      => esc_url( home_url( '/achtung-garantie-richtige-lagerung-ihrer-lifepo4-batterie/' ) ),
+        '___SYSTEME_URL___'    => esc_url( home_url( '/heimspeicher-systeme/' ) ),
+        '___AIO_URL___'        => esc_url( home_url( '/all-in-one-heimspeicher-off-grid/' ) ),
+        '___KOSTEN_URL___'     => esc_url( home_url( '/heimspeicher-kosten-pro-kwh/' ) ),
+        '___WAS_KOSTET_URL___' => esc_url( home_url( '/was-ein-lifepo4-heimspeicher-wirklich-kostet/' ) ),
+        '___KFW_URL___'        => esc_url( home_url( '/kfw-foerderung-heimspeicher-2026-bis-zu-15-zuschuss-werdu-de/' ) ),
+        '___MWST_URL___'       => esc_url( home_url( '/mwst-befreiung-eigenverbrauch/' ) ),
+        '___KASSE_URL___'      => esc_url( home_url( '/kasse/' ) ),
+        '___INSTALL_URL___'    => esc_url( home_url( '/heimspeicher-installation/' ) ),
+        '___PLUG_URL___'       => esc_url( home_url( '/heimspeicher-installation-plug-play-anleitung-2026-werdu-de/' ) ),
+        '___VERSAND_URL___'    => esc_url( home_url( '/zahlung-und-lieferung/' ) ),
+        '___LIEFER_URL___'     => esc_url( home_url( '/heimspeicher-versand-lieferbedingungen/' ) ),
+        '___APPS_URL___'       => esc_url( home_url( '/kostenlose-apps-fuer-ihre-solarbatterie/' ) ),
+        '___EMS_URL___'        => esc_url( home_url( '/intelligente-energieoptimierung-fuer-solarbatterien-ems/' ) ),
+        '___BMS_URL___'        => esc_url( home_url( '/intelligente-energiesteuerung-bms-app-technologie-2026-werdu-de/' ) ),
+        '___BATTG_URL___'      => esc_url( home_url( '/batteriegesetz/' ) ),
+        '___ELEKTROG_URL___'   => esc_url( home_url( '/elektrog/' ) ),
+        '___ENTSORG_URL___'    => esc_url( home_url( '/entsorgung/' ) ),
+        '___DACH_URL___'       => esc_url( home_url( '/dachbrand-pv-anlage/' ) ),
+        '___FAQ_URL___'        => esc_url( home_url( '/faq-heimspeicher/' ) ),
+        '___SOLAR_URL___'      => esc_url( home_url( '/solarbatterien/' ) ),
+        '___KOMPLETT_URL___'   => esc_url( home_url( '/solaranlage-mit-speicher-2026-pv-batterie-komplettsysteme/' ) ),
+        '___NETZ_URL___'       => esc_url( home_url( '/netzengpaesse-ueberbruecken-7-bewaehrte-strategien/' ) ),
+        '___UEBER_URL___'      => esc_url( home_url( '/ueber-uns/' ) ),
+        '___IMP_URL___'        => esc_url( home_url( '/impressum/' ) ),
+        '___AGB_URL___'        => esc_url( home_url( '/agb/' ) ),
+        '___DS_URL___'         => esc_url( home_url( '/datenschutzerklaerung/' ) ),
     );
+
+    return str_replace( array_keys( $replacements ), array_values( $replacements ), $template );
 }
 
 /**
@@ -1907,6 +2210,15 @@ function werdu_sanitize_elementor_html_widget_output( $content ) {
         if ( null !== $result ) {
             $content = $result;
         }
+    }
+
+    // C. Homepage LCP: never lazy-load the designated hero image.
+    if ( is_front_page() ) {
+        $content = preg_replace(
+            '/(<img\b[^>]*class="[^"]*werdu-hero-lcp[^"]*"[^>]*)\sloading=(["\'])lazy\2/i',
+            '$1',
+            $content
+        );
     }
 
     return $content;

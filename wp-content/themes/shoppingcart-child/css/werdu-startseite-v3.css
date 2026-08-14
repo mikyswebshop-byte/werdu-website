@@ -3,16 +3,12 @@
  * ---------------------------------------------------------------------------
  * Losstaand, additief stylesheet voor het nieuwe pagina-template
  * `page-templates/page-werdu-v2.php` (Template Name: Werdu Homepage V2).
- * Wordt UITSLUITEND geladen wanneer dat template actief is (zie de
- * conditionele wp_enqueue_style-aanroep in dat bestand) — dit bestand heeft
- * dus geen enkel effect op de huidige, live Elementor-homepage of enige
- * andere pagina, totdat het nieuwe template bewust aan een pagina wordt
- * gekoppeld.
- *
- * Alle klassen zijn met opzet generiek/herbruikbaar (.glass-card,
- * .btn-shimmer, .variant-card, .accordion, ...) zodat ze ook in een
- * eventuele volgende iteratie van de site opnieuw ingezet kunnen worden.
+ * Wordt UITSLUITEND geladen wanneer dat template actief is.
  */
+
+@font-face {
+  font-display: swap;
+}
 
 /* =============================================================
    1. DESIGN TOKENS — kleuren (oklch color-mix), sfeer, ruimtes
@@ -119,12 +115,10 @@
    4. GLASSMORPHISM CARDS
    ============================================================= */
 .glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
 }
 
 .wv2-card-grid {

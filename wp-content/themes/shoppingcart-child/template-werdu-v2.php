@@ -7,6 +7,9 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 get_header();
 ?>
 <style id="werdu-v2-layout-override">
+  @font-face { font-display: swap !important; }
+  a.skip-link, .skip-link, .skip, .screen-reader-text:focus { display: none !important; }
+  .wv2-page { background: #f8fafc; color: #0f172a; }
   /* Verberg standaard thema-elementen die de lay-out breken (uitsluitend
      op deze pagina actief, want deze <style> staat alleen in dit template) */
   .page-header, .entry-header, .sidebar, #secondary, .breadcrumb, .breadcrumbs { display: none !important; }
@@ -108,10 +111,11 @@ $wv2_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo
 						<img
 							class="full-img"
 							src="<?php echo esc_url( home_url( $wv2_hero_rel ) ); ?>"
-							alt="Modernes Wohnhaus mit PV-Speicher für maximale Autarkie"
-							loading="lazy"
+							alt="Modernes Wohnhaus mit Photovoltaik und LiFePO4-Heimspeicher in Deutschland"
 							width="1024"
 							height="572"
+							fetchpriority="high"
+							decoding="async"
 							onload="this.classList.add('loaded')"
 							onerror="this.closest('.img-blur-wrapper').style.display='none';"
 						/>
@@ -275,7 +279,7 @@ $wv2_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo
 									<?php if ( $wv2_img_full ) : ?>
 										<div class="img-blur-wrapper" style="aspect-ratio:4/3;margin-bottom:16px;">
 											<img class="tiny-blur" src="<?php echo esc_url( $wv2_img_blur ); ?>" alt="" aria-hidden="true" />
-											<img class="full-img" src="<?php echo esc_url( $wv2_img_full ); ?>" alt="<?php echo esc_attr( $wv2_product->get_name() ); ?>" loading="lazy" />
+											<img class="full-img" src="<?php echo esc_url( $wv2_img_full ); ?>" alt="<?php echo esc_attr( $wv2_product->get_name() ); ?>" width="400" height="300" loading="lazy" decoding="async" />
 										</div>
 									<?php endif; ?>
 									<h3><?php echo esc_html( $wv2_product->get_name() ); ?></h3>
@@ -400,9 +404,11 @@ $wv2_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo
 	<?php endif; ?>
 
 	<!-- =====================================================
-	     SECTION 6 — FAQ (native details/summary, gedeelde databron)
+	     SECTION 6 — SEO-BODY, FAQ, JSON-LD (shared with live homepage)
 	     ===================================================== -->
-	<?php if ( function_exists( 'werdu_home_seo_faq_data' ) ) : ?>
+	<?php if ( function_exists( 'werdu_home_seo_body_html' ) ) : ?>
+		<?php echo werdu_home_seo_body_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup is built server-side with esc_url / wp_kses ?>
+	<?php elseif ( function_exists( 'werdu_home_seo_faq_data' ) ) : ?>
 		<section class="wv2-section">
 			<div class="wv2-container" style="max-width:760px;">
 				<div class="wv2-section-head">
@@ -415,13 +421,21 @@ $wv2_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo
 						<summary><?php echo esc_html( $wv2_faq['q'] ); ?></summary>
 						<div class="accordion-content">
 							<div>
-								<p><?php echo esc_html( $wv2_faq['a'] ); ?></p>
+								<p><?php echo wp_kses_post( $wv2_faq['a'] ); ?></p>
 							</div>
 						</div>
 					</details>
 				<?php endforeach; ?>
 			</div>
 		</section>
+		<?php
+		if ( function_exists( 'werdu_home_seo_faq_json_ld' ) ) {
+			echo werdu_home_seo_faq_json_ld(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		if ( function_exists( 'werdu_home_seo_software_json_ld' ) ) {
+			echo werdu_home_seo_software_json_ld(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		?>
 	<?php endif; ?>
 
 	<!-- =====================================================

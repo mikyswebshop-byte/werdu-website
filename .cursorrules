@@ -1,12 +1,40 @@
 # WERDU.DE - PROJECT CONTEXT & INSTRUCTIONS
 
 ## 1. PROJECT OVERVIEW & ARCHITECTURE
-- Website Domain: https://werdu.de
+- Website Domain: https://werdu.de (Production) / https://test.werdu.de (Staging)
 - Environment: WordPress environment located in `/httpdocs`.
 - Primary Business Model: Direct-to-consumer sales of home battery storage systems (Heimspeicher / LiFePO4 batteries) in Germany. Transparent pricing is available directly on the site.
 - Primary Goal: Achieve #1 Rankings, top conversion rates, and dominate AI Search (AIO / GEO - ChatGPT Search, Perplexity, Google SGE/AIO) for home energy storage in Germany (2026).
 
-## 2. CALCULATORS & LEAD FLOW ARCHITECTURE
+## 2. AGENTIC CRO & LIGHT THEME DESIGN (FULL AUTHORITY)
+Cursor has full authority to refactor UI, HTML, CSS, layout, and German copy for higher conversions (CRO) and modern aesthetics, provided the factual, URL, and hook rules in this file are kept.
+
+Light theme is mandatory. Never ship dark-on-dark or dark marketing themes.
+
+Design tokens (strict):
+- Page background: white / light-grey `#f8fafc`
+- Body text: dark blue `#0f172a`
+- Muted text: `#475569`
+- Borders: `#e2e8f0`
+- Primary CTA: orange `#ff6600` (hover `#e05500`), white label text
+- Cards: white `#ffffff` on the light page background
+
+CTA buttons must be high-contrast orange on the light canvas. Product grids must keep equal card heights with CTAs aligned on one baseline.
+
+## 3. ABSOLUTE TRUTH & FACT CHECKING
+- NEVER invent facts, battery specs, prices, guarantee terms, funding amounts, or company attributes.
+- ALWAYS verify German energy standards, LiFePO4 specifications, and tax rules before writing them.
+- § 12 Abs. 3 UStG: 0 % MwSt on eligible PV systems and associated storage for residential / qualifying buildings. Do not invent extra tax exceptions.
+- LiFePO4: use only established ranges already used on the site (typically 6.000–8.000 cycles and 15–20 years; product-specific values only when they already exist in WooCommerce / Preis-Manager data).
+- Local installer option: optional shipping to a certified local installer. Do not invent a fixed setup fee; each mechanic sets their own hourly rates.
+- Everything written MUST be 100 % accurate, EEAT-grade, and professional German.
+
+## 4. ZERO BROKEN LINKS
+- NEVER construct hallucinated or non-existent URLs.
+- ONLY link internally to validated sitemap URLs in Section 8 (e.g. `/solarbatterie-rechner/`, `/shop/`, `/beratung-anfragen/`).
+- External references must point exclusively to genuine authority portals (e.g. Bundesnetzagentur, Verbraucherzentrale, Fraunhofer ISE) using `target="_blank" rel="noopener"`.
+
+## 5. CALCULATORS & LEAD FLOW ARCHITECTURE
 We have 3 Calculators on the site:
 1. Calculator 1 (Main/Detailed): https://werdu.de/solarbatterie-rechner/
 2. Calculator 2 (Homepage Preview/Quick): https://werdu.de/
@@ -18,26 +46,43 @@ Flow Requirements:
 - On `https://werdu.de/beratung-anfragen/`, the user's calculated parameters (e.g., consumption, PV size, recommended kWh capacity) MUST pre-fill into the lead contact form so the customer can submit their details.
 - Calculator 2 (Homepage) and Calculator 3 MUST act as quick previews and seamlessly pass parameters (via URL query parameters or session storage) to Calculator 1 or directly to `https://werdu.de/beratung-anfragen/`.
 
-## 3. NEW FEATURE: LOCAL INSTALLER OPTION
-- We do not issue complex custom quotes, but we are implementing an optional Installer Shipping & Setup Option.
-- Option Details: Customers can select an additional service fee (+150€ to +300€).
-- Mechanics: When selected, the battery is shipped directly to the nearest certified local installer. Upon delivery, the installer handles the physical installation at the customer's house.
+## 6. LOCAL INSTALLER OPTION
+- We do not issue complex custom quotes, but we offer an optional Installer Shipping & Setup Option.
+- When selected, the battery is shipped directly to the nearest certified local installer. Upon delivery, the installer handles the physical installation at the customer's house.
+- Hourly rates are set by the individual installer — never invent a global setup price.
 - UX Integration: Integrate this choice clearly on product pages, checkout (`/kasse/`), and inside the consultation flow (`/beratung-anfragen/`).
 
-## 4. SEO & AIO (AI OPTIMIZATION) STRICT GUIDELINES
-- All PHP, JS, CSS, and HTML modifications must comply with 2026 technical SEO and Generative Engine Optimization (GEO/AIO) standards.
-- Structured Data (JSON-LD): Implement/verify `SoftwareApplication`, `FAQPage`, `HowTo`, `Product`, `LocalBusiness` / `Service`, and `BreadcrumbList`. Ensure JSON-LD includes `areaServed` where applicable.
-- Answer Engine Optimization (AIO): Use clear Answer-First (BLUF - Bottom Line Up Front) formatting in headers (H2/H3) and introductory paragraphs so AI crawlers can extract direct answers.
-- Performance: Code must be optimized for Core Web Vitals (no blocking scripts, clean isolation, modular CSS/JS).
+## 7. LIGHTHOUSE PERFORMANCE FIXES
+Target: FCP < 1.5s, LCP < 2.5s, Mobile PageSpeed >= 87, SEO 100. Eliminate the ~4.4s render-blocking CSS/JS delay.
 
-## 5. STRICT CODE & EXECUTION RULES FOR CURSOR
-- NEVER remove existing core functionality without replacement.
-- DO NOT invent non-existent file paths or missing functions. Always inspect existing code files first.
-- Maintain absolute isolation for calculator scripts (e.g., `#werdu-calc-isolated`) to avoid theme CSS/JS conflicts.
-- Ensure all German text produced is grammatically flawless, natural, and highly professional.
-- Do not leave unfinished TODO comments in production code.
+- Inline critical header/hero CSS in `<head>`. Do not block first paint with Font Awesome `all.min.css`, cart CSS, or non-critical Elementor/theme stylesheets.
+- Non-critical CSS: preload / `media="print"` + onload swap, or equivalent deferred load. Non-critical JS: `defer` or `async`.
+- Fonts: apply `font-display: swap;` to all `@font-face` rules (theme fonts, Google fonts, Font Awesome).
+- Hero / LCP image MUST have `fetchpriority="high"`, `decoding="async"`, explicit `width` and `height`. NEVER `loading="lazy"` on the hero image.
+- Prefer system font stack plus swap; avoid render-blocking webfont CSS in the critical path.
+- Animate only `transform` and `opacity`. Respect `prefers-reduced-motion`.
 
-## 6. COMPLETE SITE MAP REFERENCE
+## 8. RANK MATH SEO
+- Custom PHP templates MUST ALWAYS include `wp_head();` inside `<head>` and `wp_footer();` before `</body>`.
+- NEVER bypass or strip WordPress core SEO hooks that Rank Math uses for titles, meta descriptions, canonicals, and Open Graph.
+- Exactly ONE `<h1>` per page. Subsections follow `<h2>` then `<h3>`.
+- Minimum 2200+ words of high-value German content on custom landing templates.
+- BLUF: every H2/H3 section starts with a 1–2 sentence direct answer.
+- JSON-LD: `FAQPage`, `Product` / `Offer`, `SoftwareApplication` (calculators), `BreadcrumbList` where applicable.
+- FAQs: 8–10 in-depth items (not one-liners) plus matching `FAQPage` schema.
+- Preserve dynamic WooCommerce / Preis-Manager shortcodes (`do_shortcode('[werdu_preis id="..."]')`). Never hardcode product prices.
+
+## 9. AUTOMATED GIT DEPLOYMENT
+After completing requested file modifications, always deploy to staging by running in the repo root:
+
+1. `git add .`
+2. `git commit -m "..."` with a concise message describing why the change exists
+3. `git push` to the active branch (`origin main` unless another branch is checked out)
+
+This triggers the automatic deployment pipeline to https://test.werdu.de. Do not skip the push after homepage/template/performance work unless the user explicitly forbids git in that turn. Never use `--no-verify`, force-push, or rewrite published history.
+
+## 10. COMPLETE SITE MAP REFERENCE (ONLY USE THESE VALID LINKS)
+
 Main Pages:
 - https://werdu.de/
 - https://werdu.de/solarbatterie-rechner/
@@ -105,3 +150,24 @@ Blog Posts:
 - https://werdu.de/warum-zahlen-manche-hausbesitzer-tausende-euro-zu-viel-fuer-eine-solarbatterie-und-andere-nicht/
 - https://werdu.de/kfw-foerderung-heimspeicher-2026-bis-zu-15-zuschuss-werdu-de/
 - https://werdu.de/intelligente-energiesteuerung-bms-app-technologie-2026-werdu-de/
+
+## 11. STRICT CODE & EXECUTION RULES
+- NEVER remove existing core functionality without replacement.
+- DO NOT invent non-existent file paths or missing functions. Always inspect existing code files first.
+- Maintain absolute isolation for calculator scripts (e.g., `#werdu-calc-isolated`) to avoid theme CSS/JS conflicts.
+- Ensure all German text produced is grammatically flawless, natural, and highly professional.
+- Do not leave unfinished TODO comments in production code.
+- NEVER truncate code. Always output complete code files from top to bottom.
+- NEVER use placeholder comments such as `// ... rest of code` or `/* TODO */`.
+
+## 12. CSS & LAYOUT BUG PREVENTION
+- SKIP-LINK BUG FIX: `a.skip-link, .skip-link, .screen-reader-text:focus { display: none !important; }`
+- TITLE GRADIENT: `.gradient-title .highlight-gradient { background: linear-gradient(135deg, #00529b 0%, #ff6600 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }`
+- CALCULATOR DIMENSIONS: `max-width: 850px !important; width: 100% !important; margin: 0 auto !important; padding: 35px !important;`
+- PRODUCT GRID: `display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; align-items: stretch;`
+- PRODUCT CARDS: `display: flex; flex-direction: column; justify-content: space-between; height: 100%;`
+- BESTSELLER CARD: `border: 2px solid #ff6600 !important;`
+- STANDARD CARD: `border: 1px solid #e2e8f0 !important;`
+- CTA BOTTOM ALIGN: `margin-top: auto !important; padding-top: 15px !important; border-top: 1px solid #edf2f7 !important;`
+- FAQ accordions: native `<details>` / `<summary>`, not JavaScript toggles.
+- Custom templates MUST keep `get_header()` / `get_footer()` (or explicit `wp_head()` / `wp_footer()`).

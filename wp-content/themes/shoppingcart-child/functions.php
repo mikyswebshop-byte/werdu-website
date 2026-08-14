@@ -440,6 +440,63 @@ add_action( 'wp_enqueue_scripts', function() {
 }, 999 );
 
 /* ============================================================
+   13b. HOMEPAGE LIGHTHOUSE — defer render-blocking CSS/JS
+   ============================================================ */
+add_filter( 'style_loader_tag', 'werdu_homepage_defer_noncritical_css', 20, 4 );
+function werdu_homepage_defer_noncritical_css( $html, $handle, $href, $media ) {
+    if ( is_admin() || ! is_front_page() ) {
+        return $html;
+    }
+    $defer_needles = array(
+        'font-awesome',
+        'elementor-icons',
+        'elementor-animations',
+        'eael-',
+        'swiper',
+        'megamenu',
+        'dashicons',
+    );
+    $should_defer = false;
+    foreach ( $defer_needles as $needle ) {
+        if ( false !== strpos( $handle, $needle ) ) {
+            $should_defer = true;
+            break;
+        }
+    }
+    if ( ! $should_defer ) {
+        return $html;
+    }
+    if ( $media && $media !== 'all' && $media !== 'screen' ) {
+        return $html;
+    }
+    $href_esc = esc_url( $href );
+    return '<link rel="preload" href="' . $href_esc . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">'
+        . '<noscript><link rel="stylesheet" href="' . $href_esc . '"></noscript>';
+}
+
+add_filter( 'script_loader_tag', 'werdu_homepage_defer_noncritical_js', 20, 2 );
+function werdu_homepage_defer_noncritical_js( $tag, $handle ) {
+    if ( is_admin() || ! is_front_page() ) {
+        return $tag;
+    }
+    if ( false !== strpos( $tag, ' defer' ) || false !== strpos( $tag, ' async' ) ) {
+        return $tag;
+    }
+    $defer_handles = array(
+        'elementor-frontend',
+        'elementor-webpack-runtime',
+        'elementor-frontend-modules',
+        'elementor-pro-frontend',
+        'wp-embed',
+        'comment-reply',
+    );
+    if ( in_array( $handle, $defer_handles, true ) ) {
+        return str_replace( ' src', ' defer src', $tag );
+    }
+    return $tag;
+}
+
+/* ============================================================
    14. Database query cache hints
    ============================================================ */
 add_filter( 'wp_cache_themes_persistently', '__return_true', 100 );
@@ -805,8 +862,17 @@ add_filter( 'get_custom_logo', function( $html ) {
    23. HERO FETCHPRIORITY
    ============================================================ */
 add_filter( 'wp_get_attachment_image_attributes', function( $attr, $attachment ) {
-    if ( is_front_page() && ! empty( $attr['class'] ) && strpos( $attr['class'], 'attachment-large' ) !== false ) {
+    if ( ! is_front_page() ) {
+        return $attr;
+    }
+    $class = isset( $attr['class'] ) ? $attr['class'] : '';
+    $is_hero = ( false !== strpos( $class, 'attachment-large' ) )
+        || ( false !== strpos( $class, 'werdu-hero-lcp' ) )
+        || ( ! empty( $attr['fetchpriority'] ) && 'high' === $attr['fetchpriority'] );
+    if ( $is_hero ) {
         $attr['fetchpriority'] = 'high';
+        $attr['decoding']      = 'async';
+        unset( $attr['loading'] );
     }
     return $attr;
 }, 10, 2 );

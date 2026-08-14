@@ -22,6 +22,7 @@
   .site-content-contain { min-height: 100vh; }
   .custom-logo, .custom-logo-link img { aspect-ratio: 143 / 140; height: auto; max-height: 60px; width: auto; }
   @font-face { font-display: swap !important; }
+  a.skip-link, .skip-link, .screen-reader-text:focus { display: none !important; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
@@ -99,7 +100,9 @@ if ($shoppingcart_settings['shoppingcart_disable_top_bar'] == 0 ){
 
 <?php shoppingcart_the_custom_logo(); ?>
 <div id="site-detail">
-    <?php if ( is_front_page() || is_home() ) : ?>
+    <?php if ( is_front_page() ) : ?>
+        <p id="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+    <?php elseif ( is_home() ) : ?>
         <h1 id="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
     <?php else : ?>
         <div id="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></div>
