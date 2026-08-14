@@ -136,6 +136,14 @@ body.home .container {
   max-width: 720px;
 }
 
+.whp-lead a,
+.whp-faq-a a,
+.whp-hero-text a {
+  color: var(--whp-link);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .whp-center {
   text-align: center;
 }
@@ -151,10 +159,12 @@ body.home .container {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 15px 28px;
+  padding: 16px 28px;
   border-radius: 10px;
-  font-weight: 700;
-  font-size: 1.05rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  min-height: 48px;
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -273,7 +283,7 @@ body.home .werdu-btn-glow:hover {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--whp-orange);
+  background: var(--whp-link);
   color: #fff;
   font-size: 12px;
   font-weight: 800;
@@ -497,9 +507,9 @@ body.home .werdu-btn-glow:hover {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: var(--whp-orange);
+  background: var(--whp-link);
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;

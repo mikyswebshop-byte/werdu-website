@@ -615,6 +615,66 @@ function werdu_homepage_inline_lp_css() {
     echo '<style id="whp-css">' . $css . '</style>' . "\n";
 }
 
+add_action( 'wp_head', 'werdu_print_a11y_css', 4 );
+function werdu_print_a11y_css() {
+    if ( is_admin() ) {
+        return;
+    }
+    echo '<style id="werdu-a11y">'
+        . ':root{--cmplz_button_accept_background_color:#c2410c;--cmplz_button_accept_text_color:#ffffff;--cmplz_button_font_size:18px;--cmplz_text_font_size:14px;--cmplz_link_font_size:14px;--cmplz_hyperlink_color:#0b57d0}'
+        . '.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-accept,.cmplz-btn.cmplz-accept{background:#c2410c!important;color:#fff!important;font-weight:700!important;font-size:18px!important;min-height:48px!important}'
+        . '#site-title a,.main-navigation a:hover,.main-navigation ul li.current-menu-item a,.main-navigation ul li.current_page_item a,.main-navigation ul li:hover>a{color:#c2410c!important}'
+        . '.header-right .wcmenucart-contents,.header-right .wishlist-btn{color:#334155!important}'
+        . '.header-right .cart-value,.wl-counter{background:#c2410c!important;color:#fff!important}'
+        . '#colophon .widget-wrap a,#colophon .widget a,#colophon .textwidget a,#colophon .copyright a,#colophon .site-info a{color:#c2410c!important;text-decoration:underline!important;display:inline-block;padding:10px 6px;margin:2px 4px 2px 0;min-height:44px;line-height:1.35;font-size:15px;box-sizing:border-box}'
+        . '#colophon .copyright,#colophon .site-info{color:#444!important;font-size:14px!important}'
+        . '#colophon [style*="color:#999"],#colophon [style*="color: #999"]{color:#444!important}'
+        . '#colophon [style*="color:#ff6600"],#colophon [style*="color: #ff6600"],#colophon [style*="color:#FF6600"]{color:#c2410c!important;text-decoration:underline!important}'
+        . '#colophon [style*="153, 255"],#colophon [style*="#0099FF"],#colophon [style*="#0099ff"]{color:#0b57d0!important;text-decoration:underline!important}'
+        . '.whp-page a:not(.whp-btn){color:#c2410c;text-decoration:underline}'
+        . '.whp-page .whp-btn--primary,.whp-page a.whp-btn--primary,button.whp-btn--primary{font-size:1.25rem!important;font-weight:800!important;line-height:1.2!important}'
+        . '</style>' . "\n";
+}
+
+add_filter( 'widget_text', 'werdu_a11y_fix_widget_html', 99 );
+add_filter( 'widget_text_content', 'werdu_a11y_fix_widget_html', 99 );
+add_filter( 'widget_custom_html_content', 'werdu_a11y_fix_widget_html', 99 );
+add_filter( 'widget_block_content', 'werdu_a11y_fix_widget_html', 99 );
+function werdu_a11y_fix_widget_html( $html ) {
+    if ( ! is_string( $html ) || '' === $html ) {
+        return $html;
+    }
+    if ( false !== strpos( $html, 'contact-list' ) ) {
+        $html = preg_replace_callback(
+            '/(<ul[^>]*class="[^"]*contact-list[^"]*"[^>]*>)(.*?)(<\/ul>)/is',
+            static function ( $m ) {
+                $inner = $m[2];
+                $inner = preg_replace( '/<p\b[^>]*>/i', '<li>', $inner );
+                $inner = preg_replace( '/<\/p>/i', '</li>', $inner );
+                return $m[1] . $inner . $m[3];
+            },
+            $html
+        );
+    }
+    $html = str_ireplace( array( 'color:#ff6600', 'color: #ff6600' ), 'color:#c2410c', $html );
+    $html = str_ireplace( 'text-decoration:none', 'text-decoration:underline', $html );
+    $html = str_ireplace( array( 'color:#999', 'color: #999' ), 'color:#444', $html );
+    $html = str_ireplace( 'font-size:10px', 'font-size:14px', $html );
+    $html = str_ireplace( array( 'color:#0099FF', 'color: #0099FF', 'color: rgb(0, 153, 255)' ), 'color:#0b57d0', $html );
+    return $html;
+}
+
+add_action( 'dynamic_sidebar_before', 'werdu_a11y_sidebar_ob_start', 0 );
+function werdu_a11y_sidebar_ob_start() {
+    ob_start( 'werdu_a11y_fix_widget_html' );
+}
+add_action( 'dynamic_sidebar_after', 'werdu_a11y_sidebar_ob_end', 999 );
+function werdu_a11y_sidebar_ob_end() {
+    if ( ob_get_level() > 0 ) {
+        ob_end_flush();
+    }
+}
+
 add_action( 'wp_head', 'werdu_homepage_preload_lcp_image', 1 );
 function werdu_homepage_preload_lcp_image() {
     if ( is_admin() || ! is_front_page() ) {
