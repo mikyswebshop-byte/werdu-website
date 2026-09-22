@@ -141,6 +141,7 @@ class Werdu_Simple_Cache {
         $files = [
             WP_CONTENT_DIR . '/mu-plugins/werdu-homepage-seo-upgrade.php',
             WP_CONTENT_DIR . '/mu-plugins/fix-calculator-links.php',
+            WP_CONTENT_DIR . '/mu-plugins/werdu-optimizations.php',
         ];
 
         $stamp = 0;
@@ -170,6 +171,12 @@ class Werdu_Simple_Cache {
     public function save_output($buffer) {
         if (empty($buffer) || strlen($buffer) < 500) {
             return $buffer;
+        }
+
+        // Homepage: max. één H1 (SEO), vóór disk-cache.
+        if (function_exists('is_front_page') && is_front_page()
+            && function_exists('werdu_html_keep_single_h1')) {
+            $buffer = werdu_html_keep_single_h1($buffer);
         }
 
         $file = $this->get_cache_file();
