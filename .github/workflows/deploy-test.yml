@@ -1,9 +1,9 @@
 name: Deploy to Test Environment
+# Manual only — automatic push deploys polluted test.werdu.de and are not production.
+# Production (werdu.de) uses deploy-live.yml + LIVE_FTP_* secrets.
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+
 jobs:
   web-deploy:
     name: Deploy to test.werdu.de
@@ -26,6 +26,7 @@ jobs:
         rm -f readme.html liesmich.html license.txt
 
     # Host blocks/times out SFTP:22; Plesk FTP listens on port 21.
+    # TEST FTP user is chrooted to the test document root — use / not /httpdocs/.
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
@@ -35,7 +36,7 @@ jobs:
         protocol: ftp
         port: 21
         local-dir: ./
-        server-dir: /httpdocs/
+        server-dir: /
         dangerous-clean-slate: false
         exclude: |
           **/.git*
