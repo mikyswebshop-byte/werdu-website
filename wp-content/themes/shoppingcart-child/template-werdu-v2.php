@@ -23,7 +23,7 @@ $whp_logo     = $whp_up . '/08';
 $whp_price = static function ( $id ) {
 	$html = do_shortcode( '[werdu_preis id="' . sanitize_key( $id ) . '"]' );
 	if ( '' === $html || '—' === $html ) {
-		return '<a href="' . esc_url( home_url( '/shop/' ) ) . '">Preis im Shop anzeigen</a>';
+		return '<a href="' . esc_url( home_url( '/shop/' ) ) . '">Aktuellen Festpreis im Shop prüfen</a>';
 	}
 	return $html;
 };
@@ -54,10 +54,10 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 			<div class="whp-hero-panel">
 				<span class="whp-kicker">Deutschland · 0&nbsp;% MwSt.</span>
 				<h1>PV-Speicher kaufen</h1>
-				<p>LiFePO4-Solarbatterie mit sichtbarem Festpreis. Eigenverbrauch typischerweise von 20–30&nbsp;% auf 70–85&nbsp;% – ohne PDF-Angebot.</p>
+				<p>LiFePO4-Solarbatterie mit sichtbarem Festpreis im Shop: Eigenverbrauch steigt typischerweise von 20–30&nbsp;% auf 70–85&nbsp;%, ohne dass Sie auf ein PDF-Angebot warten müssen.</p>
 				<div class="whp-actions">
 					<a class="whp-btn whp-btn--primary" href="#whp-rechner">Kapazität berechnen</a>
-					<a class="whp-btn whp-btn--ghost" href="<?php echo esc_url( $whp_shop ); ?>">Zum Shop</a>
+					<a class="whp-btn whp-btn--ghost" href="<?php echo esc_url( $whp_shop ); ?>">Festpreise im Shop</a>
 				</div>
 			</div>
 		</div>
@@ -68,7 +68,7 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 			<span class="whp-kicker">Werdu</span>
 			<h2 class="whp-display" id="whp-intro-title">Energie, die im Haus bleibt</h2>
 		</div>
-		<p class="whp-lede">Ein passend dimensionierter PV-Speicher verschiebt Mittagsstrom in den Abend. Sie kaufen zum Preis im Shop – Beratung ist optional, kein individuelles Angebot.</p>
+		<p class="whp-lede">Ein passend dimensionierter PV-Speicher verschiebt Mittagsstrom in den Abend und hält mehr Ertrag im Haus. Sie kaufen zum sichtbaren Festpreis im Shop; Beratung bleibt optional und erzeugt kein individuelles Angebot.</p>
 	</section>
 
 	<section id="whp-produkte" aria-label="PV-Speicher">
@@ -80,10 +80,10 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 				<span class="whp-kicker">16 kWh</span>
 				<h2>LiFePO4 PV-Speicher</h2>
 				<p class="whp-meta">51,2&nbsp;V / 314&nbsp;Ah · Basen Green · 200&nbsp;A Dauerstrom gemäß Produktdaten</p>
-				<p>Für klassische Eigenverbrauchshaushalte. Touchscreen, aktiver Balancer und App laut Herstellerangabe.</p>
+				<p>Dieser 16&nbsp;kWh-Speicher ist für klassische Eigenverbrauchshaushalte ausgelegt und bringt Touchscreen, aktiven Balancer sowie App-Anbindung laut Herstellerangabe mit.</p>
 				<span class="whp-price"><?php echo wp_kses_post( $whp_price( 'basen16kwh' ) ); ?></span>
 				<div class="whp-actions">
-					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/16-kwh-lifepo4-heimspeicher-51-2v-314ah/' ) ); ?>">Erfahren Sie mehr</a>
+					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/16-kwh-lifepo4-heimspeicher-51-2v-314ah/' ) ); ?>">16 kWh Speicher ansehen</a>
 				</div>
 			</div>
 		</article>
@@ -96,10 +96,10 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 				<span class="whp-kicker">30–32 kWh</span>
 				<h2>Speicher für hohen Bedarf</h2>
 				<p class="whp-meta">51,2&nbsp;V · für E-Auto, Wärmepumpe, hohen Verbrauch</p>
-				<p>Modulare Erweiterung je nach Modell. LiFePO4 mit hoher nutzbarer Entladetiefe laut Produktdaten.</p>
+				<p>Die größere Kapazität deckt hohen Tagesbedarf und lässt sich je nach Modell modular erweitern; LiFePO4 liefert dabei eine hohe nutzbare Entladetiefe laut Produktdaten.</p>
 				<span class="whp-price"><?php echo wp_kses_post( $whp_price( '30kwh' ) ); ?></span>
 				<div class="whp-actions">
-					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>">Erfahren Sie mehr</a>
+					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>">30–32 kWh Speicher ansehen</a>
 				</div>
 			</div>
 		</article>
@@ -112,10 +112,10 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 				<span class="whp-kicker">15 kWh All-in-One</span>
 				<h2>Solarbatterie mit Wechselrichter</h2>
 				<p class="whp-meta">inkl. 5&nbsp;kW Hybrid-Wechselrichter</p>
-				<p>Batterie und Hybrid-WR in einem System. Sinnvoll, wenn noch kein Hybrid-Wechselrichter vorhanden ist.</p>
+				<p>Batterie und Hybrid-Wechselrichter sitzen in einem System und eignen sich besonders, wenn noch kein Hybrid-WR vorhanden ist und Sie PV plus Speicher gemeinsam planen.</p>
 				<span class="whp-price"><?php echo wp_kses_post( $whp_price( '15kwh_aio' ) ); ?></span>
 				<div class="whp-actions">
-					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>">Erfahren Sie mehr</a>
+					<a class="whp-btn whp-btn--primary" href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>">All-in-One System ansehen</a>
 				</div>
 			</div>
 		</article>
@@ -143,7 +143,7 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 			<div>
 				<span class="whp-kicker">Autarkie-Rechner</span>
 				<h2 class="whp-display">Welche Kapazität passt zu Ihrem Haus?</h2>
-				<p class="whp-lede" style="margin-top:18px;">Das Ergebnis führt zur Beratung – nicht zu einem Preisangebot. Festpreise stehen im <a href="<?php echo esc_url( $whp_shop ); ?>">Shop</a>.</p>
+				<p class="whp-lede" style="margin-top:18px;">Das Ergebnis führt zur Fachberatung und erzeugt kein Preisangebot; verbindliche Festpreise stehen weiterhin im <a href="<?php echo esc_url( $whp_shop ); ?>">Solarbatterien-Shop</a>.</p>
 			</div>
 			<div id="werdu-calc-isolated">
 				<form id="pv-calculator" class="whp-form" action="<?php echo esc_url( $whp_beratung ); ?>" method="get">
@@ -199,8 +199,8 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 						<div><span>Autarkie</span><strong id="whp-res-autarkie">–</strong></div>
 						<div><span>Ersparnis</span><strong id="whp-res-spar">–</strong></div>
 					</div>
-					<p>Orientierung, keine verbindliche Auslegung. Als Nächstes übergeben wir die Werte an die Fachberatung.</p>
-					<a class="whp-btn whp-btn--primary werdu-calc-cta whp-calc-cta" href="<?php echo esc_url( $whp_beratung ); ?>">Beratung anfordern</a>
+					<p>Diese Werte sind eine Orientierung und keine verbindliche Auslegung; als Nächstes übergeben wir die Parameter an die Fachberatung.</p>
+					<a class="whp-btn whp-btn--primary werdu-calc-cta whp-calc-cta" href="<?php echo esc_url( $whp_beratung ); ?>">Mit Werten zur Fachberatung</a>
 				</div>
 			</div>
 		</div>
@@ -213,7 +213,7 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 		<div class="whp-tech-copy">
 			<span class="whp-kicker">Technologie</span>
 			<h2 class="whp-display">LiFePO4 als Standard</h2>
-			<p class="whp-lede" style="margin-top:16px;">Sicherheit und Zyklenfestigkeit passen zur Nutzungsdauer einer PV-Anlage. NMC ist energiedichter, aber thermisch empfindlicher. Blei-Säure ist für diesen Einsatz veraltet.</p>
+			<p class="whp-lede" style="margin-top:16px;">Sicherheit und Zyklenfestigkeit von LiFePO4 passen zur Nutzungsdauer einer PV-Anlage besser als energiedichtere, aber thermisch empfindlichere NMC-Zellen. Blei-Säure gilt für diesen Dauerbetrieb inzwischen als veraltet und wird hier nicht empfohlen.</p>
 			<ul class="whp-facts">
 				<li><span>Typische Zyklen</span><strong>6.000–8.000</strong></li>
 				<li><span>Nutzungsdauer</span><strong>15–20 Jahre</strong></li>
@@ -232,23 +232,23 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 		<div class="whp-wissen-list">
 			<article id="warum-pv-speicher">
 				<h2>Warum ein PV-Speicher</h2>
-				<p>Ohne Speicher bleiben oft nur 20–30&nbsp;% des Solarstroms im Haus. Mit passend dimensionierter Solarbatterie sind 70–85&nbsp;% Eigenverbrauch realistisch. Nachrüstung an bestehende PV-Anlagen ist üblich.</p>
+				<p>Ohne Speicher bleiben oft nur 20–30&nbsp;% des Solarstroms im Haus, weil Mittagserträge sonst ins Netz fließen. Mit passend dimensionierter Solarbatterie sind 70–85&nbsp;% Eigenverbrauch realistisch, und die Nachrüstung an bestehende PV-Anlagen ist in Deutschland üblich.</p>
 			</article>
 			<article id="autarkie-eigenverbrauch">
 				<h2>Autarkie</h2>
-				<p>Ziel ist ein hoher Jahresanteil selbst genutzten Stroms – nicht 100&nbsp;% Inselbetrieb. Fraunhofer ISE beschreibt den Sprung von rund 30&nbsp;% ohne Speicher auf bis etwa 80&nbsp;% mit Batterie. Notstrom braucht eine ausgewiesene Funktion.</p>
+				<p>Ziel ist ein hoher Jahresanteil selbst genutzten Stroms – nicht zwingend 100&nbsp;% Inselbetrieb hinter dem Zähler. Fraunhofer ISE beschreibt den Sprung von rund 30&nbsp;% ohne Speicher auf bis etwa 80&nbsp;% mit Batterie; echte Notstromfunktion braucht eine ausgewiesene Ersatzstromlösung.</p>
 			</article>
 			<article id="dimensionierung">
 				<h2>Kapazität</h2>
-				<p>Praxisregel: 1,0–1,5 kWh nutzbarer Speicher je 1.000 kWh Jahresverbrauch. 4.000 kWh liegen oft bei 5–8 kWh; mit E-Auto oder Wärmepumpe eher 12–16 kWh oder 30–32 kWh.</p>
+				<p>Als Praxisregel gelten 1,0–1,5&nbsp;kWh nutzbarer Speicher je 1.000&nbsp;kWh Jahresverbrauch: 4.000&nbsp;kWh liegen oft bei 5–8&nbsp;kWh, während E-Auto oder Wärmepumpe eher 12–16&nbsp;kWh oder 30–32&nbsp;kWh nahelegen.</p>
 			</article>
 			<article id="wechselrichter">
 				<h2>Nachrüstung</h2>
-				<p>AC-gekoppelt lässt den vorhandenen Wechselrichter unangetastet. Hybrid und All-in-One bündeln PV und Batterie. Anschluss durch eine Elektrofachkraft; Stundensätze setzt der Betrieb. Siehe <a href="<?php echo esc_url( home_url( '/heimspeicher-installation/' ) ); ?>">Installation</a>.</p>
+				<p>AC-gekoppelt lässt den vorhandenen Wechselrichter unangetastet, während Hybrid und All-in-One PV und Batterie bündeln. Den Anschluss übernimmt eine Elektrofachkraft; Stundensätze setzt der Betrieb. Siehe <a href="<?php echo esc_url( home_url( '/heimspeicher-installation/' ) ); ?>">Heimspeicher-Installation</a>.</p>
 			</article>
 			<article id="mwst-kosten">
 				<h2>0&nbsp;% MwSt.</h2>
-				<p>Seit 2023 gilt 0&nbsp;% auf begünstigte PV-Anlagen und dazugehörige Speicher an Wohngebäuden – Kauf und Installation, nicht jedes Zubehör. Einordnung: <a href="<?php echo esc_url( home_url( '/mwst-befreiung-eigenverbrauch/' ) ); ?>">MwSt-Befreiung</a>.</p>
+				<p>Seit 2023 gilt 0&nbsp;% auf begünstigte PV-Anlagen und dazugehörige Speicher an Wohngebäuden – für Kauf und Installation, nicht für jedes Zubehör. Einordnung: <a href="<?php echo esc_url( home_url( '/mwst-befreiung-eigenverbrauch/' ) ); ?>">MwSt-Befreiung Eigenverbrauch</a>.</p>
 			</article>
 		</div>
 	</section>
@@ -273,10 +273,10 @@ body.home,#content,.whp-page{background:#fff;color:#1a1a1a}
 
 	<section class="whp-close">
 		<div class="whp-shell">
-			<p class="whp-lede">Kapazität berechnen oder Festpreise im Shop ansehen.</p>
+			<p class="whp-lede">Berechnen Sie die passende Kapazität oder vergleichen Sie die Festpreise direkt im Shop.</p>
 			<div class="whp-actions" style="margin-top:0;">
-				<a class="whp-btn whp-btn--primary" href="#whp-rechner">Rechner</a>
-				<a class="whp-btn whp-btn--ghost" href="<?php echo esc_url( $whp_beratung ); ?>">Beratung</a>
+				<a class="whp-btn whp-btn--primary" href="#whp-rechner">Zum Autarkie-Rechner</a>
+				<a class="whp-btn whp-btn--ghost" href="<?php echo esc_url( $whp_beratung ); ?>">Fachberatung anfragen</a>
 			</div>
 		</div>
 	</section>

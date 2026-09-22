@@ -14,6 +14,11 @@ if ( file_exists( $werdu_p1 ) ) {
     require_once $werdu_p1;
 }
 
+$werdu_home_seo = get_stylesheet_directory() . '/inc/werdu-home-seo.php';
+if ( file_exists( $werdu_home_seo ) ) {
+    require_once $werdu_home_seo;
+}
+
 $werdu_installer = get_stylesheet_directory() . '/werdu-installer-option.php';
 if ( file_exists( $werdu_installer ) ) {
     require_once $werdu_installer;
@@ -359,6 +364,40 @@ add_action( 'wp_default_scripts', function( $scripts ) {
         );
     }
 } );
+
+// 9.1b jQuery via CDN (SEO-Check / bandbreedte) — CSP moet cdn.jsdelivr.net toestaan
+add_action( 'wp_enqueue_scripts', 'werdu_jquery_from_cdn', 1 );
+function werdu_jquery_from_cdn() {
+    if ( is_admin() ) {
+        return;
+    }
+    $cdn = 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js';
+    wp_deregister_script( 'jquery-core' );
+    wp_deregister_script( 'jquery' );
+    wp_register_script( 'jquery-core', $cdn, array(), '3.7.1', false );
+    wp_register_script( 'jquery', false, array( 'jquery-core' ), '3.7.1', false );
+}
+
+add_filter( 'script_loader_tag', 'werdu_jquery_cdn_sri', 10, 3 );
+function werdu_jquery_cdn_sri( $tag, $handle, $src ) {
+    if ( 'jquery-core' !== $handle || false === strpos( $src, 'cdn.jsdelivr.net' ) ) {
+        return $tag;
+    }
+    $integrity = 'sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=';
+    if ( false !== strpos( $tag, 'integrity=' ) ) {
+        return $tag;
+    }
+    return str_replace( ' src=', ' integrity="' . esc_attr( $integrity ) . '" crossorigin="anonymous" referrerpolicy="no-referrer" src=', $tag );
+}
+
+add_action( 'wp_head', 'werdu_jquery_cdn_preconnect', 1 );
+function werdu_jquery_cdn_preconnect() {
+    if ( is_admin() ) {
+        return;
+    }
+    echo '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />' . "\n";
+    echo '<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />' . "\n";
+}
 
 // 9.2 Dashicons uitschakelen voor niet-ingelogde bezoekers
 add_action( 'wp_enqueue_scripts', function() {

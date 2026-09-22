@@ -57,7 +57,7 @@ $wd_home = home_url( '/' );
 				</a>
 				<p>LiFePO4 PV-Speicher mit transparenten Festpreisen – direkt im Shop, ohne Angebotsrunde.</p>
 			</div>
-			<a class="wd-ft-cta" href="<?php echo esc_url( home_url( '/shop/' ) ); ?>">Zum Shop</a>
+			<a class="wd-ft-cta" href="<?php echo esc_url( home_url( '/shop/' ) ); ?>">PV-Speicher Preise ansehen</a>
 		</div>
 
 		<nav class="wd-ft-grid" aria-label="Fußzeile">

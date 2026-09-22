@@ -7,7 +7,7 @@
     Header always set X-XSS-Protection "1; mode=block"
     
     # CSP — licht genoeg voor Elementor + WooCommerce + SilentShield
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.silentshield.io https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.silentshield.io https://www.google-analytics.com; frame-src 'self'; base-uri 'self'; form-action 'self';"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://api.silentshield.io https://api-us.silentshield.io https://api-eu.silentshield.io https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.silentshield.io https://api-us.silentshield.io https://api-eu.silentshield.io https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.google.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; form-action 'self';"
     
     # COOP — veilig voor WooCommerce popups
     Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
