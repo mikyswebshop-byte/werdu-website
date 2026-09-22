@@ -174,3 +174,16 @@ wp-content/wflogs/
 # OS files
 Thumbs.db
 .DS_Store
+
+# ============================================================
+# Never upload as site content (strip in deploy / .git-ftp-ignore).
+# Keep these in GitHub for Cursor — they must not land in httpdocs.
+# ============================================================
+.git-ftp.log
+apply-openseo-audit.py
+fix-db-calc-urls.php
+test-php.php
+elementor-*-export.json
+wpt-hotlinked-image-stub.png
+plesk-upload-*/
+

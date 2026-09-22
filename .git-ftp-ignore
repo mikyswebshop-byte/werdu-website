@@ -1,0 +1,22 @@
+# Prevent git-ftp from uploading laptop/Cursor/Git junk into httpdocs.
+.cursorrules
+.github/
+.githooks/
+.gitignore
+.gitattributes
+.editorconfig
+.git-ftp.log
+.git-ftp-ignore
+.deployignore
+README.md
+LICENSE
+apply-openseo-audit.py
+fix-db-calc-urls.php
+test-php.php
+elementor-*-export.json
+wpt-hotlinked-image-stub.png
+readme.html
+liesmich.html
+license.txt
+*.bk
+*.bak

@@ -10,6 +10,21 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v3
+
+    # Never upload laptop/Cursor/Git tooling into the public web root.
+    - name: Strip non-public repo files before SFTP
+      run: |
+        set -euo pipefail
+        rm -rf .github .githooks .git
+        rm -f .cursorrules .gitignore .gitattributes .editorconfig
+        rm -f .git-ftp.log .git-ftp-ignore .deployignore
+        rm -f README.md LICENSE
+        rm -f apply-openseo-audit.py fix-db-calc-urls.php test-php.php
+        rm -f elementor-*-export.json
+        rm -f wpt-hotlinked-image-stub.png
+        rm -f readme.html liesmich.html license.txt
+        # Keep WordPress + site proxies; nothing else from tooling.
+
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
