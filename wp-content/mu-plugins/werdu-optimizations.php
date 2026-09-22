@@ -236,3 +236,61 @@ add_action('wp_enqueue_scripts', function() {
         wp_dequeue_style('elementor-post-' . get_the_ID());
     }
 }, 99);
+
+/* 25. SEO: www → apex 301 + max. 1× H1 op de homepage */
+add_action('template_redirect', function () {
+    if (is_admin()) {
+        return;
+    }
+    $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    if ($host === 'www.werdu.de') {
+        wp_redirect('https://werdu.de' . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/'), 301);
+        exit;
+    }
+    if ($host === 'www.test.werdu.de') {
+        wp_redirect('https://test.werdu.de' . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/'), 301);
+        exit;
+    }
+}, 0);
+
+if (!function_exists('werdu_html_keep_single_h1')) {
+    /**
+     * Houdt de eerste <h1> intact; zet elke volgende H1 om naar H2 (open + close).
+     */
+    function werdu_html_keep_single_h1($html) {
+        if (!is_string($html) || $html === '' || stripos($html, '<h1') === false) {
+            return $html;
+        }
+        $seen  = 0;
+        $stack = array();
+        $out   = preg_replace_callback(
+            '/<\/?h1\b[^>]*>/i',
+            function ($m) use (&$seen, &$stack) {
+                if (isset($m[0][1]) && $m[0][1] === '/') {
+                    $demoted = array_pop($stack);
+                    return $demoted ? '</h2>' : '</h1>';
+                }
+                $seen++;
+                if (1 === $seen) {
+                    $stack[] = false;
+                    return $m[0];
+                }
+                $stack[] = true;
+                return preg_replace('/^<h1/i', '<h2', $m[0]);
+            },
+            $html
+        );
+        return is_string($out) ? $out : $html;
+    }
+}
+
+add_action('template_redirect', function () {
+    if (is_admin() || !is_front_page()) {
+        return;
+    }
+    // Alleen voor requests die de page-cache overslaan (login/query).
+    // Gecachte HTML wordt in werdu-simple-cache::save_output genormaliseerd.
+    if (is_user_logged_in() || !empty($_GET)) {
+        ob_start('werdu_html_keep_single_h1');
+    }
+}, 1);
