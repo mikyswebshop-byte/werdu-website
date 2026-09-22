@@ -1,0 +1,87 @@
+/*
+Theme Name: Shoptimizer Child Theme
+Theme URI: 
+Description: Child theme of Shoptimizer
+Author: CommerceGurus
+Author URI: 
+Template: shoptimizer
+Version: 1.2.2
+License:         	GNU General Public License v2 or later
+License URI:     	http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* Mobile Extra: compact German links, no heading chrome */
+.mobile-extra p,
+.mobile-extra strong {
+	color: inherit;
+	font-size: inherit;
+}
+
+.werdu-seo-h1 {
+	font-size: 1.75rem;
+	line-height: 1.25;
+	margin: 1rem 0 1.25rem;
+	color: #1a1a2e;
+}
+
+.werdu-topic-links,
+.werdu-deep-seo,
+.werdu-related-pv {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1.25rem 1rem 2rem;
+}
+
+.werdu-seo-footer-links {
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 16px 20px 28px;
+	box-sizing: border-box;
+}
+.werdu-seo-footer-links nav,
+nav.werdu-seo-footer-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
+}
+.werdu-seo-footer-links a {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: #f1f5f9;
+	color: #334155;
+	text-decoration: none;
+	font-size: 0.82rem;
+}
+
+.werdu-topic-links-title {
+	font-weight: 700;
+	margin: 0 0 .75rem;
+}
+
+.werdu-topic-links ul,
+.werdu-related-pv ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem 1.25rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.werdu-topic-links a,
+.werdu-related-pv a {
+	color: #1e73be;
+	text-decoration: underline;
+}
+
+.werdu-deep-seo h1,
+.werdu-deep-seo h2 {
+	margin: 1.25rem 0 .5rem;
+}
+
+.werdu-deep-seo p {
+	margin: 0 0 1rem;
+}

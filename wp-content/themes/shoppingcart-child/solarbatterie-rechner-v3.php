@@ -378,25 +378,25 @@ get_header();
             <h3>Passende Produkte für Ihren Bedarf</h3>
             <div class="werdu-product-grid" id="w-products">
 
-                <a href="<?php echo esc_url( home_url( '/tewaycell-10-kwh-all-in-one-sodium-ion-solarspeicher-5-kw-hybrid-wechselrichter/' ) ); ?>" class="werdu-product-item" id="prod-10">
-                    <div class="werdu-product-type">All-in-One System</div>
+                <a href="<?php echo esc_url( home_url( '/sodium-ion-solarspeicher-10-kwh-mit-5-kw-wechselrichter/' ) ); ?>" class="werdu-product-item" id="prod-10">
+                    <div class="werdu-product-type">All-in-One (Batterie + Wechselrichter)</div>
                     <div class="werdu-product-kwh">10 kWh</div>
                     <div class="werdu-product-price">2.799 €</div>
-                    <div class="werdu-product-features">Sodium-Ion + 5 kW Hybrid-WR<br>Ideal für Singles & kleine Haushalte<br>Plug & Play</div>
+                    <div class="werdu-product-features">Sodium-Ion + 5 kW Hybrid-WR<br>Kein reiner Batteriespeicher<br>Ideal für kleine Haushalte ohne Hybrid-WR</div>
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
                 <!-- BASEN GREEN 16 kWh - VERVANGT Tewaycell 15 kWh -->
-                <a href="<?php echo esc_url( home_url( '/16-kwh-heimspeicher-lifepo4-314ah/' ) ); ?>" class="werdu-product-item" id="prod-16green">
-                    <div class="werdu-product-type">Batterie Only</div>
+                <a href="<?php echo esc_url( home_url( '/16-kwh-batteriespeicher-kaufen/' ) ); ?>" class="werdu-product-item" id="prod-16green">
+                    <div class="werdu-product-type">Nur Batterie (ohne Wechselrichter)</div>
                     <div class="werdu-product-kwh">16 kWh</div>
                     <div class="werdu-product-price">1.990 €</div>
-                    <div class="werdu-product-features">Basen Green LiFePO₄ Grade A<br>51,2V 314Ah • 200A Dauerstrom<br>Touchscreen • 5A aktiver Balancer<br>10.000 Zyklen • App-Steuerung</div>
+                    <div class="werdu-product-features">Basen Green LiFePO₄ Grade A<br>51,2V 314Ah • 200A Dauerstrom<br>Lieferzeit typisch 5–10 Werktage</div>
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="<?php echo esc_url( home_url( '/tewaycell-16-kwh-512-v-lifepo4-solarbatterie-314-ah-mobile-ess-kostenloser-versand/' ) ); ?>" class="werdu-product-item" id="prod-16">
-                    <div class="werdu-product-type">Batterie Only</div>
+                <a href="<?php echo esc_url( home_url( '/stromspeicher-16-kwh-lifepo4-batteriespeicher/' ) ); ?>" class="werdu-product-item" id="prod-16">
+                    <div class="werdu-product-type">Nur Batterie (ohne Wechselrichter)</div>
                     <div class="werdu-product-kwh">16 kWh</div>
                     <div class="werdu-product-price">2.345 €</div>
                     <div class="werdu-product-features">LiFePO₄ 314Ah Mobile ESS<br>Max. 200A Entladestrom<br>Kompatibel mit Growatt, Victron uvm.</div>
@@ -404,15 +404,15 @@ get_header();
                 </a>
 
                 <a href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>" class="werdu-product-item" id="prod-15aio">
-                    <div class="werdu-product-type">All-in-One System</div>
+                    <div class="werdu-product-type">All-in-One (Batterie + Wechselrichter)</div>
                     <div class="werdu-product-kwh">15 kWh</div>
                     <div class="werdu-product-price">2.899 €</div>
-                    <div class="werdu-product-features">LiFePO₄ + 5 kW Hybrid-WR<br>Plug & Play, mobil einsetzbar<br>MPPT integriert</div>
+                    <div class="werdu-product-features">LiFePO₄ + 5 kW Hybrid-WR<br>Wenn noch kein Hybrid-WR vorhanden ist<br>MPPT integriert</div>
                     <div class="werdu-product-cta">Zum Produkt &#8594;</div>
                 </a>
 
-                <a href="<?php echo esc_url( home_url( '/tewaycell-30-32-kwh-lifepo4-batterie-512v-560-628ah-mobile-ess-300ah-bms/' ) ); ?>" class="werdu-product-item" id="prod-30">
-                    <div class="werdu-product-type">Batterie Only</div>
+                <a href="<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>" class="werdu-product-item" id="prod-30">
+                    <div class="werdu-product-type">Nur Batterie (ohne Wechselrichter)</div>
                     <div class="werdu-product-kwh">30-32 kWh</div>
                     <div class="werdu-product-price">3.499 €</div>
                     <div class="werdu-product-features">LiFePO₄ 560-628Ah<br>Max. 15.000W Ausgangsleistung<br>Für große Haushalte & E-Auto</div>
@@ -420,7 +420,7 @@ get_header();
                 </a>
 
                 <a href="<?php echo esc_url( home_url( '/tewaycell-30-kwh-all-in-one-solarspeicher-mit-12-kw-hybrid-wechselrichter-3-phasig/' ) ); ?>" class="werdu-product-item" id="prod-30aio">
-                    <div class="werdu-product-type">All-in-One 3-phasig</div>
+                    <div class="werdu-product-type">All-in-One 3-phasig (Batterie + WR)</div>
                     <div class="werdu-product-kwh">30 kWh</div>
                     <div class="werdu-product-price">4.839 €</div>
                     <div class="werdu-product-features">LiFePO₄ + 12 kW 3-phasig WR<br>Dual MPPT, USV-Funktion<br>Für Gewerbe & maximale Autarkie</div>
@@ -439,12 +439,12 @@ get_header();
                     <tr><th scope="col">Merkmal</th><th scope="col">Werdu.de Tewaycell</th><th scope="col">Marktüblich (Vergleichswerte)</th></tr>
                 </thead>
                 <tbody>
-                    <tr><th scope="row" style="font-weight:600;">Preis 10-16 kWh</th><td class="price-werdu">ab 2.345 €</td><td class="price-market">3.500 – 5.000 €</td></tr>
+                    <tr><th scope="row" style="font-weight:600;">Preis Batterie ab 16 kWh</th><td class="price-werdu">ab 1.990 €</td><td class="price-market">3.500 – 5.000 €</td></tr>
                     <tr><th scope="row" style="font-weight:600;">Preis 30+ kWh</th><td class="price-werdu">ab 3.499 €</td><td class="price-market">7.000 – 11.000 €</td></tr>
                     <tr><th scope="row" style="font-weight:600;">Zyklenlebensdauer</th><td>6.000 – 8.000 Zyklen (80% DoD)</td><td class="price-market">4.000 – 10.000 Zyklen</td></tr>
-                    <tr><th scope="row" style="font-weight:600;">Technologie</th><td>LiFePO₄ (A-Grade) & Sodium-Ion</td><td class="price-market">Meist LiFePO₄</td></tr>
-                    <tr><th scope="row" style="font-weight:600;">Garantie</th><td>10 Jahre</td><td class="price-market">5 – 10 Jahre</td></tr>
-                    <tr><th scope="row" style="font-weight:600;">Lieferzeit</th><td>45 – 66 Tage (China) / EU schneller</td><td class="price-market">3 – 8 Wochen</td></tr>
+                    <tr><th scope="row" style="font-weight:600;">Technologie</th><td>LiFePO₄ (A-Grade) & Sodium-Ion All-in-One</td><td class="price-market">Meist LiFePO₄</td></tr>
+                    <tr><th scope="row" style="font-weight:600;">Garantie</th><td>5 Jahre</td><td class="price-market">5 – 10 Jahre</td></tr>
+                    <tr><th scope="row" style="font-weight:600;">Lieferzeit</th><td>Basen Green 5–10 Werktage · sonst produktbezogen im Shop</td><td class="price-market">3 – 8 Wochen</td></tr>
                     <tr><th scope="row" style="font-weight:600;">Erweiterbarkeit</th><td>Bis 15 Einheiten parallel</td><td class="price-market">Oft modular, teils fest</td></tr>
                     <tr><th scope="row" style="font-weight:600;">Sicherheitsfeatures</th><td>BMS, Active Balancer, Feuerlöschsystem</td><td class="price-market">BMS standard, sonst variabel</td></tr>
                 </tbody>
@@ -455,8 +455,12 @@ get_header();
         <div class="werdu-final-cta">
             <h3>&#128640; Bereit für Ihre Energieunabhängigkeit?</h3>
             <p>Mit der empfohlenen Lösung sparen Sie bis zu <strong id="cta-savings" style="color:#ea580c;">-</strong> pro Jahr.</p>
-            <a href="<?php echo esc_url( home_url( '/beratung-anfragen/' ) ); ?>" class="btn werdu-calc-cta" id="werdu-beratung-cta">Kostenlose Fachanalyse anfordern &#8594;</a>
-            <div class="sub">Kostenloser Versand &#8226; 10 Jahre Garantie &#8226; 14 Tage Rückgabe &#8226; Deutscher Support</div>
+            <div class="werdu-cta-actions">
+                <a href="<?php echo esc_url( home_url( '/beratung-anfragen/' ) ); ?>" class="btn werdu-calc-cta" id="werdu-beratung-cta">Kostenlose Beratung anfragen</a>
+                <button type="button" class="werdu-cta-secondary" id="wr5-pdf-btn" onclick="typeof wPrintResults==='function'&&wPrintResults()">Ergebnis als PDF herunterladen</button>
+                <button type="button" class="werdu-cta-secondary" id="wr5-email-btn" onclick="typeof wEmailResults==='function'&&wEmailResults()">Ergebnis per E-Mail senden</button>
+            </div>
+            <div class="sub">Kostenloser Versand &#8226; 5 Jahre Garantie &#8226; 14 Tage Rückgabe &#8226; Deutscher Support</div>
         </div>
 
         <div style="text-align:center; margin-top:20px;">
