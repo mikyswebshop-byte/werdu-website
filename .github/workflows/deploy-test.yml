@@ -3,16 +3,17 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 jobs:
   web-deploy:
     name: Deploy to test.werdu.de
     runs-on: ubuntu-latest
     steps:
     - name: Get latest code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # Never upload laptop/Cursor/Git tooling into the public web root.
-    - name: Strip non-public repo files before SFTP
+    - name: Strip non-public repo files before FTP
       run: |
         set -euo pipefail
         rm -rf .github .githooks .git
@@ -23,15 +24,23 @@ jobs:
         rm -f elementor-*-export.json
         rm -f wpt-hotlinked-image-stub.png
         rm -f readme.html liesmich.html license.txt
-        # Keep WordPress + site proxies; nothing else from tooling.
 
-    - name: SFTP Deploy
-      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+    # Host blocks/times out SFTP:22; Plesk FTP listens on port 21.
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.TEST_FTP_SERVER }}
         username: ${{ secrets.TEST_FTP_USERNAME }}
         password: ${{ secrets.TEST_FTP_PASSWORD }}
-        port: 22
-        local_path: './*'
-        remote_path: '/'
-        sftp_only: true
+        protocol: ftp
+        port: 21
+        local-dir: ./
+        server-dir: /httpdocs/
+        dangerous-clean-slate: false
+        exclude: |
+          **/.git*
+          **/.github/**
+          **/.githooks/**
+          **/.cursorrules
+          **/node_modules/**
+          **/.DS_Store

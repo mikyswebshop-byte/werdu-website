@@ -1,0 +1,34 @@
+name: Deploy to Werdu Live
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'wp-content/themes/shoptimizer-child-theme/**'
+      - '.github/workflows/deploy-live.yml'
+
+jobs:
+  deploy-live:
+    name: Deploy shoptimizer-child to werdu.de
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v4
+
+      - name: FTP deploy theme fixes to production httpdocs
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Prefer LIVE_* secrets; fall back to TEST_* if LIVE is not configured yet.
+          server: ${{ secrets.LIVE_FTP_SERVER || secrets.TEST_FTP_SERVER }}
+          username: ${{ secrets.LIVE_FTP_USERNAME || secrets.TEST_FTP_USERNAME }}
+          password: ${{ secrets.LIVE_FTP_PASSWORD || secrets.TEST_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./wp-content/themes/shoptimizer-child-theme/
+          server-dir: /httpdocs/wp-content/themes/shoptimizer-child-theme/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            functions.php
