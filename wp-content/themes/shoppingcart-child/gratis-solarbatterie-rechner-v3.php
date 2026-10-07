@@ -1065,7 +1065,7 @@ if (!defined('ABSPATH')) {
       "name": "Solarbatterie Rechner 2026 | Speichergröße kostenlos berechnen",
       "description": "Kostenloser Solarbatterie Rechner. Berechnen Sie Speichergröße, Autarkiegrad und Amortisation in 2 Minuten. Basierend auf DWD-Solardaten und VDI 4655.",
       "inLanguage": "de-DE",
-      "url": "<?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?>"
+      "url": "<?php echo esc_url( home_url( '/pv-speicher-rechner/' ) ); ?>"
     },
     {
       "@type": "SoftwareApplication",
@@ -1523,7 +1523,7 @@ if (!defined('ABSPATH')) {
   </div>
 
   <div class="wr5-embed-codebox">
-    <code>&lt;iframe src="<?php echo esc_url( home_url( '/solarbatterie-rechner/?embed=1' ) ); ?>"
+    <code>&lt;iframe src="<?php echo esc_url( home_url( '/pv-speicher-rechner/?embed=1' ) ); ?>"
         width="100%" height="1200" frameborder="0"
         style="border:none;overflow:hidden;"&gt;&lt;/iframe&gt;</code>
   </div>
@@ -2525,7 +2525,7 @@ if (!defined('ABSPATH')) {
     html += '<div class="footer">';
     html += '<p><strong>Hinweis:</strong> Alle Berechnungen basieren auf DWD-Solardaten und VDI 4655. Die Ergebnisse dienen der Orientierung.</p>';
     html += '<p>&copy; 2026 Werdu.de | Solarbatterie-Rechner v3</p>';
-    html += '<p><?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?></p>';
+    html += '<p><?php echo esc_url( home_url( '/pv-speicher-rechner/' ) ); ?></p>';
     html += '</div>';
     html += '</body></html>';
 

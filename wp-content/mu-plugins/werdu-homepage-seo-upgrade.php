@@ -86,7 +86,7 @@ function werdu_home_seo_beratung_url() {
 }
 
 function werdu_home_seo_rechner_url() {
-    return home_url( '/solarbatterie-rechner/' );
+    return home_url( '/pv-speicher-rechner/' );
 }
 
 // ============================================
@@ -1595,7 +1595,7 @@ function werdu_home_seo_software_json_ld() {
 /**
  * Groot SEO/AIO-contentblok (ToC, artikel, vergelijkingstabel, FAQ, JSON-LD).
  * Wordt direct onder de calculator-sectie geplaatst. Alle CTA's verwijzen naar
- * home_url('/beratung-anfragen/') resp. home_url('/solarbatterie-rechner/') —
+ * home_url('/beratung-anfragen/') resp. home_url('/pv-speicher-rechner/') —
  * nooit naar /kontakt/ en nooit naar een hardgecodeerde host. De copy is
  * bewust gevarieerd (PV-Speicher, Batteriespeicher, Heimspeicher, LiFePO4,
  * Autarkie) om onnatuurlijke keyword-stuffing te vermijden.
@@ -1902,7 +1902,7 @@ HTML;
         '___ELEKTROG_URL___'   => esc_url( home_url( '/elektrog/' ) ),
         '___ENTSORG_URL___'    => esc_url( home_url( '/entsorgung/' ) ),
         '___DACH_URL___'       => esc_url( home_url( '/dachbrand-pv-anlage/' ) ),
-        '___FAQ_URL___'        => esc_url( home_url( '/faq-heimspeicher/' ) ),
+        '___FAQ_URL___'        => esc_url( home_url( '/faq-pv-speicher/' ) ),
         '___SOLAR_URL___'      => esc_url( home_url( '/solarbatterien/' ) ),
         '___KOMPLETT_URL___'   => esc_url( home_url( '/solaranlage-mit-speicher-2026-pv-batterie-komplettsysteme/' ) ),
         '___NETZ_URL___'       => esc_url( home_url( '/netzengpaesse-ueberbruecken-7-bewaehrte-strategien/' ) ),

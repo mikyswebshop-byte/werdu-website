@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 $home_url = home_url( '/' );
-$calc_url = home_url( '/solarbatterie-rechner/' );
+$calc_url = home_url( '/pv-speicher-rechner/' );
 $shop_url = home_url( '/shop/' );
 $img_alt  = 'PV Speicher Partner werden - ACC Heimspeicher B2B';
 $img_1    = 'https://werdu.de/wp-content/uploads/2026/07/16kwh-lifepo4-heimspeicher-hero_1024_1024.webp';

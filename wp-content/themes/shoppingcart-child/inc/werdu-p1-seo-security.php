@@ -210,7 +210,7 @@ function werdu_calc_wp_head_seo() {
         return;
     }
 
-    $url   = 'https://werdu.de/solarbatterie-rechner/';
+    $url   = 'https://werdu.de/pv-speicher-rechner/';
     $title = 'Solarbatterie Rechner 2026 | PV-Speicher Größe kostenlos berechnen';
     $desc  = 'Kostenloser Solarbatterie-Rechner 2026: Berechnen Sie die optimale PV-Speicher-Größe für Ihr Zuhause. Mit regionaler Ertragsberechnung, Amortisations-Analyse & passenden LiFePO4-Produkten.';
     $image = 'https://werdu.de/wp-content/uploads/2026/04/cropped-logo-werdu_143_140-1.webp';

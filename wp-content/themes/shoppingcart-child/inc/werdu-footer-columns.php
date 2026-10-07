@@ -26,7 +26,7 @@ function werdu_footer_column_markup( $n ) {
 			<li><a href="<?php echo esc_url( home_url( '/30-32-kwh-lifepo4-heimspeicher-560-628ah/' ) ); ?>">30–32 kWh LiFePO4 Speicher</a></li>
 			<li><a href="<?php echo esc_url( home_url( '/tewaycell-15-kwh-all-in-one-lifepo4-solarbatterie-5-kw-hybrid-wechselrichter/' ) ); ?>">15 kWh All-in-One Solarbatterie</a></li>
 			<li><a href="<?php echo esc_url( home_url( '/shop/' ) ); ?>">Solarbatterien im Shop</a></li>
-			<li><a href="<?php echo esc_url( home_url( '/solarbatterie-rechner/' ) ); ?>">PV-Speicher Rechner</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/pv-speicher-rechner/' ) ); ?>">PV-Speicher Rechner</a></li>
 		</ul>
 		<?php
 	elseif ( 2 === $n ) :

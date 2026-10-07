@@ -845,7 +845,7 @@ $blog_link = $blog_page ? get_permalink($blog_page) : home_url('/');
             <strong style="display:block;font-size:15px;color:var(--forest);margin-bottom:6px">Solarbatterie-Rechner</strong>
             Eigenverbrauch, Autarkiegrad & Amortisation in 2 Minuten kalkuliert.
           </p>
-          <a href="<?php echo esc_url(home_url('/solarbatterie-rechner/')); ?>" class="btn">Jetzt berechnen →</a>
+          <a href="<?php echo esc_url(home_url('/pv-speicher-rechner/')); ?>" class="btn">Jetzt berechnen →</a>
         </div>
       </div>
 

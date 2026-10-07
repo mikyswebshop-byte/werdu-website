@@ -14,28 +14,28 @@ Werdu.de ist ein deutscher Onlineshop für LiFePO4-Heimspeicher, Solarbatterien 
 
 ## Tools & Rechner
 
-- [Solarbatterie-Rechner](https://werdu.de/solarbatterie-rechner/) — Professionelle PV-Ertragsprognose mit regionalen Durchschnittswerten
-- [Gratis-Heimspeicher-Rechner](https://werdu.de/gratis-heimspeicher-rechner-online/) — Schnelle Einsparungsberechnung für Einsteiger
+- [Solarbatterie-Rechner](https://werdu.de/pv-speicher-rechner/) — Professionelle PV-Ertragsprognose mit regionalen Durchschnittswerten
+- [Gratis-Heimspeicher-Rechner](https://werdu.de/pv-speicher-rechner/) — Schnelle Einsparungsberechnung für Einsteiger
 - [Kostenlose Apps für Solarbatterien](https://werdu.de/kostenlose-apps-fuer-ihre-solarbatterie/) — Übersicht kompatibler Monitoring-Apps
 
 ## Ratgeber & Blog
 
 - [Heimspeicher-Installation](https://werdu.de/heimspeicher-installation/) — Schritt-für-Schritt Anleitung mit Schema.org HowTo-Markup
-- [Plug & Play Installationsanleitung](https://werdu.de/heimspeicher-installation-plug-play-anleitung-2026-werdu-de/) — Detaillierte Anleitung für Selbstinstallateur
+- [Plug & Play Installationsanleitung](https://werdu.de/heimspeicher-installation/) — Detaillierte Anleitung für Selbstinstallateur
 - [LiFePO4 Sicherheit](https://werdu.de/lifepo4-sicherheit-die-sicherste-solarbatterie-technologie-2026/) — Warum LiFePO4 die sicherste Batterietechnologie ist
 - [Wie viele Zyklen schafft eine Solarbatterie?](https://werdu.de/wie-viele-zyklen-schafft-eine-solarbatterie-von-werdu-de/) — Lebensdauer, Entladetiefe und realistische Erwartungen
 - [Solarbatterie: Wie weit entladen?](https://werdu.de/solarbatterie-wie-weit-entladen/) — Entladetiefe-Tabelle und Empfehlungen
 - [Heimspeicher kaufen: 3 Jahre Fehler, 8.000 € Lehrgeld](https://werdu.de/heimspeicher-kaufen-3-jahre-fehler-8-000-e-lehrgeld-die-wahrheit/) — Erfahrungsbericht mit typischen Käuferfehlern
 - [Warum zahlen manche Hausbesitzer zu viel?](https://werdu.de/warum-zahlen-manche-hausbesitzer-tausende-euro-zu-viel-fuer-eine-solarbatterie-und-andere-nicht/) — Preisvergleich und Markttransparenz
 - [Transparente Solarbatterie-Preise](https://werdu.de/heimspeicher-kaufen-transparente-solarbatterie-preise/) — Preisstruktur und Kostentreiber erklärt
-- [KfW-Förderung Heimspeicher 2026](https://werdu.de/kfw-foerderung-heimspeicher-2026-bis-zu-15-zuschuss-werdu-de/) — Bis zu 15 % Zuschuss, Beantragung und Voraussetzungen
+- [KfW-Förderung Heimspeicher 2026](https://werdu.de/kfw-270-kredit-batteriespeicher/) — Bis zu 15 % Zuschuss, Beantragung und Voraussetzungen
 - [Notstrom & EPS-Funktion](https://werdu.de/notstrom-heimspeicher-ersatzstrom-blackout/) — Notstromversorgung bei Blackout
 - [Netzengpässe überbrücken](https://werdu.de/netzengpaesse-ueberbruecken-7-bewaehrte-strategien/) — 7 Strategien für Netzstabilität
-- [Intelligente Energiesteuerung (BMS & App)](https://werdu.de/intelligente-energiesteuerung-bms-app-technologie-2026-werdu-de/) — BMS-Technologie und App-Steuerung
+- [Intelligente Energiesteuerung (BMS & App)](https://werdu.de/intelligente-energieoptimierung-fuer-solarbatterien-ems/) — BMS-Technologie und App-Steuerung
 - [Intelligente Energieoptimierung (EMS)](https://werdu.de/intelligente-energieoptimierung-fuer-solarbatterien-ems/) — Energy Management Systeme erklärt
 - [Energieautarkie erreichen](https://werdu.de/energieautarkie-erreichen-unabhaengig-vom-stromnetz-2026-werdu-de/) — Unabhängigkeit vom Stromnetz
-- [Energieunabhängigkeit](https://werdu.de/energieunabhaengigkeit/) — Autarkiegrad und Eigenverbrauch optimieren
-- [Solaranlage mit Speicher 2026](https://werdu.de/solaranlage-mit-speicher-2026-pv-batterie-komplettsysteme/) — PV-Batterie-Komplettsysteme
+- [Energieunabhängigkeit](https://werdu.de/energieautarkie-erreichen/) — Autarkiegrad und Eigenverbrauch optimieren
+- [Solaranlage mit Speicher 2026](https://werdu.de/all-in-one-heimspeicher-off-grid/) — PV-Batterie-Komplettsysteme
 - [Was ein LiFePO4-Heimspeicher wirklich kostet](https://werdu.de/was-ein-lifepo4-heimspeicher-wirklich-kostet/) — Gesamtkostenrechnung inkl. Installation
 - [Ihre Energiezukunft mit Heimspeicher](https://werdu.de/ihre-energiezukunft-mit-heimspeicher/) — Planung und Zukunftssicherheit
 - [Solarbatterien im Überblick](https://werdu.de/solar-batterien-im-ueberblick-die-zukunft-der-energie/) — Technologievergleich und Markttrends

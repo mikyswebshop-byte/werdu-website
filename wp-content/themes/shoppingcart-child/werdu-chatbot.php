@@ -339,10 +339,10 @@ add_action( 'wp_footer', function () {
           ans:"KfW foerdert Heimspeicher mit bis zu 15% Zuschuss.<br><br>Voraussetzungen:<br>&bull; Erstinstallation<br>&bull; Wohngebaeude<br>&bull; Max. 50 kWh Speicherkapazitaet<br>&bull; In Kombination mit PV-Anlage<br><br><a href=\"/beratung-anfragen/\" class=\"wd-ai-link-btn\">&#9993; Foerderung beantragen</a>" },
 
         { keys:"autarkie|eigenverbrauch|unabhaengig|stromnetz|selbstversorgung", 
-          ans:"Mit einem 15-16 kWh Heimspeicher erreichen Sie je nach Verbrauch einen Autarkiegrad von 60-80%.<br><br>Mit 30+ kWh bis zu 90% Autarkie. Die Amortisation liegt typischerweise bei 8-12 Jahren.<br><br><a href=\"/solarbatterie-rechner/\" class=\"wd-ai-link-btn\">&#128200; Kostenloser Rechner</a>" },
+          ans:"Mit einem 15-16 kWh Heimspeicher erreichen Sie je nach Verbrauch einen Autarkiegrad von 60-80%.<br><br>Mit 30+ kWh bis zu 90% Autarkie. Die Amortisation liegt typischerweise bei 8-12 Jahren.<br><br><a href=\"/pv-speicher-rechner/\" class=\"wd-ai-link-btn\">&#128200; Kostenloser Rechner</a>" },
 
         { keys:"rechner|calculator|berechnen|ersparnis|amortisation|jaehrlicher ertrag", 
-          ans:"Unser <a href=\"/solarbatterie-rechner/\">kostenloser Rechner</a> berechnet:<br><br>&bull; Jaehrlicher Ertrag<br>&bull; Eigenverbrauch<br>&bull; Autarkiegrad<br>&bull; Amortisation<br>&bull; Ersparnis ueber 20 Jahre<br><br>Basiert auf Ihrer PLZ, PV-Leistung, Dachneigung und Verbrauch.<br><br><a href=\"/solarbatterie-rechner/\" class=\"wd-ai-link-btn\">&#128200; Jetzt berechnen</a>" },
+          ans:"Unser <a href=\"/pv-speicher-rechner/\">kostenloser Rechner</a> berechnet:<br><br>&bull; Jaehrlicher Ertrag<br>&bull; Eigenverbrauch<br>&bull; Autarkiegrad<br>&bull; Amortisation<br>&bull; Ersparnis ueber 20 Jahre<br><br>Basiert auf Ihrer PLZ, PV-Leistung, Dachneigung und Verbrauch.<br><br><a href=\"/pv-speicher-rechner/\" class=\"wd-ai-link-btn\">&#128200; Jetzt berechnen</a>" },
 
         { keys:"gotion|zellen|340ah|grade a|diy|zellen kaufen", 
           ans:"<a href=\"/gotion-340ah-lifepo4-zellen/\">GOTION 340Ah LiFePO4</a> - Grade A mit QR-Code:<br><br>&bull; 3,2V, 340Ah pro Zelle<br>&bull; 6.000+ Zyklen<br>&bull; Ideal fuer DIY-Speicher<br>&bull; Echtheitspruefung via QR-Code<br><br>Perfekt fuer Eigenbau-Projekte.<br><br><a href=\"/gotion-340ah-lifepo4-zellen/\" class=\"wd-ai-link-btn\">&#128722; Zellen bestellen</a>" },
@@ -369,13 +369,13 @@ add_action( 'wp_footer', function () {
           ans:"Unsere BMS-Systeme (Battery Management System) schuetzen vor:<br><br>&bull; Ueberladung<br>&bull; Tiefentladung<br>&bull; Ueberhitzung<br>&bull; Kurzschluss<br><br>Sie balancieren automatisch alle Zellen und sind per App ueberwachbar. Alle wichtigen Parameter sind in Echtzeit einsehbar.<br><br><a href=\"/beratung-anfragen/\" class=\"wd-ai-link-btn\">&#9993; Technische Beratung</a>" },
 
         { keys:"hallo|hi|guten tag|moin|servus|hey", 
-          ans:"Hallo! Ich bin Ihr digitaler Berater fuer Heimspeicher und Solarbatterien.<br><br>Fragen Sie mich zu:<br>&bull; <a href=\"/shop/\">Produkten und Preisen</a><br>&bull; <a href=\"/blog/lifepo4-technologie/\">LiFePO4-Technologie</a><br>&bull; <a href=\"/heimspeicher-installation/\">Installation</a><br>&bull; <a href=\"/beratung-anfragen/\">Garantie und KfW-Foerderung</a><br>&bull; <a href=\"/solarbatterie-rechner/\">Autarkiegrad und Ersparnis</a><br><br>Was interessiert Sie?" },
+          ans:"Hallo! Ich bin Ihr digitaler Berater fuer Heimspeicher und Solarbatterien.<br><br>Fragen Sie mich zu:<br>&bull; <a href=\"/shop/\">Produkten und Preisen</a><br>&bull; <a href=\"/blog/lifepo4-technologie/\">LiFePO4-Technologie</a><br>&bull; <a href=\"/heimspeicher-installation/\">Installation</a><br>&bull; <a href=\"/beratung-anfragen/\">Garantie und KfW-Foerderung</a><br>&bull; <a href=\"/pv-speicher-rechner/\">Autarkiegrad und Ersparnis</a><br><br>Was interessiert Sie?" },
 
         { keys:"danke|vielen dank|danke schoen|super|top", 
           ans:"Gerne! Haben Sie noch weitere Fragen zu Heimspeichern oder Solarbatterien?<br><br>Fuer eine persoenliche Beratung steht Ihnen auch unser <a href=\"/beratung-anfragen/\">Beratungsformular</a> zur Verfuegung.<br><br><a href=\"/shop/\" class=\"wd-ai-link-btn\">&#128722; Zum Shop</a>" },
 
         { keys:"bye|tschues|auf wiedersehen|ciao", 
-          ans:"Auf Wiedersehen! Bei weiteren Fragen stehe ich Ihnen jederzeit zur Verfuegung.<br><br>Besuchen Sie auch unseren <a href=\"/shop/\">Shop</a> oder den <a href=\"/solarbatterie-rechner/\">kostenlosen Rechner</a>." }
+          ans:"Auf Wiedersehen! Bei weiteren Fragen stehe ich Ihnen jederzeit zur Verfuegung.<br><br>Besuchen Sie auch unseren <a href=\"/shop/\">Shop</a> oder den <a href=\"/pv-speicher-rechner/\">kostenlosen Rechner</a>." }
     ];
 
     window.wdAiChatSend = function() {
@@ -394,7 +394,7 @@ add_action( 'wp_footer', function () {
 
         setTimeout(function() {
             var lower = text.toLowerCase();
-            var answer = "Ich bin der Werdu.de Berater. Fragen Sie mich zu <a href=\"/shop/\">Produkten</a>, <a href=\"/solarbatterie-rechner/\">Preisen</a>, <a href=\"/blog/lifepo4-technologie/\">Technik</a>, <a href=\"/beratung-anfragen/\">Versand</a>, <a href=\"/beratung-anfragen/\">Garantie</a>, <a href=\"/beratung-anfragen/\">KfW-Foerderung</a>, <a href=\"/solarbatterie-rechner/\">Autarkiegrad</a> oder <a href=\"/heimspeicher-installation/\">Installation</a>.<br><br><a href=\"/beratung-anfragen/\" class=\"wd-ai-link-btn\">&#9993; Persoenliche Beratung</a>";
+            var answer = "Ich bin der Werdu.de Berater. Fragen Sie mich zu <a href=\"/shop/\">Produkten</a>, <a href=\"/pv-speicher-rechner/\">Preisen</a>, <a href=\"/blog/lifepo4-technologie/\">Technik</a>, <a href=\"/beratung-anfragen/\">Versand</a>, <a href=\"/beratung-anfragen/\">Garantie</a>, <a href=\"/beratung-anfragen/\">KfW-Foerderung</a>, <a href=\"/pv-speicher-rechner/\">Autarkiegrad</a> oder <a href=\"/heimspeicher-installation/\">Installation</a>.<br><br><a href=\"/beratung-anfragen/\" class=\"wd-ai-link-btn\">&#9993; Persoenliche Beratung</a>";
             var matched = false;
             for (var i = 0; i < WD_KB.length; i++) {
                 var keys = WD_KB[i].keys.split('|');

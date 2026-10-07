@@ -166,6 +166,21 @@ add_filter('xmlrpc_methods', function($methods) {
 });
 
 // ============================================
+// 7b. WWW → APEX (SEO host canonical)
+// ============================================
+add_action('init', function () {
+    if (is_admin() || (defined('WP_CLI') && WP_CLI)) {
+        return;
+    }
+    $host = isset($_SERVER['HTTP_HOST']) ? strtolower($_SERVER['HTTP_HOST']) : '';
+    if ($host === 'www.werdu.de') {
+        $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+        wp_redirect('https://werdu.de' . $uri, 301);
+        exit;
+    }
+}, 0);
+
+// ============================================
 // 8. SECURITY HEADERS AANVULLEN
 // ============================================
 

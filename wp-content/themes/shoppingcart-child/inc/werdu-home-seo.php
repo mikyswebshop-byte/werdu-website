@@ -20,7 +20,7 @@ function werdu_home_seo_beratung_url() {
  * @return string
  */
 function werdu_home_seo_rechner_url() {
-	return home_url( '/solarbatterie-rechner/' );
+	return home_url( '/pv-speicher-rechner/' );
 }
 
 /**

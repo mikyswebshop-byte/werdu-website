@@ -620,7 +620,7 @@ get_header();
         </div>
     </div>
 
-    <p style="text-align:center; margin-top:22px;"><a href="/solarbatterie-rechner/">→ Kostenloser Solarbatterie-Rechner</a></p>
+    <p style="text-align:center; margin-top:22px;"><a href="/pv-speicher-rechner/">→ Kostenloser Solarbatterie-Rechner</a></p>
 </div>
 
 <!-- FAQ -->

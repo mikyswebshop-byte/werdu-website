@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 $whp_beratung = function_exists( 'werdu_home_seo_beratung_url' ) ? werdu_home_seo_beratung_url() : home_url( '/beratung-anfragen/' );
-$whp_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo_rechner_url() : home_url( '/solarbatterie-rechner/' );
+$whp_rechner  = function_exists( 'werdu_home_seo_rechner_url' ) ? werdu_home_seo_rechner_url() : home_url( '/pv-speicher-rechner/' );
 $whp_shop     = home_url( '/shop/' );
 $whp_up       = content_url( '/uploads/2026' );
 $whp_hero     = $whp_up . '/06/Deutsches-Einfamilienhaus-mit-Solarmodulen-auf-dem-Dach_1046_783.webp';
