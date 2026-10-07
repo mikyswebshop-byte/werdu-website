@@ -31,14 +31,14 @@ CTA buttons must be high-contrast orange on the light canvas. Product grids must
 
 ## 4. ZERO BROKEN LINKS
 - NEVER construct hallucinated or non-existent URLs.
-- ONLY link internally to validated sitemap URLs in Section 8 (e.g. `/solarbatterie-rechner/`, `/shop/`, `/beratung-anfragen/`).
+- ONLY link internally to validated sitemap URLs in Section 8 (e.g. `/pv-speicher-rechner/`, `/shop/`, `/beratung-anfragen/`).
 - External references must point exclusively to genuine authority portals (e.g. Bundesnetzagentur, Verbraucherzentrale, Fraunhofer ISE) using `target="_blank" rel="noopener"`.
 
 ## 5. CALCULATORS & LEAD FLOW ARCHITECTURE
 We have 3 Calculators on the site:
-1. Calculator 1 (Main/Detailed): https://werdu.de/solarbatterie-rechner/
+1. Calculator 1 (Main/Detailed): https://werdu.de/pv-speicher-rechner/
 2. Calculator 2 (Homepage Preview/Quick): https://werdu.de/
-3. Calculator 3 (Gratis Online Rechner): https://werdu.de/gratis-heimspeicher-rechner-online/
+3. Calculator 3 (Gratis Online Rechner): https://werdu.de/pv-speicher-rechner/
 
 Flow Requirements:
 - Calculators MUST NOT generate individual automated PDF quotes or formal price quotes, as transparent prices are already listed online in `/shop/`.
@@ -85,8 +85,8 @@ This triggers the automatic deployment pipeline to https://test.werdu.de. Do not
 
 Main Pages:
 - https://werdu.de/
-- https://werdu.de/solarbatterie-rechner/
-- https://werdu.de/gratis-heimspeicher-rechner-online/
+- https://werdu.de/pv-speicher-rechner/
+- https://werdu.de/pv-speicher-rechner/
 - https://werdu.de/beratung-anfragen/
 - https://werdu.de/heimspeicher-installation/
 - https://werdu.de/heimspeicher-systeme/
@@ -97,7 +97,7 @@ Main Pages:
 - https://werdu.de/warenkorb/
 - https://werdu.de/kasse/
 - https://werdu.de/mein-konto/
-- https://werdu.de/faq-heimspeicher/
+- https://werdu.de/faq-pv-speicher/
 - https://werdu.de/kostenlose-apps-fuer-ihre-solarbatterie/
 - https://werdu.de/ueber-uns/
 - https://werdu.de/kontakt/
