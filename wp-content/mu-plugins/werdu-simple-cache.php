@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Werdu Simple Cache
  * Description: HTML page cache — veilig, snel, stabiel. Automatisch 1× pro Tag legen + opwarmen.
- * Version:     4.4.0
+ * Version:     4.5.0
  * Author:      Werdu
  */
 
@@ -10,10 +10,11 @@ if (!defined('ABSPATH')) exit;
 
 class Werdu_Simple_Cache {
     private $dir;
-    private $ttl = 604800;        // ← 7 Tage statt 24 Stunden
+    private $ttl = 604800;        // 7 Tage
     private $max_files = 300;
     private $cron_hook = 'werdu_cache_daily_event';
     private $cron_schedule = 'werdu_daily';
+    private $plugin_ver = '4.5.0';
 
     public function __construct() {
         $this->dir = WP_CONTENT_DIR . '/cache/werdu-simple/';
@@ -24,6 +25,10 @@ class Werdu_Simple_Cache {
         if (!is_dir($this->dir)) {
             wp_mkdir_p($this->dir);
         }
+
+        // v4.5.0: corrupt gzip HIT bodies (UTF-8 BOM + Content-Encoding: gzip)
+        // braken Safari iOS ("kan raw-gegevens niet decoderen"). Purge once on upgrade.
+        $this->maybe_upgrade_clear();
 
         if (current_user_can('manage_options')) {
             add_action('admin_bar_menu', [$this, 'admin_bar'], 100);
@@ -37,14 +42,29 @@ class Werdu_Simple_Cache {
         add_action('edit_post', [$this, 'clear_single'], 20);
         add_action('deleted_post', [$this, 'clear_all'], 20);
 
+        // Edge/manual purge hooks from werdu-homepage-seo-upgrade.php
+        add_action('litespeed_purge_all', [$this, 'clear_all'], 5);
+
         add_filter('cron_schedules', [$this, 'add_schedules']);
         add_action('init', [$this, 'maybe_schedule_cron'], 30);
         add_action($this->cron_hook, [$this, 'clear_and_warm']);
     }
 
+    /**
+     * One-shot purge when this mu-plugin version changes after deploy.
+     */
+    private function maybe_upgrade_clear() {
+        $stored = get_option('werdu_simple_cache_ver');
+        if ($stored === $this->plugin_ver) {
+            return;
+        }
+        $this->clear_all();
+        update_option('werdu_simple_cache_ver', $this->plugin_ver, false);
+    }
+
     public function add_schedules($schedules) {
         $schedules[$this->cron_schedule] = [
-            'interval' => 86400,   // ← 24 Stunden statt 1 Stunde
+            'interval' => 86400,
             'display'  => 'Täglich um Mitternacht'
         ];
         return $schedules;
@@ -72,34 +92,59 @@ class Werdu_Simple_Cache {
         if ($this->should_skip()) return;
 
         $file = $this->get_cache_file();
-        $gz_file = $file . '.gz';
 
-        if (file_exists($gz_file)) {
-            $age = time() - filemtime($gz_file);
-            if ($age < $this->ttl) {
-                $html = file_get_contents($gz_file);
-                if ($html && strlen($html) > 100) {
-                    $this->send_headers('HIT', true);
-                    echo $html;
-                    exit;
-                }
-            }
-        }
-
+        // Serve plain HTML only. Never emit Content-Encoding: gzip from PHP.
+        // Pre-compressed .gz HIT bodies conflicted with early UTF-8 BOM output and/or
+        // Apache mod_deflate, so Safari iOS received Content-Encoding:gzip with a
+        // non-gzip body (often only the BOM) → "kan raw-gegevens niet decoderen".
         if (file_exists($file)) {
             $age = time() - filemtime($file);
             if ($age < $this->ttl) {
                 $html = file_get_contents($file);
-                if ($html && strlen($html) > 500) {
-                    $this->send_headers('HIT', false);
+                if ($html && strlen($html) > 500 && $this->is_sane_html_cache($html)) {
+                    $this->discard_output_buffers();
+                    $html = $this->strip_utf8_bom($html);
+                    $this->send_headers('HIT');
                     echo $html;
                     exit;
                 }
             }
         }
 
-        $this->send_headers('MISS', false);
+        // Drop stale/corrupt companion .gz files from older plugin versions.
+        $gz_file = $file . '.gz';
+        if (file_exists($gz_file)) {
+            @unlink($gz_file);
+        }
+
+        $this->send_headers('MISS');
         ob_start([$this, 'save_output']);
+    }
+
+    /**
+     * Reject cache payloads that are clearly not a full HTML document.
+     */
+    private function is_sane_html_cache($html) {
+        $probe = $this->strip_utf8_bom($html);
+        $head = strtolower(substr($probe, 0, 64));
+        return (strpos($head, '<!doctype') !== false || strpos($head, '<html') !== false);
+    }
+
+    private function strip_utf8_bom($value) {
+        if (strncmp($value, "\xEF\xBB\xBF", 3) === 0) {
+            return substr($value, 3);
+        }
+        return $value;
+    }
+
+    /**
+     * Remove any buffered early output (classic cause: a PHP file saved with UTF-8 BOM)
+     * so a cache HIT cannot prepend non-gzip bytes in front of the document.
+     */
+    private function discard_output_buffers() {
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
     }
 
     private function should_skip() {
@@ -141,6 +186,7 @@ class Werdu_Simple_Cache {
         $files = [
             WP_CONTENT_DIR . '/mu-plugins/werdu-homepage-seo-upgrade.php',
             WP_CONTENT_DIR . '/mu-plugins/fix-calculator-links.php',
+            __FILE__,
         ];
 
         $stamp = 0;
@@ -150,20 +196,19 @@ class Werdu_Simple_Cache {
             }
         }
 
-        $version = (string) $stamp;
+        $version = (string) $stamp . '|c=' . $this->plugin_ver;
         return $version;
     }
 
-    private function send_headers($status, $is_gzip = false) {
+    private function send_headers($status) {
         if (headers_sent()) return;
         header('X-Cache: ' . $status);
+        // Never set Content-Encoding here — Apache/mod_deflate (or the host)
+        // must be the only layer that compresses HTML responses.
         if ($status === 'HIT') {
             header('Cache-Control: public, max-age=604800');
             header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 604800) . ' GMT');
-            if ($is_gzip) {
-                header('Content-Encoding: gzip');
-                header('Vary: Accept-Encoding');
-            }
+            header('Vary: Accept-Encoding');
         }
     }
 
@@ -172,14 +217,17 @@ class Werdu_Simple_Cache {
             return $buffer;
         }
 
+        $buffer = $this->strip_utf8_bom($buffer);
+        if (!$this->is_sane_html_cache($buffer)) {
+            return $buffer;
+        }
+
         $file = $this->get_cache_file();
         file_put_contents($file, $buffer, LOCK_EX);
 
-        if (function_exists('gzencode')) {
-            $gz = gzencode($buffer, 6);
-            if ($gz) {
-                file_put_contents($file . '.gz', $gz, LOCK_EX);
-            }
+        // Remove legacy precompressed companions; PHP must not serve them.
+        if (file_exists($file . '.gz')) {
+            @unlink($file . '.gz');
         }
 
         return $buffer;
@@ -193,7 +241,6 @@ class Werdu_Simple_Cache {
 
     public function admin_bar($bar) {
         $files = count(glob($this->dir . '*.html'));
-        $ttl_days = round($this->ttl / 86400);
         $bar->add_node([
             'id'    => 'werdu-cache-clear',
             'title' => 'Cache legen (' . $files . ')',
@@ -240,6 +287,9 @@ class Werdu_Simple_Cache {
     }
 
     public function clear_all() {
+        if (!is_dir($this->dir)) {
+            return;
+        }
         foreach (glob($this->dir . '*') as $f) {
             @unlink($f);
         }

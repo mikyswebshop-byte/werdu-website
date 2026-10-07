@@ -57,6 +57,14 @@ function werdu_home_seo_purge_edge_cache() {
         litespeed_purge_all();
     }
     do_action( 'litespeed_purge_all' );
+
+    // Also wipe Werdu Simple Cache files (Safari gzip/BOM decode bug safety net).
+    $werdu_cache_dir = WP_CONTENT_DIR . '/cache/werdu-simple/';
+    if ( is_dir( $werdu_cache_dir ) ) {
+        foreach ( glob( $werdu_cache_dir . '*' ) as $werdu_cache_file ) {
+            @unlink( $werdu_cache_file );
+        }
+    }
 }
 
 /**
