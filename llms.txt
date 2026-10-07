@@ -51,7 +51,7 @@ Werdu.de ist ein deutscher Onlineshop für LiFePO4-Heimspeicher, Solarbatterien 
 - [Beratung anfragen](https://werdu.de/beratung-anfragen/) — Kostenlose persönliche Beratung mit Konfiguration
 - [Kontakt](https://werdu.de/kontakt/) — Kontaktformular und Anfragen
 - [FAQ LiFePO4](https://werdu.de/faq-lifepo4-solarspeicher-energiespeicher/) — Häufig gestellte Fragen zu LiFePO4-Speichern
-- [FAQ Heimspeicher](https://werdu.de/faq-heimspeicher/) — Allgemeine Fragen zu Heimspeichern
+- [FAQ Heimspeicher](https://werdu.de/faq-pv-speicher/) — Allgemeine Fragen zu Heimspeichern
 - [Zahlung & Lieferung](https://werdu.de/zahlung-lieferung/) — Versandkostenfrei ab EU-Lager, DDP inkl. MwSt.
 - [Garantie](https://werdu.de/garantie/) — 10 Jahre Herstellergarantie
 - [Richtige Lagerung](https://werdu.de/achtung-garantie-richtige-lagerung-ihrer-lifepo4-batterie/) — Lagerung vor Inbetriebnahme
