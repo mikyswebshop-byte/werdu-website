@@ -134,7 +134,7 @@ add_action('init', function () {
             if (!empty($from_blog['id'])) {
                 \RankMath\Redirections\DB::delete($from_blog['id']);
             }
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // stil: redirect-opschoning is best-effort
         }
     }

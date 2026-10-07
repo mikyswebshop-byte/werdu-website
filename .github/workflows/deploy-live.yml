@@ -5,30 +5,55 @@ on:
     branches:
       - main
     paths:
-      - 'wp-content/themes/shoptimizer-child-theme/**'
+      - 'wp-content/mu-plugins/**'
+      - 'wp-content/themes/shoppingcart-child/**'
+      - 'llms.txt'
       - '.github/workflows/deploy-live.yml'
 
 jobs:
   deploy-live:
-    name: Deploy shoptimizer-child to werdu.de
+    name: Deploy critical fixes to werdu.de
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
         uses: actions/checkout@v4
 
-      - name: FTP deploy theme fixes to production httpdocs
+      # LIVE_* secrets only — never fall back to TEST (wrong host).
+      - name: Verify LIVE FTP secrets
+        run: |
+          if [ -z "${{ secrets.LIVE_FTP_SERVER }}" ] || [ -z "${{ secrets.LIVE_FTP_USERNAME }}" ] || [ -z "${{ secrets.LIVE_FTP_PASSWORD }}" ]; then
+            echo "::error::LIVE_FTP_SERVER / LIVE_FTP_USERNAME / LIVE_FTP_PASSWORD must be set for werdu.de production deploy."
+            exit 1
+          fi
+
+      - name: FTP deploy mu-plugins to production
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          # Prefer LIVE_* secrets; fall back to TEST_* if LIVE is not configured yet.
-          server: ${{ secrets.LIVE_FTP_SERVER || secrets.TEST_FTP_SERVER }}
-          username: ${{ secrets.LIVE_FTP_USERNAME || secrets.TEST_FTP_USERNAME }}
-          password: ${{ secrets.LIVE_FTP_PASSWORD || secrets.TEST_FTP_PASSWORD }}
+          server: ${{ secrets.LIVE_FTP_SERVER }}
+          username: ${{ secrets.LIVE_FTP_USERNAME }}
+          password: ${{ secrets.LIVE_FTP_PASSWORD }}
           protocol: ftp
           port: 21
-          local-dir: ./wp-content/themes/shoptimizer-child-theme/
-          server-dir: /httpdocs/wp-content/themes/shoptimizer-child-theme/
+          local-dir: ./wp-content/mu-plugins/
+          server-dir: /httpdocs/wp-content/mu-plugins/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
-            **/node_modules/**
-            functions.php
+            **/wp-toolkit/**
+            **/wp-toolkit.php
+
+      - name: FTP deploy shoppingcart-child theme to production
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.LIVE_FTP_SERVER }}
+          username: ${{ secrets.LIVE_FTP_USERNAME }}
+          password: ${{ secrets.LIVE_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./wp-content/themes/shoppingcart-child/
+          server-dir: /httpdocs/wp-content/themes/shoppingcart-child/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/UNUSED-*
+            **/*.zip

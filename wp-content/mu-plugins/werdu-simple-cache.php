@@ -91,6 +91,10 @@ class Werdu_Simple_Cache {
     public function serve() {
         if ($this->should_skip()) return;
 
+        // Emergency: wipe ANY legacy .gz companions site-wide once per request
+        // when still present (corrupt HIT bodies took werdu.de offline for Safari).
+        $this->purge_legacy_gz_files();
+
         $file = $this->get_cache_file();
 
         // Serve plain HTML only. Never emit Content-Encoding: gzip from PHP.
@@ -104,14 +108,22 @@ class Werdu_Simple_Cache {
                 if ($html && strlen($html) > 500 && $this->is_sane_html_cache($html)) {
                     $this->discard_output_buffers();
                     $html = $this->strip_utf8_bom($html);
-                    $this->send_headers('HIT');
-                    echo $html;
-                    exit;
+                    // Refuse to serve tiny/corrupt snapshots (BOM-only etc.).
+                    if (strlen($html) < 500) {
+                        @unlink($file);
+                    } else {
+                        $this->send_headers('HIT');
+                        echo $html;
+                        exit;
+                    }
+                } else {
+                    @unlink($file);
+                    @unlink($file . '.gz');
                 }
             }
         }
 
-        // Drop stale/corrupt companion .gz files from older plugin versions.
+        // Drop stale/corrupt companion .gz for this URL.
         $gz_file = $file . '.gz';
         if (file_exists($gz_file)) {
             @unlink($gz_file);
@@ -119,6 +131,20 @@ class Werdu_Simple_Cache {
 
         $this->send_headers('MISS');
         ob_start([$this, 'save_output']);
+    }
+
+    /**
+     * Delete all *.html.gz leftovers from older plugin versions (one short scan).
+     */
+    private function purge_legacy_gz_files() {
+        static $done = false;
+        if ($done || !is_dir($this->dir)) {
+            return;
+        }
+        $done = true;
+        foreach (glob($this->dir . '*.gz') as $gz) {
+            @unlink($gz);
+        }
     }
 
     /**
